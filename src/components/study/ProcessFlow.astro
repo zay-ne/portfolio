@@ -1,0 +1,225 @@
+---
+import type { ProcessStep } from '../../data/study-types';
+
+export interface Props {
+  stepLabel: string;
+  benefitLabel: string;
+  steps: ProcessStep[];
+  caption?: string;
+}
+
+const { stepLabel, benefitLabel, steps, caption } = Astro.props;
+---
+
+<figure class="process" data-reveal>
+  <figcaption class="head">
+    <h3 class="chart-title">{stepLabel}</h3>
+    <span class="label count tabular">{steps.length} Schritte</span>
+  </figcaption>
+
+  <ol class="steps">
+    {
+      steps.map((step, i) => (
+        <li class="step" style={`--d:${200 + i * 130}ms`}>
+          <span class="marker" aria-hidden="true">
+            <span class="num tabular">{i + 1}</span>
+          </span>
+
+          <h4 class="step-title">{step.title}</h4>
+          <p class="step-text">{step.body}</p>
+
+          <div class="benefit">
+            <p class="label benefit-label">{benefitLabel}</p>
+            <p class="benefit-text">{step.benefit}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  {caption && <p class="caption">{caption}</p>}
+</figure>
+
+<style>
+  .process {
+    margin: 0;
+    border-block-start: 1px solid var(--color-line);
+    padding-block-start: 1.25rem;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block-end: 2rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .count {
+    color: var(--color-fg-subtle);
+  }
+
+  .steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Verbindungslinie durch die Schrittmarken. Sie wächst beim Einblenden mit. */
+  .steps::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 15px;
+    inset-block: 15px;
+    inline-size: 1px;
+    background: var(--color-line-strong);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  html.js [data-reveal].is-visible .steps::before {
+    transform: scaleY(1);
+    transition: transform 900ms var(--ease-out-expo);
+  }
+
+  html:not(.js) .steps::before {
+    transform: none;
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    gap: 0.6rem;
+    padding-inline-start: 3rem;
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+
+  html.js [data-reveal].is-visible .step {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 700ms var(--ease-out-quart) var(--d),
+      transform 700ms var(--ease-out-expo) var(--d);
+  }
+
+  html:not(.js) .step {
+    opacity: 1;
+    transform: none;
+  }
+
+  .marker {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    display: grid;
+    place-items: center;
+    inline-size: 31px;
+    block-size: 31px;
+    border-radius: 999px;
+    border: 1px solid var(--color-accent);
+    background: var(--color-bg);
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-accent);
+  }
+
+  .step-title {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    padding-block-start: 0.3rem;
+  }
+
+  .step-text {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-fg-muted);
+  }
+
+  .benefit {
+    display: grid;
+    gap: 0.3rem;
+    margin-block-start: 0.4rem;
+    padding-block-start: 0.9rem;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .benefit-label {
+    color: var(--color-accent);
+  }
+
+  .benefit-text {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-fg);
+  }
+
+  .caption {
+    padding-block-start: 1.5rem;
+    max-inline-size: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-subtle);
+  }
+
+  /* Ab Desktop laufen die Schritte nebeneinander, die Linie waagerecht. */
+  @media (min-width: 64rem) {
+    .steps {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0 1.75rem;
+    }
+
+    .steps::before {
+      inset-inline: 15px 15px;
+      inset-block: 15px auto;
+      inline-size: auto;
+      block-size: 1px;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    html.js [data-reveal].is-visible .steps::before {
+      transform: scaleX(1);
+    }
+
+    /* Flex statt Grid, damit der Vorteilsblock über eine automatische
+       Oberkante nach unten rutscht und alle vier auf einer Linie sitzen,
+       unabhängig davon, wie lang der Schritttext ausfällt. */
+    .step {
+      display: flex;
+      flex-direction: column;
+      padding-inline-start: 0;
+      padding-block-start: 3rem;
+    }
+
+    .marker {
+      inset-block-start: 0;
+    }
+
+    .benefit {
+      margin-block-start: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .steps::before,
+    .step {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

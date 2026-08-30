@@ -49,11 +49,34 @@ export interface TimelineBand {
   strong?: boolean;
 }
 
+/** Eine große Kennzahl mit Beschriftung und optionaler Quelle. */
+export interface FigureItem {
+  value: string;
+  label: string;
+  source?: string;
+}
+
+/** Ein Schritt eines Ablaufs, jeweils mit dem Nutzen für die Gegenseite. */
+export interface ProcessStep {
+  title: string;
+  body: string;
+  benefit: string;
+}
+
 export type StudyVisual =
   | { kind: 'modes'; caption: string; labels: Record<'A' | 'B' | 'C' | 'D' | 'E', string>; recommendedNote: string }
   | { kind: 'bars'; title: string; unit: string; caption: string; bars: BarDatum[]; digits?: number }
   | { kind: 'icc'; title: string; caption: string; bands: { label: string; from: number; to: number }[]; items: IccDatum[] }
   | { kind: 'table'; columns: string[]; rows: ModeInfo[]; recommendedNote: string }
+  | { kind: 'figures'; caption?: string; items: FigureItem[] }
+  | { kind: 'cards'; items: { title: string; body: string }[] }
+  | {
+      kind: 'process';
+      stepLabel: string;
+      benefitLabel: string;
+      caption?: string;
+      steps: ProcessStep[];
+    }
   | {
       kind: 'timeline';
       title: string;
@@ -89,7 +112,8 @@ export interface StudyContent {
   meta: { term: string; value: string }[];
   stats: { label: string; items: StudyStat[] };
   sections: StudySection[];
-  credits: {
+  /** Entfällt, wenn eine Arbeit keine Mitwirkenden ausweist. */
+  credits?: {
     title: string;
     body: string[];
     people: StudyPerson[];

@@ -10,6 +10,7 @@ status: wip
 order: 10
 externalUrl: https://meedup.de
 # cover: "/work/meedup.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
+feature: meedup
 draft: false
 ---
 

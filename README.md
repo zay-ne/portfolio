@@ -61,7 +61,8 @@ src/
     de/*.md              Ein Projekt je Datei, deutsche Fassung
     en/*.md              Dieselben Projekte, englische Fassung
   data/cv.ts             Lebenslaufdaten, zweisprachig
-  data/study-types.ts    Gemeinsame Struktur aller Studienseiten
+  data/meedup.ts         Inhalte und Zahlen der meedup-Seite
+  data/study-types.ts    Gemeinsame Struktur aller ausführlichen Seiten
   data/studies.ts        Zuordnung von `feature` zu den Studieninhalten
   data/vectra-study.ts   Inhalte und Messwerte der Vectra-H2-Studie
   data/week-study.ts     Inhalte und Messwerte der Wochenverlauf-Studie
@@ -70,7 +71,7 @@ src/
     utils.ts             Sprache aus der URL, Routentabelle, Datumsformat
   lib/projects.ts        Projekte laden, sortieren, gruppieren
   components/            Kopf, Fuß, Projektliste, Hover-Vorschau, Icons …
-  components/study/      Diagramme der Studienseite, alle als Inline-SVG
+  components/study/      Diagramme der ausführlichen Seiten, ohne Bibliothek
   layouts/               Ganze Seitentypen: Start, Projekt, Lebenslauf, Recht
   pages/                 Routen, dünne Hüllen um die Layouts
   styles/global.css      Farbtokens, Typoskala, Abstände, Bewegungssystem
@@ -134,19 +135,36 @@ gesetzt, rendert `layouts/StudyPage.astro` die Seite, und der Fließtext der
 Markdown-Datei wird nicht verwendet. Die Datei bleibt trotzdem nötig, damit das
 Projekt in der Übersicht erscheint.
 
-Bislang nutzen das die beiden Studien:
+Bislang nutzen das drei Arbeiten:
 
 | `feature`           | Inhalte in                  |
 | ------------------- | --------------------------- |
+| `meedup`            | `src/data/meedup.ts`        |
 | `vectra-h2`         | `src/data/vectra-study.ts`  |
 | `periorbital-week`  | `src/data/week-study.ts`    |
 
-Beide teilen sich ein Layout. Eine Studie beschreibt ihre Abschnitte als Liste,
+Alle teilen sich ein Layout. Eine Arbeit beschreibt ihre Abschnitte als Liste,
 und jeder Abschnitt kann eine Grafik tragen, die über das Feld `kind` gewählt
-wird. Verfügbar sind derzeit `modes`, `bars`, `icc`, `table` und `timeline`.
-Die Typen dazu stehen in `src/data/study-types.ts`, die Zuordnung von
-`feature` zu Inhalt in `src/data/studies.ts`. Eine dritte Studie braucht also
-eine Datendatei, einen Eintrag in der Registry und einen im Schema.
+wird. Verfügbar sind:
+
+| `kind`     | zeigt                                                    |
+| ---------- | -------------------------------------------------------- |
+| `figures`  | große Kennzahlen mit Beschriftung und Quelle             |
+| `bars`     | waagerechte Balken mit Standardabweichung                |
+| `icc`      | Werte auf einer Skala von 0 bis 1 mit Bewertungsbereichen |
+| `timeline` | Zeitverlauf mit Intervallbändern und Schwellenlinie       |
+| `process`  | nummerierter Ablauf, je Schritt mit Nutzen               |
+| `cards`    | gleichrangige Kurztexte nebeneinander                    |
+| `table`    | Vergleichstabelle mit hervorgehobener Zeile              |
+| `modes`    | die fünf Messbereiche der Vectra-Studie als Schema        |
+
+Die Typen dazu stehen in `src/data/study-types.ts`, die Zuordnung von `feature`
+zu Inhalt in `src/data/studies.ts`. Eine weitere Arbeit braucht also eine
+Datendatei, einen Eintrag in der Registry und einen im Schema.
+
+Der Abschnitt zu den Beteiligten ist optional. Fehlt `credits`, entfällt er.
+Externe Links kommen aus dem Frontmatter der Projektdatei, nicht aus der
+Inhaltsdatei.
 
 Die Grafiken liegen unter `src/components/study/` und sind von Hand gezeichnetes
 Inline-SVG und CSS, ohne Diagrammbibliothek. Sie beziehen ihre Farben aus

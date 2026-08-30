@@ -3,6 +3,9 @@ import BaseLayout from './BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import SplitLines from '../components/SplitLines.astro';
 import BarStat from '../components/study/BarStat.astro';
+import CardGrid from '../components/study/CardGrid.astro';
+import FigureGrid from '../components/study/FigureGrid.astro';
+import ProcessFlow from '../components/study/ProcessFlow.astro';
 import IccScale from '../components/study/IccScale.astro';
 import ModeDiagram from '../components/study/ModeDiagram.astro';
 import TimelineChart from '../components/study/TimelineChart.astro';
@@ -29,8 +32,11 @@ const next = nextProject(all, project);
 const pad = (n: number) => String(n).padStart(2, '0');
 const creditsIndex = pad(s.sections.length + 1);
 
-/* Nennt das Manuskript keine Einzelbeiträge, wird nur die Autorenliste gezeigt. */
-const hasRoles = s.credits.people.some((person) => person.role);
+/* Nennt eine Arbeit keine Einzelbeiträge, wird nur die Namensliste gezeigt. */
+const hasRoles = s.credits?.people.some((person) => person.role) ?? false;
+
+/* Externe Links kommen aus dem Frontmatter, nicht aus der Inhaltsdatei. */
+const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
 ---
 
 <BaseLayout
@@ -69,6 +75,25 @@ const hasRoles = s.credits.people.some((person) => person.role);
             }
           </dl>
         </div>
+
+        {
+          (externalUrl || secondaryUrl) && (
+            <div class="actions" data-reveal style="--reveal-delay:400ms">
+              {externalUrl && (
+                <a class="action action-primary" href={externalUrl} target="_blank" rel="noopener noreferrer">
+                  <span>{strings.projects.visitSite}</span>
+                  <Icon name="arrow-up-right" size={15} />
+                </a>
+              )}
+              {secondaryUrl && (
+                <a class="action" href={secondaryUrl} target="_blank" rel="noopener noreferrer">
+                  <span>{secondaryLabel ?? strings.projects.viewCode}</span>
+                  <Icon name="arrow-up-right" size={15} />
+                </a>
+              )}
+            </div>
+          )
+        }
       </header>
 
       <!-- ---------- Kennzahlen ---------- -->
@@ -125,6 +150,19 @@ const hasRoles = s.credits.people.some((person) => person.role);
                     <IccScale title={v.title} caption={v.caption} bands={v.bands} items={v.items} locale={locale} />
                   )}
 
+                  {v.kind === 'figures' && <FigureGrid items={v.items} caption={v.caption} />}
+
+                  {v.kind === 'cards' && <CardGrid items={v.items} />}
+
+                  {v.kind === 'process' && (
+                    <ProcessFlow
+                      stepLabel={v.stepLabel}
+                      benefitLabel={v.benefitLabel}
+                      steps={v.steps}
+                      caption={v.caption}
+                    />
+                  )}
+
                   {v.kind === 'timeline' && (
                     <TimelineChart
                       title={v.title}
@@ -177,7 +215,8 @@ const hasRoles = s.credits.people.some((person) => person.role);
         })
       }
 
-      <!-- ---------- Beteiligte ---------- -->
+      <!-- ---------- Beteiligte, falls die Arbeit welche ausweist ---------- -->
+      {s.credits && (
       <section class="block">
         <div class="block-grid">
           <div class="block-head" data-reveal>
@@ -215,6 +254,7 @@ const hasRoles = s.credits.people.some((person) => person.role);
           </div>
         </div>
       </section>
+      )}
 
       {
         next && (
@@ -309,6 +349,44 @@ const hasRoles = s.credits.people.some((person) => person.role);
     margin: 0;
     font-size: 0.9375rem;
     color: var(--color-fg-muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-block-start: 2rem;
+  }
+
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-block-size: 44px;
+    padding-inline: 1.25rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    transition:
+      border-color var(--duration-fast) var(--ease-out-quart),
+      background-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .action:hover {
+    border-color: var(--color-fg);
+  }
+
+  .action-primary {
+    background: var(--color-fg);
+    border-color: var(--color-fg);
+    color: var(--color-bg);
+  }
+
+  .action-primary:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-accent-contrast);
   }
 
   /* ---------- Kennzahlen ---------- */
