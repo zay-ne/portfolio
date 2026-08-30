@@ -1,0 +1,70 @@
+---
+export interface Props {
+  index: string;
+  title: string;
+  description?: string;
+  /** Anker-Id, falls die Sektion aus der Navigation erreichbar sein soll. */
+  id?: string;
+  /** h2 auf der Startseite, h1 auf eigenen Seiten. */
+  as?: 'h1' | 'h2';
+}
+
+const { index, title, description, id, as: Tag = 'h2' } = Astro.props;
+---
+
+<header class="section-head" id={id}>
+  <hr class="hairline" />
+  <div class="inner">
+    <div class="lead" data-reveal>
+      <p class="label idx">{index}</p>
+      <Tag class="heading-lg title">{title}</Tag>
+    </div>
+    {
+      description && (
+        <div class="desc" data-reveal style="--reveal-delay:120ms">
+          <p class="prose-measure">{description}</p>
+        </div>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .section-head {
+    /* Anker landen unter dem fixierten Kopf, nicht dahinter. */
+    scroll-margin-block-start: 5.5rem;
+    padding-block-start: var(--spacing-block);
+  }
+
+  .inner {
+    display: grid;
+    gap: 1.75rem;
+    padding-block-start: 1.5rem;
+  }
+
+  .lead {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .idx {
+    color: var(--color-fg-subtle);
+  }
+
+  .title {
+    text-wrap: balance;
+  }
+
+  @media (min-width: 64rem) {
+    .inner {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      align-items: end;
+      gap: 3rem;
+    }
+
+    .desc {
+      padding-block-end: 0.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import SplitLines from '../components/SplitLines.astro';
+import { ui } from '../i18n/ui';
+
+/* Eine statische Seite kann die Sprache nicht erraten, deshalb steht hier
+   beides untereinander, Deutsch zuerst. */
+const de = ui.de.error;
+const en = ui.en.error;
+---
+
+<BaseLayout locale="de" title={`404 · ${de.title}`} description={de.description} altHref="/en/" noindex>
+  <div class="shell notfound">
+    <div class="code" data-reveal style="--reveal-y:0.5rem">
+      <p class="label">404</p>
+    </div>
+
+    <SplitLines lines={[de.title]} as="h1" class="display" delay={60} />
+
+    <div class="body" data-reveal style="--reveal-delay:260ms">
+      <p class="prose-measure">{de.description}</p>
+      <a class="home" href="/">
+        <span class="link-underline">{de.home}</span>
+        <Icon name="arrow-up-right" size={16} />
+      </a>
+    </div>
+
+    <div class="alt" data-reveal style="--reveal-delay:360ms">
+      <hr class="hairline" />
+      <p class="prose-measure" lang="en">{en.description}</p>
+      <a class="home" href="/en/" lang="en">
+        <span class="link-underline">{en.home}</span>
+        <Icon name="arrow-up-right" size={16} />
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .notfound {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-block-size: calc(100dvh - 4.5rem);
+    padding-block: var(--spacing-block);
+  }
+
+  .code {
+    padding-block-end: 1.5rem;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding-block-start: clamp(2rem, 6vh, 3.5rem);
+  }
+
+  .alt {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding-block-start: clamp(2.5rem, 8vh, 4rem);
+  }
+
+  .alt .hairline {
+    align-self: stretch;
+    margin-block-end: 1rem;
+  }
+
+  .home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.4rem;
+    font-size: 1.0625rem;
+  }
+
+  .home:hover {
+    color: var(--color-accent);
+  }
+</style>

@@ -1,0 +1,393 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import CopyEmail from '../components/CopyEmail.astro';
+import HoverPreview from '../components/HoverPreview.astro';
+import Icon from '../components/Icon.astro';
+import ProjectList from '../components/ProjectList.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import SplitLines from '../components/SplitLines.astro';
+import { SITE, SOCIALS, type Locale } from '../consts';
+import { anchors, route, t } from '../i18n/utils';
+import { getProjectsByDiscipline } from '../lib/projects';
+
+interface Props {
+  locale: Locale;
+  altHref: string;
+}
+
+const { locale, altHref } = Astro.props;
+const strings = t(locale);
+const groups = await getProjectsByDiscipline(locale);
+
+/* Der Anker aus der Navigation zeigt auf die erste Disziplin-Sektion. */
+const firstDiscipline = groups[0]?.discipline;
+
+/* Die Nummerierung entsteht aus der Reihenfolge, nicht aus fest eingetragenen
+   Zahlen. So verschiebt sich alles korrekt, wenn eine Disziplin dazukommt oder
+   wegfällt. */
+const pad = (n: number) => String(n).padStart(2, '0');
+const sections = groups.map((group, i) => ({ ...group, index: pad(i + 1) }));
+const aboutIndex = pad(groups.length + 1);
+const cvIndex = pad(groups.length + 2);
+const contactIndex = pad(groups.length + 3);
+---
+
+<BaseLayout
+  locale={locale}
+  title={strings.meta.title}
+  description={strings.meta.description}
+  altHref={altHref}
+>
+  <!-- ---------- Auftakt ---------- -->
+  <section class="hero">
+    <div class="shell hero-inner">
+      <div class="hero-top" data-reveal style="--reveal-y:0.75rem">
+        <p class="label">{strings.hero.eyebrow}</p>
+        <p class="label">{SITE.location[locale]}</p>
+      </div>
+
+      <div class="hero-title">
+        <SplitLines lines={strings.hero.lines} as="h1" class="display" delay={80} />
+      </div>
+
+      <div class="hero-bottom">
+        <div data-reveal style="--reveal-delay:340ms">
+          <p class="prose-measure">{strings.hero.intro}</p>
+        </div>
+
+        <div class="hero-aside" data-reveal style="--reveal-delay:440ms">
+          <p class="status">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="label">{strings.hero.status}</span>
+          </p>
+          <a class="scroll-cue" href={`#${anchors.work}`}>
+            <span class="label">{strings.hero.scroll}</span>
+            <span class="scroll-icon"><Icon name="arrow-down" size={14} /></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- Arbeiten, nach Disziplin getrennt ---------- -->
+  {
+    sections.map(({ discipline, projects, index }) => (
+      <section class="shell work-section">
+        <SectionHeading
+          id={discipline === firstDiscipline ? anchors.work : undefined}
+          index={index}
+          title={strings.sections[discipline].title}
+          description={strings.sections[discipline].description}
+        />
+        <ProjectList projects={projects} locale={locale} />
+      </section>
+    ))
+  }
+
+  <HoverPreview />
+
+  <!-- ---------- Über mich ---------- -->
+  <section class="shell about-section">
+    <SectionHeading
+      id={anchors.about}
+      index={aboutIndex}
+      title={strings.sections.about.title}
+    />
+    <div class="about-grid">
+      <div class="about-body" data-reveal>
+        {strings.sections.about.body.map((paragraph) => <p class="prose-measure prose-measure-wide">{paragraph}</p>)}
+      </div>
+
+      <div class="about-facts" data-reveal style="--reveal-delay:140ms">
+        <p class="label facts-label">{strings.sections.about.facts.label}</p>
+        <dl class="facts">
+          {strings.sections.about.facts.items.map((item) => (
+            <div class="fact">
+              <dt class="label">{item.term}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- Lebenslauf ---------- -->
+  <section class="shell cv-section">
+    <SectionHeading
+      id={anchors.cv}
+      index={cvIndex}
+      title={strings.sections.cv.title}
+      description={strings.sections.cv.description}
+    />
+    <div class="cv-action" data-reveal>
+      <a class="big-action" href={route('cv', locale)}>
+        <span class="big-action-text">{strings.sections.cv.cta}</span>
+        <span class="big-action-icon"><Icon name="arrow-up-right" size={18} /></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ---------- Kontakt ---------- -->
+  <section class="shell contact-section">
+    <SectionHeading
+      id={anchors.contact}
+      index={contactIndex}
+      title={strings.sections.contact.title}
+      description={strings.sections.contact.description}
+    />
+    <div class="contact-body" data-reveal>
+      <CopyEmail locale={locale} />
+      <nav class="contact-socials" aria-label={strings.contact.elsewhere}>
+        <p class="label">{strings.contact.elsewhere}</p>
+        <ul>
+          {SOCIALS.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="me noopener noreferrer">
+                <span class="link-underline">{s.label}</span>
+                <span class="social-handle label">{s.handle}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Auftakt ---------- */
+  .hero {
+    display: flex;
+    align-items: stretch;
+    min-block-size: calc(100dvh - 4.5rem);
+    padding-block: clamp(2rem, 6vh, 4rem) var(--spacing-block);
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block-end: clamp(1.5rem, 5vh, 3rem);
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .hero-title {
+    padding-block-start: clamp(2rem, 6vh, 4rem);
+    /* Der Titel bekommt den überschüssigen Raum, nicht die Ränder. */
+    margin-block-end: auto;
+  }
+
+  .hero-bottom {
+    display: grid;
+    gap: 2.5rem;
+    padding-block-start: clamp(2.5rem, 7vh, 5rem);
+    /* Etwas länger als der Standard: der Einleitungstext soll nicht zu einer
+       schmalen, siebenzeiligen Säule werden. */
+    --measure: 52ch;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .status-dot {
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 16%, transparent);
+  }
+
+  .hero-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .scroll-cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--color-fg-muted);
+    padding-block: 0.5rem;
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .scroll-cue:hover {
+    color: var(--color-fg);
+  }
+
+  .scroll-icon {
+    display: grid;
+    place-items: center;
+    inline-size: 28px;
+    block-size: 28px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    transition:
+      transform var(--duration-base) var(--ease-out-quart),
+      border-color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .scroll-cue:hover .scroll-icon {
+    transform: translateY(3px);
+    border-color: var(--color-fg);
+  }
+
+  /* ---------- Sektionen ---------- */
+  .work-section,
+  .about-section,
+  .cv-section,
+  .contact-section {
+    padding-block-end: var(--spacing-block);
+  }
+
+  .about-grid {
+    display: grid;
+    gap: 2.5rem;
+    padding-block-start: var(--spacing-block);
+  }
+
+  .about-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .about-body p {
+    color: var(--color-fg);
+  }
+
+  .facts-label {
+    display: block;
+    padding-block-end: 1rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .facts {
+    margin: 0;
+  }
+
+  .fact {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 0.9rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .fact dd {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--color-fg-muted);
+  }
+
+  /* ---------- Große Handlungsaufforderung ---------- */
+  .cv-action {
+    padding-block-start: var(--spacing-block);
+  }
+
+  .big-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: clamp(1.5rem, 4.5vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+  }
+
+  .big-action-text {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-block-end: 0.08em;
+    transition: background-size 600ms var(--ease-out-expo);
+  }
+
+  .big-action:hover .big-action-text,
+  .big-action:focus-visible .big-action-text {
+    background-size: 100% 1px;
+  }
+
+  .big-action-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 44px;
+    block-size: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    transition:
+      transform 520ms var(--ease-out-expo),
+      border-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .big-action:hover .big-action-icon {
+    transform: translate3d(4px, -4px, 0);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  /* ---------- Kontakt ---------- */
+  .contact-body {
+    display: grid;
+    gap: 3rem;
+    padding-block-start: var(--spacing-block);
+  }
+
+  .contact-socials ul {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+  }
+
+  .contact-socials a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding-block: 0.65rem;
+    font-size: 1rem;
+    color: var(--color-fg);
+  }
+
+  .social-handle {
+    color: var(--color-fg-subtle);
+  }
+
+  @media (min-width: 48rem) {
+    .hero-bottom {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 3rem;
+    }
+
+    .hero-aside {
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 4rem;
+    }
+
+    .contact-body {
+      gap: 4rem;
+    }
+  }
+</style>

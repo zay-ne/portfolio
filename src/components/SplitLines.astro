@@ -1,0 +1,29 @@
+---
+/**
+ * Große Überschrift, deren Zeilen nacheinander hinter einer Maske hochfahren.
+ * Der Umbruch ist bewusst von Hand gesetzt (ein Array-Eintrag = eine Zeile),
+ * weil bei dieser Schriftgröße der automatische Umbruch nie dort sitzt,
+ * wo er inhaltlich hingehört.
+ */
+export interface Props {
+  lines: readonly string[];
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'div';
+  class?: string;
+  /** Abstand zwischen den Zeilen in Millisekunden. */
+  stagger?: number;
+  /** Startverzögerung der ersten Zeile. */
+  delay?: number;
+}
+
+const { lines, as: Tag = 'h2', class: className, stagger = 90, delay = 0 } = Astro.props;
+---
+
+<Tag class={className} data-reveal>
+  {
+    lines.map((line: string, i: number) => (
+      <span class="line-clip" style={`--reveal-delay:${delay + i * stagger}ms`}>
+        <span>{line}</span>
+      </span>
+    ))
+  }
+</Tag>

@@ -1,0 +1,294 @@
+@import 'tailwindcss';
+
+/* Dark Mode wird über data-theme am <html> gesteuert (Umschalter + Systemvorgabe),
+   nicht allein über prefers-color-scheme. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  /* ---- Schrift ---------------------------------------------------------- */
+  /* --font-archivo / --font-jetbrains liefert Astros Fonts-API (siehe astro.config.mjs). */
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-jetbrains);
+
+  /* ---- Farben: semantische Tokens, nie rohe Hex-Werte in Komponenten ---- */
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-fg: #0a0a0a;
+  --color-fg-muted: #5f5f66;
+  --color-fg-subtle: #71717a;
+  --color-line: #e3e3e6;
+  --color-line-strong: #c9c9ce;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-contrast: #ffffff;
+
+  /* ---- Vertikaler Rhythmus (Density 3/10, großzügig) -------------------- */
+  --spacing-gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --spacing-section: clamp(6rem, 14vw, 13rem);
+  --spacing-block: clamp(3rem, 7vw, 6rem);
+
+  /* ---- Bewegung: ein gemeinsames Timing für die ganze Seite ------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-fast: 180ms;
+  --duration-base: 320ms;
+  --duration-slow: 900ms;
+}
+
+/* Dunkle Variante: aufgehellte, entsättigte Töne, keine bloße Invertierung. */
+[data-theme='dark'] {
+  --color-bg: #0a0a0b;
+  --color-surface: #131316;
+  --color-fg: #f4f4f5;
+  --color-fg-muted: #a1a1aa;
+  --color-fg-subtle: #7d7d88;
+  --color-line: #26262b;
+  --color-line-strong: #3f3f46;
+  --color-accent: #6c96ff;
+  --color-accent-hover: #8fb0ff;
+  --color-accent-contrast: #0a0a0b;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Kompensiert den fixierten Kopf beim Springen zu Ankern. */
+    scroll-padding-top: 6rem;
+    background-color: var(--color-bg);
+    color-scheme: light;
+  }
+
+  [data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
+    transition:
+      background-color var(--duration-base) var(--ease-out-quart),
+      color var(--duration-base) var(--ease-out-quart);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Sichtbarer Fokusring, nur bei Tastaturbedienung, aber dann unübersehbar. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+
+  /* Zahlen in Listen und Tabellen springen nicht. */
+  time,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  img,
+  video,
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer components {
+  /* Innenmaß der Seite, überall identisch, damit alles auf derselben Kante sitzt. */
+  .shell {
+    width: 100%;
+    max-width: 96rem;
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  /* Kleines Mono-Label für Metadaten: Jahr, Kategorie, Nummerierung. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+  }
+
+  /* Überschrift im Anschnitt. Die Größe hängt an einer Custom Property, damit
+     einzelne Seiten sie über ein Elternelement anpassen können, ohne die
+     Klasse global überschreiben zu müssen. */
+  .display {
+    font-size: var(--display-size, clamp(2.25rem, 6.5vw, 6.25rem));
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.88;
+  }
+
+  .heading-lg {
+    font-size: var(--heading-lg-size, clamp(1.75rem, 5.2vw, 4.25rem));
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+  }
+
+  .heading-md {
+    font-size: clamp(1.375rem, 2.6vw, 2.25rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+  /* Fließtext bleibt lesbar. Die Zeilenlänge hängt an einer Custom Property,
+     damit einzelne Stellen sie anpassen können, ohne die Klasse zu ersetzen. */
+  .prose-measure {
+    max-width: var(--measure, 38ch);
+    font-size: clamp(1rem, 1.15vw, 1.1875rem);
+    line-height: 1.65;
+    color: var(--color-fg-muted);
+  }
+
+  .prose-measure-wide {
+    --measure: 62ch;
+  }
+
+  .hairline {
+    border: 0;
+    border-top: 1px solid var(--color-line);
+    margin: 0;
+  }
+
+  /* Textlink mit Unterstrich, der beim Überfahren durchläuft. */
+  .link-underline {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 1px;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+    transition: background-size var(--duration-base) var(--ease-out-quart);
+  }
+
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+@layer utilities {
+  /* ---- Scroll-Reveal ----------------------------------------------------
+     Elemente starten leicht versetzt und blenden beim Eintreten ein.
+     Ohne JavaScript (oder bei reduzierter Bewegung) sind sie sofort sichtbar. */
+  [data-reveal] {
+    opacity: 1;
+  }
+
+  html.js [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 1.5rem), 0);
+    /* Bewusst kein will-change: die Seite hat dutzende dieser Elemente, und
+       dauerhaft offene Compositing-Layer kosten mehr, als die Zusage bringt.
+       opacity und transform sind ohnehin die günstigen Eigenschaften. */
+  }
+
+  html.js [data-reveal].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition:
+      opacity var(--duration-slow) var(--ease-out-expo) var(--reveal-delay, 0ms),
+      transform var(--duration-slow) var(--ease-out-expo) var(--reveal-delay, 0ms);
+  }
+
+  /* Zeilenweiser Maskenaufzug für große Überschriften. */
+  .line-clip {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.06em;
+  }
+
+  .line-clip > span {
+    display: block;
+  }
+
+  html.js [data-reveal] .line-clip > span {
+    transform: translate3d(0, 110%, 0);
+  }
+
+  html.js [data-reveal].is-visible .line-clip > span {
+    transform: translate3d(0, 0, 0);
+    transition: transform var(--duration-slow) var(--ease-out-expo) var(--reveal-delay, 0ms);
+  }
+
+  /* Bei Maskenaufzug übernimmt die Maske die Bewegung, der Block selbst bleibt ruhig. */
+  html.js [data-reveal]:has(.line-clip) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .anim-none {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Wer reduzierte Bewegung eingestellt hat, bekommt die Inhalte sofort und ruhig. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.js [data-reveal],
+  html.js [data-reveal] .line-clip > span {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

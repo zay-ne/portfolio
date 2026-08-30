@@ -1,0 +1,395 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import SplitLines from '../components/SplitLines.astro';
+import { SITE, type Locale } from '../consts';
+import { projectPath, route, t } from '../i18n/utils';
+import { getProjects, nextProject, type Project } from '../lib/projects';
+
+interface Props {
+  locale: Locale;
+  altHref: string;
+  project: Project;
+}
+
+const { locale, altHref, project } = Astro.props;
+const strings = t(locale);
+const { data } = project;
+const { Content } = await render(project);
+
+const all = await getProjects(locale);
+const next = nextProject(all, project);
+
+/* Der Zweitlink heißt je nach Disziplin anders: Quellcode, Studie, Video. */
+const secondaryLabel =
+  data.secondaryLabel ??
+  (data.discipline === 'research' ? strings.projects.readStudy : strings.projects.viewCode);
+
+const details = [
+  { term: strings.projects.role, value: data.role },
+  { term: strings.projects.category, value: strings.projects.disciplineLabels[data.discipline] },
+  { term: strings.projects.year, value: data.year },
+  { term: strings.projects.status, value: strings.projects.statusLabels[data.status] },
+  ...(data.stack.length > 0 ? [{ term: strings.projects.stack, value: data.stack.join(', ') }] : []),
+];
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${data.title} · ${SITE.name}`}
+  description={data.summary}
+  altHref={altHref}
+>
+  <article class="project">
+    <div class="shell">
+      <div class="back-row" data-reveal style="--reveal-y:0.5rem">
+        <a class="back-link" href={`${route('home', locale)}#work`}>
+          <span class="back-icon"><Icon name="arrow-left" size={14} /></span>
+          <span class="label">{strings.projects.backToWork}</span>
+        </a>
+      </div>
+
+      <header class="project-head">
+        <div class="head-meta" data-reveal style="--reveal-y:0.5rem">
+          <span class="label">{strings.projects.disciplineLabels[data.discipline]}</span>
+          <span class="label tabular">{data.year}</span>
+        </div>
+
+        <div class="project-title">
+          <SplitLines lines={[data.title]} as="h1" class="heading-lg" delay={60} />
+        </div>
+
+        <div class="head-lead" data-reveal style="--reveal-delay:200ms">
+          <p class="prose-measure prose-measure-wide lead">{data.summary}</p>
+        </div>
+
+        {
+          (data.externalUrl || data.secondaryUrl) && (
+            <div class="head-actions" data-reveal style="--reveal-delay:280ms">
+              {data.externalUrl && (
+                <a class="action action-primary" href={data.externalUrl} target="_blank" rel="noopener noreferrer">
+                  <span>{strings.projects.visitSite}</span>
+                  <Icon name="arrow-up-right" size={15} />
+                </a>
+              )}
+              {data.secondaryUrl && (
+                <a class="action" href={data.secondaryUrl} target="_blank" rel="noopener noreferrer">
+                  <span>{secondaryLabel}</span>
+                  <Icon name="arrow-up-right" size={15} />
+                </a>
+              )}
+            </div>
+          )
+        }
+      </header>
+
+      <div class="media" data-reveal style="--reveal-delay:120ms">
+        {
+          data.cover ? (
+            <img src={data.cover} alt={data.coverAlt ?? ''} width="1600" height="900" loading="eager" />
+          ) : (
+            /* Ohne Bild tritt eine gestaltete Fläche an seine Stelle,
+               damit die Seite nicht wie ein Fehler aussieht. */
+            <div class="media-placeholder">
+              <span class="label">{data.title}</span>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="body-grid">
+        <div class="prose" data-reveal>
+          <Content />
+        </div>
+
+        <div class="details" data-reveal style="--reveal-delay:120ms">
+          <dl>
+            {details.map((d) => (
+              <div class="detail">
+                <dt class="label">{d.term}</dt>
+                <dd>{d.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+
+      {
+        next && (
+          <div class="next" data-reveal>
+            <hr class="hairline" />
+            <a class="next-link" href={projectPath(next.data.key, locale)}>
+              <span class="label next-label">{strings.projects.nextProject}</span>
+              <span class="next-row">
+                <span class="next-title">{next.data.title}</span>
+                <span class="next-icon">
+                  <Icon name="arrow-up-right" size={18} />
+                </span>
+              </span>
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project {
+    padding-block: clamp(2rem, 6vh, 4rem) 0;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-block: 0.5rem;
+    color: var(--color-fg-muted);
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .back-link:hover {
+    color: var(--color-fg);
+  }
+
+  .back-icon {
+    display: grid;
+    place-items: center;
+    inline-size: 28px;
+    block-size: 28px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    transition: transform var(--duration-base) var(--ease-out-quart);
+  }
+
+  .back-link:hover .back-icon {
+    transform: translateX(-3px);
+  }
+
+  .project-head {
+    padding-block: clamp(2.5rem, 8vh, 5rem) clamp(2rem, 5vh, 3.5rem);
+  }
+
+  .head-meta {
+    display: flex;
+    gap: 1.5rem;
+    padding-block-end: 1.25rem;
+  }
+
+  .project-title {
+    --heading-lg-size: clamp(2rem, 7vw, 5.25rem);
+  }
+
+  .head-lead {
+    padding-block-start: 2rem;
+  }
+
+  .lead {
+    font-size: clamp(1.0625rem, 1.6vw, 1.375rem);
+    color: var(--color-fg);
+  }
+
+  .head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-block-start: 2rem;
+  }
+
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-block-size: 44px;
+    padding-inline: 1.25rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    transition:
+      border-color var(--duration-fast) var(--ease-out-quart),
+      background-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .action:hover {
+    border-color: var(--color-fg);
+  }
+
+  /* Genau eine Hauptaktion pro Seite, die zweite bleibt untergeordnet. */
+  .action-primary {
+    background: var(--color-fg);
+    border-color: var(--color-fg);
+    color: var(--color-bg);
+  }
+
+  .action-primary:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+
+  .media {
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+  }
+
+  .media img {
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .media-placeholder {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent 0 9px,
+      color-mix(in srgb, var(--color-fg) 4%, transparent) 9px 10px
+    );
+  }
+
+  .body-grid {
+    display: grid;
+    gap: 3rem;
+    padding-block: var(--spacing-block);
+  }
+
+  .detail {
+    display: grid;
+    gap: 0.3rem;
+    padding-block: 0.9rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .detail:first-child {
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .details dl {
+    margin: 0;
+  }
+
+  .details dd {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--color-fg-muted);
+  }
+
+  /* Markdown-Ausgabe: :global, weil der Inhalt zur Laufzeit eingesetzt wird. */
+  .prose :global(h2) {
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-block: 2.5rem 0.875rem;
+  }
+
+  .prose :global(h2:first-child) {
+    margin-block-start: 0;
+  }
+
+  .prose :global(p) {
+    max-inline-size: 66ch;
+    font-size: clamp(1rem, 1.15vw, 1.0625rem);
+    line-height: 1.7;
+    color: var(--color-fg-muted);
+    margin-block-end: 1rem;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    max-inline-size: 66ch;
+    padding-inline-start: 1.2rem;
+    color: var(--color-fg-muted);
+    line-height: 1.7;
+  }
+
+  .prose :global(li) {
+    margin-block-end: 0.4rem;
+  }
+
+  .prose :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .prose :global(blockquote) {
+    margin: 2rem 0;
+    padding-inline-start: 1.25rem;
+    border-inline-start: 2px solid var(--color-accent);
+    font-size: 1.125rem;
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 3px;
+    padding: 0.1em 0.35em;
+  }
+
+  /* ---- Nächstes Projekt ---- */
+  .next-link {
+    display: block;
+    padding-block: 2rem 0;
+  }
+
+  .next-label {
+    color: var(--color-fg-subtle);
+  }
+
+  .next-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block-start: 0.75rem;
+  }
+
+  .next-title {
+    font-size: clamp(1.5rem, 5vw, 3.25rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    transition: transform 520ms var(--ease-out-expo);
+  }
+
+  .next-link:hover .next-title,
+  .next-link:focus-visible .next-title {
+    transform: translate3d(clamp(6px, 1vw, 14px), 0, 0);
+  }
+
+  .next-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 44px;
+    block-size: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-fg-muted);
+    transition:
+      transform 520ms var(--ease-out-expo),
+      border-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .next-link:hover .next-icon {
+    transform: translate3d(4px, -4px, 0);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  @media (min-width: 64rem) {
+    .body-grid {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 5rem;
+      align-items: start;
+    }
+  }
+</style>

@@ -1,0 +1,64 @@
+---
+import { getLocale, otherLocale, t } from '../i18n/utils';
+
+interface Props {
+  /** Dieselbe Seite in der anderen Sprache. Jede Route liefert das selbst. */
+  altHref: string;
+}
+
+const { altHref } = Astro.props;
+const locale = getLocale(Astro.url);
+const strings = t(locale);
+const target = otherLocale(locale);
+---
+
+<a
+  class="lang-toggle"
+  href={altHref}
+  hreflang={target}
+  lang={target}
+  aria-label={`${strings.meta.langLabel}: ${strings.meta.langSwitchTo}`}
+>
+  <span class="current" aria-hidden="true">{locale.toUpperCase()}</span>
+  <span class="sep" aria-hidden="true">/</span>
+  <span class="target" aria-hidden="true">{target.toUpperCase()}</span>
+</a>
+
+<style>
+  .lang-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    padding: 0.55rem 0.15rem;
+    color: var(--color-fg-subtle);
+  }
+
+  /* Trefferfläche auf 44px anheben, ohne das Layout aufzublähen. */
+  .lang-toggle::after {
+    content: '';
+    position: absolute;
+    inset: -0.5rem -0.6rem;
+  }
+
+  .current {
+    color: var(--color-fg);
+  }
+
+  .sep {
+    opacity: 0.4;
+  }
+
+  .lang-toggle:hover .target,
+  .lang-toggle:focus-visible .target {
+    color: var(--color-fg);
+  }
+
+  .target {
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+</style>

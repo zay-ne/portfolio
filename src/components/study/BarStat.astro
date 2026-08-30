@@ -1,0 +1,224 @@
+---
+import type { BarDatum } from '../../data/vectra-study';
+import type { Locale } from '../../consts';
+
+export interface Props {
+  title: string;
+  unit: string;
+  caption: string;
+  bars: BarDatum[];
+  locale: Locale;
+  /** Nachkommastellen der Beschriftung. */
+  digits?: number;
+}
+
+const { title, unit, caption, bars, locale, digits = 3 } = Astro.props;
+
+const nf = new Intl.NumberFormat(locale === 'de' ? 'de-DE' : 'en-GB', {
+  minimumFractionDigits: digits,
+  maximumFractionDigits: digits,
+});
+
+/* Die Skala reicht bis zum größten Wert samt Standardabweichung, aufgerundet
+   auf eine glatte Stufe, damit die Achse nicht bei einer krummen Zahl endet. */
+const rawMax = Math.max(...bars.map((b) => b.value + (b.sd ?? 0)));
+const step = Math.pow(10, Math.floor(Math.log10(rawMax))) / 2;
+const max = Math.ceil(rawMax / step) * step;
+const pct = (v: number) => `${Math.max(0, Math.min(100, (v / max) * 100))}%`;
+---
+
+<figure class="bar-stat" data-reveal>
+  <figcaption class="head">
+    <h3 class="chart-title">{title}</h3>
+    <span class="label unit">{unit}</span>
+  </figcaption>
+
+  <div class="rows">
+    {
+      bars.map((bar, i) => (
+        <div
+          class="row"
+          data-accent={bar.accent ? '' : undefined}
+          style={`--w:${pct(bar.value)};--sd-x:${pct(Math.max(0, bar.value - (bar.sd ?? 0)))};--sd-w:${pct(Math.min(bar.value + (bar.sd ?? 0), max) - Math.max(0, bar.value - (bar.sd ?? 0)))};--d:${i * 90}ms`}
+        >
+          <span class="label row-label">{bar.label}</span>
+          <span class="track">
+            <span class="fill" />
+            {bar.sd !== undefined && <span class="sd" aria-hidden="true" />}
+          </span>
+          <span class="value tabular">
+            {nf.format(bar.value)}
+            {bar.sd !== undefined && <span class="sd-value"> ± {nf.format(bar.sd)}</span>}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="axis" aria-hidden="true">
+    <span class="tabular">0</span>
+    <span class="tabular">{nf.format(max / 2)}</span>
+    <span class="tabular">{nf.format(max)}</span>
+  </div>
+
+  <p class="caption">{caption}</p>
+</figure>
+
+<style>
+  .bar-stat {
+    margin: 0;
+    border-block-start: 1px solid var(--color-line);
+    padding-block-start: 1.25rem;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block-end: 1.5rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .unit {
+    color: var(--color-fg-subtle);
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .row-label {
+    color: var(--color-fg-muted);
+    text-transform: none;
+    letter-spacing: 0.06em;
+  }
+
+  .row[data-accent] .row-label {
+    color: var(--color-fg);
+  }
+
+  .track {
+    position: relative;
+    display: block;
+    block-size: 10px;
+    background: color-mix(in srgb, var(--color-fg) 6%, transparent);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .fill {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: var(--w);
+    background: var(--color-fg-muted);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .row[data-accent] .fill {
+    background: var(--color-accent);
+  }
+
+  /* Standardabweichung als hellere Spanne über dem Balken. */
+  .sd {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: var(--sd-x);
+    inline-size: var(--sd-w);
+    background: repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-fg) 26%, transparent) 0 1px,
+      transparent 1px 4px
+    );
+    opacity: 0;
+  }
+
+  html.js [data-reveal].is-visible .fill {
+    transform: scaleX(1);
+    transition: transform 1000ms var(--ease-out-expo) var(--d);
+  }
+
+  html.js [data-reveal].is-visible .sd {
+    opacity: 1;
+    transition: opacity 600ms var(--ease-out-quart) calc(var(--d) + 500ms);
+  }
+
+  html:not(.js) .fill {
+    transform: scaleX(1);
+  }
+
+  html:not(.js) .sd {
+    opacity: 1;
+  }
+
+  .value {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-fg);
+  }
+
+  .sd-value {
+    color: var(--color-fg-subtle);
+  }
+
+  .axis {
+    display: flex;
+    justify-content: space-between;
+    padding-block-start: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    color: var(--color-fg-subtle);
+  }
+
+  .caption {
+    padding-block-start: 1rem;
+    max-inline-size: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-subtle);
+  }
+
+  @media (min-width: 48rem) {
+    .row {
+      grid-template-columns: 15rem minmax(0, 1fr) 9rem;
+      gap: 1.25rem;
+    }
+
+    .value {
+      text-align: right;
+    }
+
+    .axis {
+      margin-inline-start: calc(15rem + 1.25rem);
+      margin-inline-end: calc(9rem + 1.25rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fill {
+      transform: scaleX(1);
+    }
+
+    .sd {
+      opacity: 1;
+    }
+  }
+</style>

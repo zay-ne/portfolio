@@ -1,0 +1,217 @@
+---
+/**
+ * Vorschaukarte, die beim Überfahren einer Projektzeile dem Zeiger folgt.
+ * Einmal pro Seite eingebunden; sie hört auf alle [data-row]-Elemente.
+ *
+ * Bewusst nur für echte Zeigegeräte: auf Touch gibt es kein Hover, dort steht
+ * die Kurzbeschreibung stattdessen direkt in der Zeile.
+ */
+---
+
+<div class="preview" data-preview aria-hidden="true">
+  <figure class="preview-card">
+    <div class="preview-media">
+      <img class="preview-img" data-preview-img alt="" hidden decoding="async" />
+      <div class="preview-fallback" data-preview-fallback>
+        <span class="label preview-num" data-preview-num></span>
+        <span class="preview-fallback-title" data-preview-title></span>
+      </div>
+    </div>
+    <figcaption class="preview-summary" data-preview-summary></figcaption>
+  </figure>
+</div>
+
+<style>
+  .preview {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 50;
+    inline-size: 22rem;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(-100%, -100%, 0) scale(0.94);
+    transition:
+      opacity 260ms var(--ease-out-quart),
+      scale 320ms var(--ease-out-expo);
+    scale: 0.94;
+    will-change: transform, opacity;
+  }
+
+  .preview[data-visible] {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .preview-card {
+    margin: 0;
+    padding: 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    box-shadow: 0 24px 60px -28px rgb(0 0 0 / 0.32);
+  }
+
+  .preview-media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 3px;
+    background: var(--color-bg);
+  }
+
+  .preview-img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Solange kein Bild hinterlegt ist, tritt eine typografische Fläche an seine
+     Stelle. Gestaltet, nicht kaputt. */
+  .preview-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent 0 7px,
+      color-mix(in srgb, var(--color-fg) 5%, transparent) 7px 8px
+    );
+  }
+
+  .preview-num {
+    color: var(--color-fg-subtle);
+  }
+
+  .preview-fallback-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .preview-summary {
+    margin-block-start: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-muted);
+    /* Bei drei Zeilen abschneiden, die ganze Geschichte steht auf der Detailseite. */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  /* Touch, Stift, grobe Zeiger: Karte bleibt vollständig aus dem Weg. */
+  @media not all and (hover: hover) and (pointer: fine) {
+    .preview {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  let raf = 0;
+  let controller: AbortController | null = null;
+
+  function initHoverPreview() {
+    controller?.abort();
+    cancelAnimationFrame(raf);
+
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const preview = document.querySelector<HTMLElement>('[data-preview]');
+    const rows = document.querySelectorAll<HTMLAnchorElement>('[data-row]');
+    if (!fine || !preview || rows.length === 0) return;
+
+    controller = new AbortController();
+    const { signal } = controller;
+
+    const img = preview.querySelector<HTMLImageElement>('[data-preview-img]')!;
+    const fallback = preview.querySelector<HTMLElement>('[data-preview-fallback]')!;
+    const numEl = preview.querySelector<HTMLElement>('[data-preview-num]')!;
+    const titleEl = preview.querySelector<HTMLElement>('[data-preview-title]')!;
+    const summaryEl = preview.querySelector<HTMLElement>('[data-preview-summary]')!;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const offset = { x: 28, y: -110 };
+    let target = { x: -9999, y: -9999 };
+    let current = { x: -9999, y: -9999 };
+    let running = false;
+
+    const tick = () => {
+      // Nachlauf: die Karte zieht dem Zeiger weich hinterher statt an ihm zu kleben.
+      const ease = reduced ? 1 : 0.16;
+      current.x += (target.x - current.x) * ease;
+      current.y += (target.y - current.y) * ease;
+      preview.style.transform = `translate3d(${current.x}px, ${current.y}px, 0)`;
+      if (running) raf = requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(tick);
+    };
+
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+
+    const move = (e: PointerEvent) => {
+      const width = preview.offsetWidth;
+      const height = preview.offsetHeight;
+      // An den Rändern kippt die Karte auf die andere Seite des Zeigers.
+      const x = Math.min(e.clientX + offset.x, window.innerWidth - width - 16);
+      const y = Math.min(Math.max(e.clientY + offset.y, 16), window.innerHeight - height - 16);
+      target = { x, y };
+    };
+
+    const show = (row: HTMLAnchorElement) => {
+      const cover = row.dataset.cover;
+      if (cover) {
+        img.src = cover;
+        img.alt = row.dataset.coverAlt ?? '';
+        img.hidden = false;
+        fallback.hidden = true;
+      } else {
+        img.hidden = true;
+        img.removeAttribute('src');
+        fallback.hidden = false;
+        numEl.textContent = row.dataset.num ?? '';
+        titleEl.textContent = row.dataset.title ?? '';
+      }
+      summaryEl.textContent = row.dataset.summary ?? '';
+      preview.setAttribute('data-visible', '');
+      start();
+    };
+
+    const hide = () => {
+      preview.removeAttribute('data-visible');
+      // Erst nach dem Ausblenden anhalten, sonst friert die Karte sichtbar ein.
+      window.setTimeout(() => {
+        if (!preview.hasAttribute('data-visible')) stop();
+      }, 280);
+    };
+
+    window.addEventListener('pointermove', move, { passive: true, signal });
+
+    rows.forEach((row) => {
+      row.addEventListener('pointerenter', () => show(row), { signal });
+      row.addEventListener('pointerleave', hide, { signal });
+      // Tastaturbedienung braucht keine Zeigerkarte, der Fokusring führt.
+      row.addEventListener('blur', hide, { signal });
+    });
+
+    window.addEventListener('scroll', hide, { passive: true, signal });
+    document.addEventListener('astro:before-swap', () => { stop(); hide(); }, { signal });
+  }
+
+  initHoverPreview();
+  document.addEventListener('astro:page-load', initHoverPreview);
+</script>

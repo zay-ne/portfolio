@@ -1,0 +1,31 @@
+---
+import ProjectPage from '../../../layouts/ProjectPage.astro';
+import StudyPage from '../../../layouts/StudyPage.astro';
+import { projectPath } from '../../../i18n/utils';
+import { getProjects } from '../../../lib/projects';
+
+export async function getStaticPaths() {
+  const [de, en] = await Promise.all([getProjects('de'), getProjects('en')]);
+  const translated = new Set(de.map((p) => p.data.key));
+
+  return en.map((project) => ({
+    params: { key: project.data.key },
+    props: {
+      project,
+      altHref: translated.has(project.data.key) ? projectPath(project.data.key, 'de') : '/',
+    },
+  }));
+}
+
+const { project, altHref } = Astro.props;
+---
+
+{
+  /* Arbeiten mit eigenem Layout bekommen ihre eigene Seite, alle anderen
+     laufen über die Standard-Projektseite. */
+  project.data.feature === 'vectra-h2' ? (
+    <StudyPage locale="en" project={project} altHref={altHref} />
+  ) : (
+    <ProjectPage locale="en" project={project} altHref={altHref} />
+  )
+}

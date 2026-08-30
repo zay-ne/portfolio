@@ -1,0 +1,201 @@
+---
+import Icon from './Icon.astro';
+import { SITE, type Locale } from '../consts';
+import { t } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = t(locale);
+---
+
+<div class="copy-email">
+  <a class="address" href={`mailto:${SITE.email}`}>
+    <span class="address-text">{SITE.email}</span>
+  </a>
+
+  <button
+    type="button"
+    class="copy-button"
+    data-copy={SITE.email}
+    data-label-copy={strings.contact.copy}
+    data-label-copied={strings.contact.copied}
+    data-label-failed={strings.contact.copyFailed}
+  >
+    <span class="copy-icons" aria-hidden="true">
+      <span class="ci ci-copy"><Icon name="copy" size={14} /></span>
+      <span class="ci ci-check"><Icon name="check" size={14} /></span>
+    </span>
+    <span class="copy-text">{strings.contact.copy}</span>
+  </button>
+
+  <!-- Rückmeldung fürs Vorlesen, ohne den Fokus zu stehlen. -->
+  <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+</div>
+
+<style>
+  .copy-email {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .address {
+    display: inline-block;
+    max-inline-size: 100%;
+    padding-block: 0.6rem;
+    font-size: clamp(1.5rem, 6.5vw, 5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    /* Lange Adressen dürfen umbrechen statt zu überlaufen. */
+    overflow-wrap: anywhere;
+  }
+
+  .address-text {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-block-end: 0.06em;
+    transition:
+      background-size 600ms var(--ease-out-expo),
+      color var(--duration-base) var(--ease-out-quart);
+  }
+
+  .address:hover .address-text,
+  .address:focus-visible .address-text {
+    background-size: 100% 1px;
+    color: var(--color-accent);
+  }
+
+  .copy-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-block-size: 44px;
+    padding: 0 1rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-fg-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+      border-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .copy-button:hover {
+    border-color: var(--color-fg);
+    color: var(--color-fg);
+  }
+
+  .copy-icons {
+    display: grid;
+    place-items: center;
+  }
+
+  .ci {
+    grid-area: 1 / 1;
+    display: grid;
+    place-items: center;
+    transition:
+      opacity var(--duration-fast) var(--ease-out-quart),
+      transform var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .ci-check {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  .copy-button[data-state='copied'] {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .copy-button[data-state='copied'] .ci-copy {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  .copy-button[data-state='copied'] .ci-check {
+    opacity: 1;
+    transform: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script>
+  function initCopyEmail() {
+    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = 'true';
+
+      const text = btn.querySelector<HTMLElement>('.copy-text')!;
+      const status = document.querySelector<HTMLElement>('[data-copy-status]');
+      let timer = 0;
+
+      btn.addEventListener('click', async () => {
+        const value = btn.dataset.copy ?? '';
+        const ok = await copy(value);
+        const label = ok ? btn.dataset.labelCopied! : btn.dataset.labelFailed!;
+
+        btn.dataset.state = ok ? 'copied' : 'failed';
+        text.textContent = label;
+        if (status) status.textContent = `${label}: ${value}`;
+
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          delete btn.dataset.state;
+          text.textContent = btn.dataset.labelCopy!;
+          if (status) status.textContent = '';
+        }, 2600);
+      });
+    });
+  }
+
+  /** Zwischenablage-API, mit Rückfallweg für Browser ohne Berechtigung. */
+  async function copy(value: string): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(value);
+      return true;
+    } catch {
+      try {
+        const el = document.createElement('textarea');
+        el.value = value;
+        el.setAttribute('readonly', '');
+        el.style.position = 'fixed';
+        el.style.opacity = '0';
+        document.body.appendChild(el);
+        el.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(el);
+        return ok;
+      } catch {
+        return false;
+      }
+    }
+  }
+
+  initCopyEmail();
+  document.addEventListener('astro:page-load', initCopyEmail);
+</script>

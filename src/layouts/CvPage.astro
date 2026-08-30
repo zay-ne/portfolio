@@ -1,0 +1,332 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import SplitLines from '../components/SplitLines.astro';
+import { SITE, type Locale } from '../consts';
+import { formatMonthYear, t } from '../i18n/utils';
+import { CV_PDF, CV_UPDATED, cv, type CvEntry } from '../data/cv';
+
+interface Props {
+  locale: Locale;
+  altHref: string;
+}
+
+const { locale, altHref } = Astro.props;
+const strings = t(locale);
+const content = cv[locale];
+const pdf = CV_PDF[locale];
+
+/* Beide Rubriken teilen sich dieselbe Zeilenstruktur, deshalb eine Schleife
+   statt zweier fast gleicher Blöcke. */
+const blocks: Array<{ title: string; entries: CvEntry[] }> = [
+  { title: strings.cv.experience, entries: content.experience },
+  { title: strings.cv.education, entries: content.education },
+  { title: strings.cv.certifications, entries: content.certifications },
+  { title: strings.cv.engagement, entries: content.engagement },
+];
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${strings.cv.title} · ${SITE.name}`}
+  description={strings.cv.lead}
+  altHref={altHref}
+>
+  <div class="shell cv">
+    <header class="cv-head">
+      <div class="cv-meta" data-reveal style="--reveal-y:0.5rem">
+        <span class="label">{SITE.name}</span>
+        <span class="label"
+          >{strings.cv.updated}: <time datetime={CV_UPDATED}>{formatMonthYear(CV_UPDATED, locale)}</time></span
+        >
+      </div>
+
+      <div class="cv-title">
+        <SplitLines lines={[strings.cv.title]} as="h1" class="display" delay={60} />
+      </div>
+
+      <div class="cv-lead" data-reveal style="--reveal-delay:220ms">
+        <p class="prose-measure prose-measure-wide">{strings.cv.lead}</p>
+        {
+          pdf && (
+            <a class="download" href={pdf} download>
+              <span>{strings.cv.download}</span>
+              <Icon name="download" size={16} />
+            </a>
+          )
+        }
+      </div>
+    </header>
+
+    <!-- Jede Rubrik ist eine eigene Sektion mit gleicher Zeilenstruktur:
+         links der Zeitraum, rechts der Inhalt. -->
+    {
+      blocks.map((block) => (
+        <section class="cv-block">
+          <hr class="hairline" />
+          <div class="block-grid">
+            <div class="block-title" data-reveal>
+              <h2 class="heading-md">{block.title}</h2>
+            </div>
+
+            <ol class="entries">
+              {block.entries.map((entry, i) => (
+                <li class="entry" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+                  <p class="label entry-period tabular">{entry.period}</p>
+                  <div class="entry-body">
+                    <h3 class="entry-role">{entry.role}</h3>
+                    <p class="entry-org">
+                      {entry.org}
+                      {entry.location && <span class="entry-location"> · {entry.location}</span>}
+                    </p>
+                    {entry.description && <p class="entry-desc">{entry.description}</p>}
+                    {entry.bullets && (
+                      <ul class="entry-bullets">
+                        {entry.bullets.map((b) => (
+                          <li>{b}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="cv-block">
+      <hr class="hairline" />
+      <div class="block-grid">
+        <div class="block-title" data-reveal>
+          <h2 class="heading-md">{strings.cv.skills}</h2>
+        </div>
+        <div class="skills">
+          {
+            content.skills.map((group, i) => (
+              <div class="skill-group" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+                <p class="label">{group.group}</p>
+                <ul class="chips">
+                  {group.items.map((item) => (
+                    <li class="chip">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="cv-block">
+      <hr class="hairline" />
+      <div class="block-grid">
+        <div class="block-title" data-reveal>
+          <h2 class="heading-md">{strings.cv.languages}</h2>
+        </div>
+        <div class="languages" data-reveal style="--reveal-delay:80ms">
+          <dl>
+            {
+              content.languages.map((lang) => (
+                <div class="language">
+                  <dt>{lang.name}</dt>
+                  <dd class="label">{lang.level}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .cv {
+    padding-block: clamp(2rem, 6vh, 4rem) 0;
+  }
+
+  .cv-head {
+    padding-block-end: var(--spacing-block);
+  }
+
+  .cv-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block-end: clamp(2rem, 6vh, 4rem);
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .cv-title {
+    padding-block-start: clamp(2rem, 6vh, 3.5rem);
+    --display-size: clamp(2.5rem, 8vw, 6.5rem);
+  }
+
+  .cv-lead {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    padding-block-start: clamp(2rem, 5vh, 3rem);
+  }
+
+  .download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-block-size: 44px;
+    padding-inline: 1.35rem;
+    border-radius: 999px;
+    background: var(--color-fg);
+    color: var(--color-bg);
+    font-size: 0.9375rem;
+    transition:
+      background-color var(--duration-fast) var(--ease-out-quart),
+      transform var(--duration-base) var(--ease-out-quart);
+  }
+
+  .download:hover {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+
+  .cv-block {
+    padding-block-end: var(--spacing-block);
+  }
+
+  .block-grid {
+    display: grid;
+    gap: 2rem;
+    padding-block-start: 2rem;
+  }
+
+  .entries {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .entry {
+    display: grid;
+    gap: 0.5rem;
+    padding-block: 1.75rem;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .entry:first-child {
+    border-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  .entry-period {
+    color: var(--color-fg-subtle);
+  }
+
+  .entry-role {
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .entry-org {
+    font-size: 0.9375rem;
+    color: var(--color-fg-muted);
+    padding-block-start: 0.15rem;
+  }
+
+  .entry-location {
+    color: var(--color-fg-subtle);
+  }
+
+  .entry-desc {
+    max-inline-size: 62ch;
+    padding-block-start: 0.75rem;
+    color: var(--color-fg-muted);
+    line-height: 1.65;
+  }
+
+  .entry-bullets {
+    max-inline-size: 62ch;
+    margin: 0.75rem 0 0;
+    padding-inline-start: 1.1rem;
+    color: var(--color-fg-muted);
+    line-height: 1.65;
+  }
+
+  .entry-bullets li {
+    margin-block-end: 0.3rem;
+  }
+
+  .skills {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .skill-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chip {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    color: var(--color-fg-muted);
+  }
+
+  .languages dl {
+    margin: 0;
+  }
+
+  .language {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 0.9rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .language dt {
+    font-size: 1rem;
+  }
+
+  .language dd {
+    margin: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .block-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
+      gap: 4rem;
+      padding-block-start: 3rem;
+    }
+
+    .block-title {
+      position: sticky;
+      /* Bleibt beim Scrollen unter dem Kopf stehen, solange die Rubrik läuft. */
+      inset-block-start: 6.5rem;
+    }
+
+    .entry {
+      grid-template-columns: 10rem minmax(0, 1fr);
+      gap: 2rem;
+    }
+  }
+</style>

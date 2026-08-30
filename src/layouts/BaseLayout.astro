@@ -1,0 +1,190 @@
+---
+import { Font } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, type Locale } from '../consts';
+import { t } from '../i18n/utils';
+import '../styles/global.css';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** Dieselbe Seite in der anderen Sprache, für Umschalter und hreflang. */
+  altHref: string;
+  /** Auf true setzen für Seiten, die nicht in den Index sollen. */
+  noindex?: boolean;
+}
+
+const { locale, title, description, altHref, noindex = false } = Astro.props;
+const strings = t(locale);
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternate = new URL(altHref, Astro.site);
+const deHref = locale === 'de' ? canonical.href : alternate.href;
+const enHref = locale === 'en' ? canonical.href : alternate.href;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <!-- viewport-fit=cover, damit die Seite unter Notch und Home-Indicator sauber sitzt.
+         Zoom bleibt bewusst erlaubt. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="alternate" hreflang="de" href={deHref} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={deHref} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={locale === 'de' ? 'de_DE' : 'en_GB'} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- TODO: /og.png anlegen (1200x630). Bis dahin zeigen geteilte Links kein Bild. -->
+
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Vorgeladen wird nur der lateinische Grundschnitt: er trägt alles, was
+         Deutsch und Englisch brauchen. latin-ext bleibt verfügbar, wird aber
+         erst geholt, wenn tatsächlich ein Zeichen daraus vorkommt. -->
+    <Font cssVariable="--font-archivo" preload={[{ subset: 'latin' }]} />
+    <Font cssVariable="--font-jetbrains" />
+
+    <!-- Läuft vor dem ersten Anstrich: setzt das Farbschema, damit nichts aufblitzt,
+         und markiert JS-Verfügbarkeit für die Scroll-Reveals. -->
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('js');
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          root.dataset.theme = stored === 'light' || stored === 'dark' ? stored : prefersDark ? 'dark' : 'light';
+        } catch (e) {
+          root.dataset.theme = 'light';
+        }
+
+        // Sicherheitsnetz: Die Reveals verstecken ihren Inhalt per CSS, solange
+        // html.js gesetzt ist. Läuft das Modul-Skript nicht an (Ladefehler,
+        // alter Browser, blockiertes JavaScript-Modul), bliebe die halbe Seite
+        // unsichtbar. Meldet es sich nicht binnen drei Sekunden, fällt die
+        // Klasse. Dann steht alles ohne Animation da, aber es steht da.
+        window.setTimeout(function () {
+          if (!window.__revealsReady) root.classList.remove('js');
+        }, 3000);
+      })();
+    </script>
+
+    <ClientRouter />
+  </head>
+
+  <body id="top">
+    <a class="skip-link" href="#main">{strings.meta.skipToContent}</a>
+
+    <Header altHref={altHref} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <style>
+      .skip-link {
+        position: fixed;
+        inset-block-start: 0.75rem;
+        inset-inline-start: 0.75rem;
+        z-index: 1000;
+        padding: 0.75rem 1.25rem;
+        background: var(--color-fg);
+        color: var(--color-bg);
+        font-size: 0.875rem;
+        border-radius: 4px;
+        transform: translateY(calc(-100% - 1rem));
+        transition: transform var(--duration-fast) var(--ease-out-quart);
+      }
+
+      .skip-link:focus-visible {
+        transform: none;
+      }
+
+      main {
+        /* Platz für den fixierten Kopf, damit nichts darunter verschwindet. */
+        padding-block-start: 4.5rem;
+      }
+    </style>
+
+    <script>
+      // Scroll-Reveal: ein Beobachter für die ganze Seite. Jedes Element wird
+      // genau einmal eingeblendet und danach nicht mehr überwacht.
+      let observer: IntersectionObserver | null = null;
+
+      function initReveals() {
+        // Zeigt dem Sicherheitsnetz im Kopf an, dass die Reveals laufen.
+        window.__revealsReady = true;
+
+        const targets = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-visible)');
+        if (targets.length === 0) return;
+
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) {
+          targets.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
+
+        observer ??= new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add('is-visible');
+              observer?.unobserve(entry.target);
+            }
+          },
+          // Erst auslösen, wenn das Element ein Stück im Bild ist, nicht schon an der Kante.
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+        );
+
+        targets.forEach((el) => observer!.observe(el));
+      }
+
+      // Farbschema-Umschalter. Der Startwert steht schon vor dem Anstrich fest;
+      // hier wird nur noch umgeschaltet und gespeichert.
+      function initThemeToggle() {
+        document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
+          if (btn.dataset.bound) return;
+          btn.dataset.bound = 'true';
+          btn.addEventListener('click', () => {
+            const root = document.documentElement;
+            const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            root.dataset.theme = next;
+            try {
+              localStorage.setItem('theme', next);
+            } catch {
+              /* Privater Modus o. Ä. Die Wahl gilt dann nur für diese Sitzung. */
+            }
+          });
+        });
+      }
+
+      initReveals();
+      initThemeToggle();
+      document.addEventListener('astro:page-load', () => {
+        initReveals();
+        initThemeToggle();
+      });
+    </script>
+  </body>
+</html>

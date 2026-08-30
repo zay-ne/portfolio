@@ -1,0 +1,185 @@
+# Portfolio
+
+Zweisprachige Portfolio-Website (Deutsch als Standard, Englisch unter `/en/`).
+Statisch gebaut mit Astro, gestaltet als ruhige, typografisch geführte Seite:
+große Neo-Grotesk, Monospace für Metadaten, ein einziger Akzent in Elektroblau.
+
+Die Inhalte stammen aus den fünf Bewerbungsfassungen (Sales, QM, Projekt-
+management, Engineering, IT). Was sich daraus nicht ableiten ließ, ist im
+Quelltext mit `TODO` markiert.
+
+Bewusst **nicht** übernommen, weil die Seite öffentlich ist: Privatanschrift,
+Telefonnummer und Geburtsdatum. Die gehören ins Bewerbungs-PDF und, soweit
+gesetzlich nötig, ins Impressum, nicht auf die Startseite.
+
+## Voraussetzungen
+
+Node 20 oder neuer. Entwickelt und gebaut mit Node 26 und npm 11.
+
+## Befehle
+
+Alle Befehle im Ordner `portfolio` ausführen.
+
+Abhängigkeiten installieren:
+
+```bash
+npm install
+```
+
+Entwicklungsserver auf http://localhost:4321 starten:
+
+```bash
+npm run dev
+```
+
+Für die Auslieferung nach `dist/` bauen:
+
+```bash
+npm run build
+```
+
+Typen und Astro-Vorlagen prüfen (läuft ohne Fehler durch):
+
+```bash
+npm run check
+```
+
+Den gebauten Stand lokal ansehen:
+
+```bash
+npm run preview
+```
+
+## Aufbau
+
+```
+src/
+  consts.ts              Name, Domain, E-Mail, Profillinks, Disziplinen
+  content.config.ts      Schema eines Projekts (Pflichtfelder, Typen)
+  env.d.ts               Typdeklarationen für globale Fenster-Eigenschaften
+  content/projects/
+    de/*.md              Ein Projekt je Datei, deutsche Fassung
+    en/*.md              Dieselben Projekte, englische Fassung
+  data/cv.ts             Lebenslaufdaten, zweisprachig
+  data/vectra-study.ts   Inhalte und Messwerte der Vectra-H2-Studie
+  i18n/
+    ui.ts                Sämtliche Oberflächentexte, DE und EN
+    utils.ts             Sprache aus der URL, Routentabelle, Datumsformat
+  lib/projects.ts        Projekte laden, sortieren, gruppieren
+  components/            Kopf, Fuß, Projektliste, Hover-Vorschau, Icons …
+  components/study/      Diagramme der Studienseite, alle als Inline-SVG
+  layouts/               Ganze Seitentypen: Start, Projekt, Lebenslauf, Recht
+  pages/                 Routen, dünne Hüllen um die Layouts
+  styles/global.css      Farbtokens, Typoskala, Abstände, Bewegungssystem
+```
+
+Die Seiten unter `pages/` enthalten bewusst fast keine Auszeichnung. Sie reichen
+nur Sprache und Gegenstück-URL an ein Layout weiter. Wer die Startseite ändern
+will, bearbeitet `layouts/HomePage.astro`, nicht `pages/index.astro`.
+
+## Ein neues Projekt anlegen
+
+1. `src/content/projects/de/<kennung>.md` anlegen, eine bestehende Datei als
+   Vorlage nehmen.
+2. `key` auf dieselbe Kennung setzen. Daraus wird die URL `/arbeit/<kennung>`.
+3. `discipline` bestimmt die Sektion: `software`, `research` oder `design`.
+4. `order` steuert die Reihenfolge innerhalb der Sektion, kleiner steht weiter oben.
+5. Dieselbe Datei unter `en/` mit gleichem `key` und `lang: en` anlegen.
+
+Fehlt die englische Fassung, erscheint das Projekt dort schlicht nicht und der
+Sprachumschalter führt auf die englische Startseite statt in eine Fehlerseite.
+
+Ein Titelbild ist optional: `cover: "/work/<kennung>.jpg"` und die Datei unter
+`public/work/` ablegen. Ohne Bild zeigen Vorschau und Detailseite eine
+gestaltete typografische Fläche.
+
+## Was noch offen ist
+
+Vor dem ersten Deployment zwingend:
+
+- **Domain eintragen** in `astro.config.mjs` (`site`) und `public/robots.txt`.
+- **Impressum und Datenschutz** füllen (`src/pages/impressum.astro`,
+  `datenschutz.astro` und die englischen Entsprechungen). Bei geschäftlicher
+  Nutzung in Deutschland ist beides Pflicht.
+
+Danach, nach Wichtigkeit:
+
+- Verbleibende `TODO`-Absätze in den Projektdateien. Das sind fast durchweg
+  Ergebnisse und Zahlen: durchgeführte Challenges bei meedup, Referenzprojekte
+  bei zayne, Reichweiten bei den ECM-Arbeiten.
+- Bei Maps Scout steht ein `TODO` zur Abwägung: das Werkzeug liest öffentlich
+  sichtbare Google-Maps-Daten, was den dortigen Nutzungsbedingungen
+  widerspricht. Entscheide, ob das Projekt öffentlich gezeigt werden soll.
+- Lebenslauf-PDF unter `public/` ablegen und in `src/data/cv.ts` bei `CV_PDF`
+  eintragen. Solange dort `null` steht, erscheint der Download-Knopf nicht.
+- `public/og.png` (1200 x 630) für Vorschaubilder beim Teilen anlegen.
+- Titelbilder unter `public/work/` ablegen und im Frontmatter als `cover`
+  eintragen. Ohne Bild zeigt die Seite eine gestaltete typografische Fläche.
+  Das funktioniert, aber Bilder tragen die Projektliste deutlich weiter.
+
+## Projekte mit eigenem Layout
+
+Die meisten Projekte laufen über `layouts/ProjectPage.astro` und bestehen aus
+dem Fließtext ihrer Markdown-Datei. Arbeiten, die mehr brauchen, bekommen ein
+eigenes Layout. Dafür gibt es im Frontmatter das Feld `feature`.
+
+Bislang gilt das nur für die Vectra-H2-Studie: `feature: vectra-h2` schaltet
+`layouts/StudyPage.astro` frei. Der Fließtext der Markdown-Datei wird dann
+nicht gerendert, alle Inhalte kommen aus `data/vectra-study.ts`. Das Feld bleibt
+trotzdem nötig, damit das Projekt in der Übersicht erscheint.
+
+Die Diagramme der Studienseite sind von Hand gezeichnetes Inline-SVG und CSS,
+keine Diagrammbibliothek. Sie beziehen ihre Farben aus denselben Tokens wie der
+Rest der Seite und funktionieren dadurch in hell und dunkel gleichermaßen.
+Sämtliche Zahlen stammen aus dem Manuskript und sind in `vectra-study.ts` mit
+der jeweiligen Tabelle belegt. Die Originalabbildungen aus dem Paper wurden
+bewusst nicht eingebunden, sondern als Schema neu gezeichnet.
+
+Die Namen der Mitwirkenden stehen ausschließlich als Initialen im Quelltext.
+
+## Konventionen
+
+**Kein Gedankenstrich mitten im Satz.** Weder im Fließtext der Seite noch in
+Kommentaren. Wo sich ein Einschub aufdrängt, steht stattdessen ein Komma, ein
+Doppelpunkt oder ein Punkt. Bindestriche in zusammengesetzten Wörtern
+(Soft-Skills, meedup-Netzwerk) und Bis-Striche in Jahresangaben sind davon
+nicht betroffen.
+
+**Farben nur über Tokens.** In Komponenten steht nie ein Hex-Wert, sondern
+`var(--color-fg)`, `var(--color-accent)` und so weiter. Die hellen und dunklen
+Werte stehen zusammen in `global.css`, damit beide Fassungen sich nicht
+auseinanderentwickeln.
+
+**Scroll-Einblendungen laufen über das Attribut `data-reveal`,** nicht über eine
+Komponente. Grund: Astro hängt seinen Scope-Hash nicht an Klassen, die als
+Eigenschaft an eine Komponente gehen. `<Reveal class="hero-top">` hätte die
+Layoutregeln zu `.hero-top` stillschweigend verworfen. Ein natives Element mit
+`data-reveal` und optionalem `style="--reveal-delay:200ms"` umgeht das.
+
+**Die Nummerierung der Sektionen entsteht automatisch** aus der Reihenfolge in
+`DISCIPLINES` (`src/consts.ts`). Kommt eine Disziplin dazu oder fällt eine weg,
+verschieben sich alle Nummern korrekt mit, ohne dass irgendwo eine Zahl von
+Hand geändert werden muss.
+
+**Schriftgrößen großer Überschriften laufen über Custom Properties.** Eine Seite
+verstellt sie über ein Elternelement (`--display-size`, `--heading-lg-size`),
+statt die globale Klasse zu überschreiben.
+
+**Bewegung ist Zugabe, nie Voraussetzung.** Ohne JavaScript, bei reduzierter
+Bewegung und falls das Modul-Skript ausbleibt, steht der gesamte Inhalt sofort
+und vollständig da. Ein Wächter im Seitenkopf sorgt dafür.
+
+**Schriften kommen vom eigenen Server.** Astros Fonts-API lädt Archivo und
+JetBrains Mono zur Buildzeit herunter. Im Browser geht keine Anfrage an Google,
+und es gibt keine Cookies und keine externen Einbettungen, was der
+Datenschutzhinweis auch so beschreibt. Kommt später ein eingebettetes Video oder
+ein Analysewerkzeug dazu, muss dieser Abschnitt angepasst werden.
+
+## Ausliefern
+
+Der Build erzeugt reine statische Dateien in `dist/`. Auf Cloudflare Pages:
+Build-Befehl `npm run build`, Ausgabeverzeichnis `dist`, Wurzelverzeichnis
+`portfolio`. Vercel, Netlify und jeder Webspace funktionieren genauso.
+
+Vor dem ersten Deployment `site` in `astro.config.mjs` auf die echte Domain
+setzen. Daraus entstehen Canonical-URLs, hreflang-Angaben und die Sitemap.

@@ -1,0 +1,176 @@
+---
+import Icon from './Icon.astro';
+import { SITE, SOCIALS } from '../consts';
+import { getLocale, route, t } from '../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const strings = t(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="shell">
+    <hr class="hairline" />
+    <div class="grid">
+      <div class="col col-identity">
+        <p class="name">{SITE.name}</p>
+        <p class="label muted">© {year} · {strings.footer.rights}</p>
+      </div>
+
+      <nav class="col col-social" aria-label={strings.contact.elsewhere}>
+        <p class="label muted">{strings.contact.elsewhere}</p>
+        <ul class="stack">
+          {
+            SOCIALS.map((s) => (
+              <li>
+                <a class="foot-link" href={s.href} target="_blank" rel="me noopener noreferrer">
+                  <span class="link-underline">{s.label}</span>
+                  <Icon name="arrow-up-right" size={13} class="foot-arrow" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="col col-legal" aria-label={strings.footer.imprint}>
+        <p class="label muted">{strings.footer.imprint} / {strings.footer.privacy}</p>
+        <ul class="stack">
+          <li>
+            <a class="foot-link" href={route('imprint', locale)}>
+              <span class="link-underline">{strings.footer.imprint}</span>
+            </a>
+          </li>
+          <li>
+            <a class="foot-link" href={route('privacy', locale)}>
+              <span class="link-underline">{strings.footer.privacy}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="col col-top">
+        <a class="to-top" href="#top">
+          <span class="label">{strings.footer.backToTop}</span>
+          <span class="to-top-icon"><Icon name="arrow-up-right" size={14} /></span>
+        </a>
+        <p class="label muted colophon">{strings.footer.builtWith}</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block-end: calc(2.5rem + env(safe-area-inset-bottom, 0px));
+    margin-block-start: var(--spacing-section);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-block-start: 2.5rem;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .name {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .muted {
+    color: var(--color-fg-subtle);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .foot-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9375rem;
+    /* 44px Trefferhöhe ohne sichtbaren Kasten. */
+    padding-block: 0.6rem;
+    color: var(--color-fg-muted);
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .foot-link:hover,
+  .foot-link:focus-visible {
+    color: var(--color-fg);
+  }
+
+  .foot-arrow {
+    opacity: 0.5;
+    transition: transform var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .foot-link:hover .foot-arrow {
+    transform: translate3d(1px, -1px, 0);
+  }
+
+  .to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.6rem;
+    color: var(--color-fg);
+  }
+
+  .to-top-icon {
+    display: grid;
+    place-items: center;
+    inline-size: 26px;
+    block-size: 26px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    transform: rotate(-45deg);
+    transition:
+      border-color var(--duration-fast) var(--ease-out-quart),
+      transform var(--duration-base) var(--ease-out-quart);
+  }
+
+  .to-top:hover .to-top-icon {
+    border-color: var(--color-fg);
+    transform: rotate(-45deg) translate3d(1px, -1px, 0);
+  }
+
+  .colophon {
+    margin-block-start: auto;
+  }
+
+  @media (min-width: 40rem) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem 2rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .grid {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      align-items: start;
+      padding-block-start: 3.5rem;
+    }
+
+    .col-top {
+      align-items: flex-end;
+      text-align: right;
+      min-block-size: 100%;
+    }
+  }
+</style>

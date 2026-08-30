@@ -1,0 +1,368 @@
+---
+import Icon from './Icon.astro';
+import LangToggle from './LangToggle.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { SITE } from '../consts';
+import { anchors, getLocale, route, t } from '../i18n/utils';
+
+interface Props {
+  altHref: string;
+}
+
+const { altHref } = Astro.props;
+const locale = getLocale(Astro.url);
+const strings = t(locale);
+const home = route('home', locale);
+
+/* Anker zeigen immer auf die Startseite, so funktionieren sie auch von
+   einer Projekt- oder Lebenslaufseite aus. */
+const nav = [
+  { label: strings.nav.work, href: `${home}#${anchors.work}` },
+  { label: strings.nav.about, href: `${home}#${anchors.about}` },
+  { label: strings.nav.cv, href: route('cv', locale) },
+  { label: strings.nav.contact, href: `${home}#${anchors.contact}` },
+];
+---
+
+<header class="site-header" data-header>
+  <div class="shell bar">
+    <a class="wordmark" href={home}>
+      <span class="wordmark-name">{SITE.name}</span>
+    </a>
+
+    <nav class="nav-desktop" aria-label={strings.nav.work}>
+      {
+        nav.map((item) => (
+          <a class="nav-link" href={item.href}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="controls">
+      <ThemeToggle />
+      <LangToggle altHref={altHref} />
+      <button
+        type="button"
+        class="menu-button"
+        data-menu-open
+        aria-expanded="false"
+        aria-controls="site-menu"
+      >
+        <span class="menu-label">{strings.meta.menuOpen}</span>
+        <Icon name="menu" size={18} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Vollflächiges Menü, nur auf schmalen Viewports im Einsatz. -->
+<div class="menu-panel" id="site-menu" data-menu-panel hidden>
+  <div class="shell menu-inner">
+    <button type="button" class="menu-close" data-menu-close aria-label={strings.meta.menuClose}>
+      <Icon name="close" size={20} />
+    </button>
+    <nav class="menu-nav" aria-label={strings.nav.work}>
+      {
+        nav.map((item, i) => (
+          <a class="menu-link" href={item.href} style={`--i:${i}`}>
+            <span class="label menu-index">{String(i + 1).padStart(2, '0')}</span>
+            <span class="menu-text">{item.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</div>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 100;
+    /* Notch und abgerundete Ecken auf iOS respektieren. */
+    padding-block-start: env(safe-area-inset-top, 0px);
+    background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    border-block-end: 1px solid transparent;
+    transition:
+      border-color var(--duration-base) var(--ease-out-quart),
+      background-color var(--duration-base) var(--ease-out-quart);
+  }
+
+  /* Erst nach dem ersten Scrollen setzt sich die Leiste vom Inhalt ab. */
+  .site-header[data-scrolled] {
+    border-block-end-color: var(--color-line);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    block-size: 4.5rem;
+    transition: block-size var(--duration-base) var(--ease-out-quart);
+  }
+
+  .site-header[data-scrolled] .bar {
+    block-size: 3.75rem;
+  }
+
+  .wordmark {
+    /* Trefferhöhe 44px, ohne dass die Zeile optisch wächst. */
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .wordmark-name {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-block-end: 2px;
+    transition: background-size var(--duration-base) var(--ease-out-quart);
+  }
+
+  .wordmark:hover .wordmark-name,
+  .wordmark:focus-visible .wordmark-name {
+    background-size: 100% 1px;
+  }
+
+  .nav-desktop {
+    display: none;
+    gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+
+  .nav-link {
+    position: relative;
+    font-size: 0.875rem;
+    color: var(--color-fg-muted);
+    padding-block: 0.75rem;
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .nav-link::before {
+    content: '';
+    position: absolute;
+    inset-block-end: 0.4rem;
+    inset-inline: 0;
+    block-size: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration-base) var(--ease-out-quart);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--color-fg);
+  }
+
+  .nav-link:hover::before,
+  .nav-link:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  .menu-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-block-size: 44px;
+    padding-inline: 0.25rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-fg);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .menu-label {
+    display: none;
+  }
+
+  /* ---- Menüfläche ------------------------------------------------------ */
+  .menu-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--color-bg);
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-out-quart);
+  }
+
+  .menu-panel[hidden] {
+    display: none;
+  }
+
+  .menu-panel[data-open] {
+    opacity: 1;
+  }
+
+  .menu-inner {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    padding-block: calc(1.25rem + env(safe-area-inset-top, 0px)) 3rem;
+  }
+
+  .menu-close {
+    align-self: flex-end;
+    display: grid;
+    place-items: center;
+    inline-size: 44px;
+    block-size: 44px;
+    border: 0;
+    background: transparent;
+    color: var(--color-fg);
+    cursor: pointer;
+  }
+
+  .menu-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    gap: 0.25rem;
+  }
+
+  .menu-link {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.6rem;
+    font-size: clamp(2rem, 11vw, 3.5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+
+  .menu-panel[data-open] .menu-link {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 420ms var(--ease-out-expo) calc(80ms + var(--i) * 55ms),
+      transform 420ms var(--ease-out-expo) calc(80ms + var(--i) * 55ms);
+  }
+
+  .menu-index {
+    flex: none;
+    color: var(--color-fg-subtle);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-link {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Ab Tablet zeigt der Kopf die Navigation direkt, ohne Klick extra. */
+  @media (min-width: 48rem) {
+    .nav-desktop {
+      display: flex;
+    }
+
+    .menu-button {
+      display: none;
+    }
+
+    .menu-panel {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Das Modul läuft nur einmal; bei Seitenwechseln des View-Transition-Routers
+  // feuert astro:page-load erneut. Ein AbortController räumt die Listener der
+  // vorigen Seite ab, sonst sammeln sie sich am window an.
+  let controller: AbortController | null = null;
+
+  function initHeader() {
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+
+    const header = document.querySelector<HTMLElement>('[data-header]');
+    if (!header) return;
+
+    let ticking = false;
+    const applyScrollState = () => {
+      header.toggleAttribute('data-scrolled', window.scrollY > 24);
+      ticking = false;
+    };
+    applyScrollState();
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(applyScrollState);
+      },
+      { passive: true, signal },
+    );
+
+    // ---- Menüfläche (nur unterhalb von 48rem sichtbar) ----
+    const panel = document.querySelector<HTMLElement>('[data-menu-panel]');
+    const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+    const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+    if (!panel || !openBtn || !closeBtn) return;
+
+    const open = () => {
+      panel.hidden = false;
+      // Ein Frame warten, damit der Übergang tatsächlich bei opacity:0 beginnt.
+      requestAnimationFrame(() => panel.setAttribute('data-open', ''));
+      openBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+
+    const close = () => {
+      if (panel.hidden) return;
+      panel.removeAttribute('data-open');
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      // transitionend deckt den Normalfall ab, der Timer den Fall reduzierter Bewegung.
+      const done = () => {
+        panel.hidden = true;
+      };
+      panel.addEventListener('transitionend', done, { once: true, signal });
+      window.setTimeout(() => {
+        if (!panel.hasAttribute('data-open')) done();
+      }, 400);
+      openBtn.focus();
+    };
+
+    openBtn.addEventListener('click', open, { signal });
+    closeBtn.addEventListener('click', close, { signal });
+    panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', close, { signal }));
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape') close();
+      },
+      { signal },
+    );
+  }
+
+  initHeader();
+  document.addEventListener('astro:page-load', initHeader);
+</script>

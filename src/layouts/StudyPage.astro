@@ -1,0 +1,667 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import SplitLines from '../components/SplitLines.astro';
+import BarStat from '../components/study/BarStat.astro';
+import IccScale from '../components/study/IccScale.astro';
+import ModeDiagram from '../components/study/ModeDiagram.astro';
+import { SITE, type Locale } from '../consts';
+import { projectPath, route, t } from '../i18n/utils';
+import { vectraStudy } from '../data/vectra-study';
+import { getProjects, nextProject, type Project } from '../lib/projects';
+
+export interface Props {
+  locale: Locale;
+  altHref: string;
+  project: Project;
+}
+
+const { locale, altHref, project } = Astro.props;
+const strings = t(locale);
+const s = vectraStudy[locale];
+
+const all = await getProjects(locale);
+const next = nextProject(all, project);
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${project.data.title} · ${SITE.name}`}
+  description={s.lead}
+  altHref={altHref}
+>
+  <article class="study">
+    <div class="shell">
+      <!-- ---------- Kopf ---------- -->
+      <header class="head">
+        <div class="back" data-reveal style="--reveal-y:0.5rem">
+          <a class="back-link" href={`${route('home', locale)}#work`}>
+            <span class="back-icon"><Icon name="arrow-left" size={14} /></span>
+            <span class="label">{strings.projects.backToWork}</span>
+          </a>
+        </div>
+
+        <p class="label eyebrow" data-reveal style="--reveal-delay:60ms">{s.eyebrow}</p>
+
+        <div class="headline">
+          <SplitLines lines={s.headline} as="h1" class="display" delay={100} />
+        </div>
+
+        <div class="lead-row" data-reveal style="--reveal-delay:320ms">
+          <p class="prose-measure prose-measure-wide lead">{s.lead}</p>
+          <dl class="meta">
+            {
+              s.meta.map((m) => (
+                <div class="meta-item">
+                  <dt class="label">{m.term}</dt>
+                  <dd>{m.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </header>
+
+      <!-- ---------- Kennzahlen ---------- -->
+      <section class="stats" data-reveal aria-label={s.stats.label}>
+        <p class="label stats-label">{s.stats.label}</p>
+        <ol class="stat-grid">
+          {
+            s.stats.items.map((item, i) => (
+              <li class="stat" style={`--d:${i * 90}ms`}>
+                <span class="stat-value tabular">{item.value}</span>
+                <span class="label stat-label">{item.label}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- ---------- 01 Aufbau ---------- -->
+      <section class="block">
+        <div class="block-grid">
+          <div class="block-head" data-reveal>
+            <p class="label idx">{s.setup.index}</p>
+            <h2 class="heading-md">{s.setup.title}</h2>
+          </div>
+          <div class="block-body" data-reveal style="--reveal-delay:100ms">
+            {s.setup.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 02 Modi ---------- -->
+      <section class="block">
+        <div class="block-grid">
+          <div class="block-head" data-reveal>
+            <p class="label idx">{s.modes.section.index}</p>
+            <h2 class="heading-md">{s.modes.section.title}</h2>
+          </div>
+          <div class="block-body" data-reveal style="--reveal-delay:100ms">
+            {s.modes.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
+          </div>
+        </div>
+        <div class="visual visual-wide">
+          <ModeDiagram
+            caption={s.modes.caption}
+            labels={s.modes.labels}
+            recommendedNote={s.tradeoff.recommendedNote}
+          />
+        </div>
+      </section>
+
+      <!-- ---------- 03 Distanzen ---------- -->
+      <section class="block">
+        <div class="block-grid">
+          <div class="block-head" data-reveal>
+            <p class="label idx">{s.distance.section.index}</p>
+            <h2 class="heading-md">{s.distance.section.title}</h2>
+          </div>
+          <div class="block-body" data-reveal style="--reveal-delay:100ms">
+            {s.distance.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
+          </div>
+        </div>
+        <div class="visual">
+          <BarStat
+            title={s.distance.chartTitle}
+            unit={s.distance.chartUnit}
+            caption={s.distance.chartCaption}
+            bars={s.distance.bars}
+            locale={locale}
+          />
+        </div>
+      </section>
+
+      <!-- ---------- 04 Volumen ---------- -->
+      <section class="block">
+        <div class="block-grid">
+          <div class="block-head" data-reveal>
+            <p class="label idx">{s.volume.section.index}</p>
+            <h2 class="heading-md">{s.volume.section.title}</h2>
+          </div>
+          <div class="block-body" data-reveal style="--reveal-delay:100ms">
+            {s.volume.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
+          </div>
+        </div>
+        <div class="visual">
+          <BarStat
+            title={s.volume.chartTitle}
+            unit={s.volume.chartUnit}
+            caption={s.volume.chartCaption}
+            bars={s.volume.bars}
+            locale={locale}
+          />
+        </div>
+      </section>
+
+      <!-- ---------- 05 Wiederholbarkeit ---------- -->
+      <section class="block">
+        <div class="block-grid">
+          <div class="block-head" data-reveal>
+            <p class="label idx">{s.reliability.section.index}</p>
+            <h2 class="heading-md">{s.reliability.section.title}</h2>
+          </div>
+          <div class="block-body" data-reveal style="--reveal-delay:100ms">
+            {s.reliability.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
+          </div>
+        </div>
+        <div class="visual">
+          <IccScale
+            title={s.reliability.chartTitle}
+            caption={s.reliability.chartCaption}
+            bands={s.reliability.bands}
+            items={s.reliability.items}
+            locale={locale}
+          />
+        </div>
+      </section>
+
+      <!-- ---------- 06 Abwägung ---------- -->
+      <section class="block">
+        <div class="block-grid">
+          <div class="block-head" data-reveal>
+            <p class="label idx">{s.tradeoff.section.index}</p>
+            <h2 class="heading-md">{s.tradeoff.section.title}</h2>
+          </div>
+          <div class="block-body" data-reveal style="--reveal-delay:100ms">
+            {s.tradeoff.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
+          </div>
+        </div>
+
+        <div class="visual visual-wide" data-reveal>
+          <div class="table-scroll">
+            <table class="tradeoff">
+              <thead>
+                <tr>{s.tradeoff.columns.map((c) => <th scope="col" class="label">{c}</th>)}</tr>
+              </thead>
+              <tbody>
+                {
+                  s.tradeoff.rows.map((row, i) => (
+                    <tr data-recommended={row.recommended ? '' : undefined} style={`--d:${i * 80}ms`}>
+                      <th scope="row" class="mode-cell">
+                        <span class="mode-id">{row.id}</span>
+                        {row.recommended && <span class="label pill">{s.tradeoff.recommendedNote}</span>}
+                      </th>
+                      <td>{row.coverage}</td>
+                      <td class="tabular num">{row.deviation}</td>
+                      <td class="tabular num">{row.icc}</td>
+                      <td class="rationale">{row.rationale}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 07 Schlussfolgerung ---------- -->
+      <section class="block conclusion">
+        <div class="block-grid">
+          <div class="block-head" data-reveal>
+            <p class="label idx">{s.conclusion.index}</p>
+            <h2 class="heading-md">{s.conclusion.title}</h2>
+          </div>
+          <div class="block-body" data-reveal style="--reveal-delay:100ms">
+            {s.conclusion.body.map((p) => <p class="prose-measure prose-measure-wide lead-out">{p}</p>)}
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 08 Beteiligte ---------- -->
+      <section class="block">
+        <div class="block-grid">
+          <div class="block-head" data-reveal>
+            <p class="label idx">{s.credits.section.index}</p>
+            <h2 class="heading-md">{s.credits.section.title}</h2>
+          </div>
+          <div class="block-body" data-reveal style="--reveal-delay:100ms">
+            {s.credits.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
+
+            <dl class="people">
+              {
+                s.credits.people.map((p) => (
+                  <div class="person" data-self={p.self ? '' : undefined}>
+                    <dt class="initials tabular">{p.initials}</dt>
+                    <dd>{p.role}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+
+            <p class="label status-label">{s.credits.statusLabel}</p>
+            <p class="status">{s.credits.status}</p>
+          </div>
+        </div>
+      </section>
+
+      {
+        next && (
+          <div class="next" data-reveal>
+            <hr class="hairline" />
+            <a class="next-link" href={projectPath(next.data.key, locale)}>
+              <span class="label next-label">{strings.projects.nextProject}</span>
+              <span class="next-row">
+                <span class="next-title">{next.data.title}</span>
+                <span class="next-icon">
+                  <Icon name="arrow-up-right" size={18} />
+                </span>
+              </span>
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .study {
+    padding-block: clamp(2rem, 6vh, 4rem) 0;
+  }
+
+  /* ---------- Kopf ---------- */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-block-size: 44px;
+    color: var(--color-fg-muted);
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .back-link:hover {
+    color: var(--color-fg);
+  }
+
+  .back-icon {
+    display: grid;
+    place-items: center;
+    inline-size: 28px;
+    block-size: 28px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    transition: transform var(--duration-base) var(--ease-out-quart);
+  }
+
+  .back-link:hover .back-icon {
+    transform: translateX(-3px);
+  }
+
+  .eyebrow {
+    padding-block: clamp(2rem, 6vh, 3.5rem) 1.25rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .headline {
+    padding-block-start: clamp(1.75rem, 5vh, 3rem);
+    --display-size: clamp(2.25rem, 6.4vw, 5.5rem);
+  }
+
+  .lead-row {
+    display: grid;
+    gap: 2.5rem;
+    padding-block-start: clamp(2rem, 5vh, 3rem);
+  }
+
+  .lead {
+    font-size: clamp(1.0625rem, 1.5vw, 1.3125rem);
+    color: var(--color-fg);
+  }
+
+  .meta {
+    margin: 0;
+  }
+
+  .meta-item {
+    display: grid;
+    gap: 0.2rem;
+    padding-block: 0.7rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .meta-item:first-child {
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .meta-item dd {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--color-fg-muted);
+  }
+
+  /* ---------- Kennzahlen ---------- */
+  .stats {
+    padding-block: var(--spacing-block) 0;
+  }
+
+  .stats-label {
+    padding-block-end: 1.25rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+    margin: 0;
+    padding-block-start: 2rem;
+    list-style: none;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+
+  html.js [data-reveal].is-visible .stat {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 700ms var(--ease-out-quart) var(--d),
+      transform 700ms var(--ease-out-expo) var(--d);
+  }
+
+  html:not(.js) .stat {
+    opacity: 1;
+    transform: none;
+  }
+
+  .stat-value {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .stat-label {
+    color: var(--color-fg-muted);
+    text-transform: none;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---------- Abschnitte ---------- */
+  .block {
+    padding-block-start: var(--spacing-block);
+  }
+
+  .block-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .block-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .idx {
+    color: var(--color-fg-subtle);
+  }
+
+  .block-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .block-body p {
+    color: var(--color-fg-muted);
+  }
+
+  .lead-out {
+    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+    color: var(--color-fg);
+  }
+
+  .visual {
+    padding-block-start: clamp(2rem, 5vh, 3rem);
+  }
+
+  /* ---------- Abwägungstabelle ---------- */
+  .table-scroll {
+    overflow-x: auto;
+    /* Die Tabelle scrollt in sich, die Seite bleibt ruhig. */
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .tradeoff {
+    inline-size: 100%;
+    min-inline-size: 46rem;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .tradeoff th,
+  .tradeoff td {
+    padding: 1rem 1.25rem 1rem 0;
+    vertical-align: top;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .tradeoff thead th {
+    padding-block: 0.85rem;
+    color: var(--color-fg-subtle);
+    font-weight: 400;
+  }
+
+  .tradeoff tbody td,
+  .tradeoff tbody th {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-fg-muted);
+    font-weight: 400;
+  }
+
+  .mode-cell {
+    inline-size: 9rem;
+  }
+
+  .mode-id {
+    display: inline-block;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--color-fg);
+    line-height: 1;
+  }
+
+  .pill {
+    display: block;
+    margin-block-start: 0.5rem;
+    color: var(--color-accent);
+  }
+
+  .tradeoff tbody tr[data-recommended] td,
+  .tradeoff tbody tr[data-recommended] th {
+    color: var(--color-fg);
+  }
+
+  .num {
+    white-space: nowrap;
+    font-size: 0.8125rem !important;
+  }
+
+  .rationale {
+    min-inline-size: 18rem;
+  }
+
+  html.js [data-reveal].is-visible .tradeoff tbody tr {
+    animation: row-in 620ms var(--ease-out-quart) var(--d) both;
+  }
+
+  @keyframes row-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 0.5rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---------- Beteiligte ---------- */
+  .people {
+    margin: 1.5rem 0 0;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .person {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.85rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .initials {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-fg-subtle);
+  }
+
+  .person[data-self] .initials {
+    color: var(--color-accent);
+  }
+
+  .person dd {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--color-fg-muted);
+  }
+
+  .status-label {
+    padding-block-start: 1.75rem;
+  }
+
+  .status {
+    padding-block-start: 0.5rem;
+    max-inline-size: 60ch;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-fg-subtle);
+  }
+
+  /* ---------- Nächstes Projekt ---------- */
+  .next {
+    padding-block-start: var(--spacing-block);
+  }
+
+  .next-link {
+    display: block;
+    padding-block: 2rem 0;
+  }
+
+  .next-label {
+    color: var(--color-fg-subtle);
+  }
+
+  .next-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block-start: 0.75rem;
+  }
+
+  .next-title {
+    font-size: clamp(1.5rem, 5vw, 3.25rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    transition: transform 520ms var(--ease-out-expo);
+  }
+
+  .next-link:hover .next-title,
+  .next-link:focus-visible .next-title {
+    transform: translate3d(clamp(6px, 1vw, 14px), 0, 0);
+  }
+
+  .next-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 44px;
+    block-size: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-fg-muted);
+    transition:
+      transform 520ms var(--ease-out-expo),
+      border-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .next-link:hover .next-icon {
+    transform: translate3d(4px, -4px, 0);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  @media (min-width: 48rem) {
+    .stat-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .lead-row {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 4rem;
+    }
+
+    .block-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
+      gap: 4rem;
+    }
+
+    .block-head {
+      position: sticky;
+      inset-block-start: 6.5rem;
+    }
+
+    /* Grafiken dürfen die volle Spaltenbreite unter dem Text nutzen. */
+    .visual {
+      margin-inline-start: calc((100% / 3.2) + 4rem);
+    }
+
+    .visual-wide {
+      margin-inline-start: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stat {
+      opacity: 1;
+      transform: none;
+    }
+
+    html.js [data-reveal].is-visible .tradeoff tbody tr {
+      animation: none;
+    }
+  }
+</style>

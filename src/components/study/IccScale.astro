@@ -1,0 +1,286 @@
+---
+import type { IccDatum } from '../../data/vectra-study';
+import type { Locale } from '../../consts';
+
+export interface Props {
+  title: string;
+  caption: string;
+  bands: { label: string; from: number; to: number }[];
+  items: IccDatum[];
+  locale: Locale;
+}
+
+const { title, caption, bands, items, locale } = Astro.props;
+
+const nf = new Intl.NumberFormat(locale === 'de' ? 'de-DE' : 'en-GB', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+/* Die Bewertungsbereiche liegen als harte Farbstopps hinter der Skala.
+   Je höher der Bereich, desto kräftiger die Fläche. */
+const stops = bands
+  .map((b, i) => {
+    const tint = 4 + i * 3;
+    return `color-mix(in srgb, var(--color-fg) ${tint}%, transparent) ${b.from * 100}% ${b.to * 100}%`;
+  })
+  .join(', ');
+---
+
+<figure class="icc" data-reveal>
+  <figcaption class="head">
+    <h3 class="chart-title">{title}</h3>
+    <span class="label unit">ICC</span>
+  </figcaption>
+
+
+  <div class="rows">
+    {
+      items.map((item, i) => (
+        <div class="row" data-strong={item.value >= 0.9 ? '' : undefined} style={`--w:${item.value * 100}%;--d:${i * 90}ms`}>
+          <span class="row-label">
+            <span class="label name">{item.label}</span>
+            {item.note && <span class="label note">{item.note}</span>}
+          </span>
+          <span class="track" style={`--stops:${stops}`}>
+            <span class="fill" />
+            <span class="dot" aria-hidden="true" />
+          </span>
+          <span class="value tabular">{nf.format(item.value)}</span>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="axis" aria-hidden="true">
+    {
+      [0, 0.5, 0.75, 0.9, 1].map((tick) => (
+        <span class="tick tabular" style={`--x:${tick * 100}%`}>{nf.format(tick)}</span>
+      ))
+    }
+  </div>
+
+  <p class="caption">
+    <span class="bands-legend">
+      {bands.map((b, i) => (
+        <span class="legend-item">
+          <span class="swatch" style={`--tint:${4 + i * 3}%`} aria-hidden="true" />
+          {b.label}
+        </span>
+      ))}
+    </span>
+    {caption}
+  </p>
+</figure>
+
+<style>
+  .icc {
+    margin: 0;
+    border-block-start: 1px solid var(--color-line);
+    padding-block-start: 1.25rem;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block-end: 1.25rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .unit {
+    color: var(--color-fg-subtle);
+  }
+
+  /* Achsenmarken statt Bandbeschriftungen: das oberste Band ist nur zehn
+     Prozent breit, dort passt kein Wort hinein. */
+  .axis {
+    position: relative;
+    block-size: 1.5rem;
+    margin-block-start: 0.75rem;
+    display: none;
+  }
+
+  .tick {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: var(--x);
+    transform: translateX(-50%);
+    padding-block-start: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+    color: var(--color-fg-subtle);
+    white-space: nowrap;
+  }
+
+  .tick::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 50%;
+    block-size: 4px;
+    border-inline-start: 1px solid var(--color-line-strong);
+  }
+
+  .bands-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    padding-block-end: 0.6rem;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .swatch {
+    inline-size: 14px;
+    block-size: 10px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--color-fg) var(--tint), transparent);
+    border: 1px solid var(--color-line);
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .row-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .name {
+    color: var(--color-fg-muted);
+    text-transform: none;
+    letter-spacing: 0.06em;
+  }
+
+  .note {
+    color: var(--color-fg-subtle);
+  }
+
+  .track {
+    position: relative;
+    display: block;
+    block-size: 14px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--stops));
+  }
+
+  .fill {
+    position: absolute;
+    inset-block: 4px;
+    inset-inline-start: 0;
+    inline-size: var(--w);
+    background: var(--color-fg-muted);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .row[data-strong] .fill {
+    background: var(--color-accent);
+  }
+
+  .dot {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: var(--w);
+    inline-size: 9px;
+    block-size: 9px;
+    margin-inline-start: -4.5px;
+    border-radius: 999px;
+    background: var(--color-bg);
+    border: 2px solid var(--color-fg-muted);
+    transform: translateY(-50%) scale(0);
+  }
+
+  .row[data-strong] .dot {
+    border-color: var(--color-accent);
+  }
+
+  html.js [data-reveal].is-visible .fill {
+    transform: scaleX(1);
+    transition: transform 1000ms var(--ease-out-expo) var(--d);
+  }
+
+  html.js [data-reveal].is-visible .dot {
+    transform: translateY(-50%) scale(1);
+    transition: transform 520ms var(--ease-out-expo) calc(var(--d) + 620ms);
+  }
+
+  html:not(.js) .fill {
+    transform: scaleX(1);
+  }
+
+  html:not(.js) .dot {
+    transform: translateY(-50%) scale(1);
+  }
+
+  .value {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-fg);
+  }
+
+  .caption {
+    padding-block-start: 1.25rem;
+    max-inline-size: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-subtle);
+  }
+
+  @media (min-width: 48rem) {
+    .row {
+      grid-template-columns: 19rem minmax(0, 1fr) 4rem;
+      gap: 1.25rem;
+    }
+
+    .row-label {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .value {
+      text-align: right;
+    }
+
+    .axis {
+      display: block;
+      margin-inline-start: calc(19rem + 1.25rem);
+      margin-inline-end: calc(4rem + 1.25rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fill {
+      transform: scaleX(1);
+    }
+
+    .dot {
+      transform: translateY(-50%) scale(1);
+    }
+  }
+</style>

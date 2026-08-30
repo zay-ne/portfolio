@@ -1,0 +1,177 @@
+---
+export interface Props {
+  caption: string;
+  labels: Record<'A' | 'B' | 'C' | 'D' | 'E', string>;
+  recommendedNote: string;
+}
+
+const { caption, labels, recommendedNote } = Astro.props;
+
+/**
+ * Die fünf Messbereiche als Schema, nachgezeichnet nach Abbildung 2 des
+ * Manuskripts. Bewusst abstrahiert statt als Foto: die Originalabbildung zeigt
+ * einen Dummy-Kopf, hier zählt allein, dass die Flächen von A nach E
+ * schrittweise größer werden.
+ */
+const MODES = [
+  { id: 'A' as const, regions: '<ellipse cx="34" cy="55" rx="12" ry="7"/>' },
+  { id: 'B' as const, regions: '<ellipse cx="33" cy="57" rx="15" ry="10"/>' },
+  { id: 'C' as const, regions: '<ellipse cx="33" cy="53" rx="16" ry="14"/>' },
+  {
+    id: 'D' as const,
+    regions:
+      '<ellipse cx="33" cy="53" rx="16" ry="14"/><ellipse cx="67" cy="53" rx="16" ry="14"/><rect x="42" y="48" width="16" height="11" rx="4"/>',
+    recommended: false,
+  },
+  {
+    id: 'E' as const,
+    regions:
+      '<ellipse cx="33" cy="53" rx="16" ry="14"/><ellipse cx="67" cy="53" rx="16" ry="14"/><rect x="17" y="46" width="66" height="31" rx="7"/>',
+  },
+];
+
+const RECOMMENDED = 'C';
+---
+
+<figure class="modes" data-reveal>
+  <ol class="grid">
+    {
+      MODES.map((mode, i) => (
+        <li class="item" style={`--d:${i * 110}ms`} data-recommended={mode.id === RECOMMENDED ? '' : undefined}>
+          <svg viewBox="0 0 100 116" role="img" aria-label={`${mode.id}: ${labels[mode.id]}`}>
+            {/* Kopf, Brauen, Augen und Nase als ruhige Strichzeichnung */}
+            <g class="face" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+              <ellipse cx="50" cy="58" rx="31" ry="42" />
+              <path d="M22 43 Q33 37 44 43" />
+              <path d="M56 43 Q67 37 78 43" />
+              <path d="M25 53 Q34 47 43 53 Q34 59 25 53 Z" />
+              <path d="M57 53 Q66 47 75 53 Q66 59 57 53 Z" />
+              <path d="M50 52 L47 68 Q50 71 53 68" />
+              <path d="M40 82 Q50 87 60 82" />
+            </g>
+            <g class="pupils" fill="currentColor">
+              <circle cx="34" cy="53" r="2" />
+              <circle cx="66" cy="53" r="2" />
+            </g>
+            {/* Messbereich */}
+            <g class="region" set:html={mode.regions} />
+          </svg>
+
+          <p class="mode-id label">
+            {mode.id}
+            {mode.id === RECOMMENDED && <span class="star" title={recommendedNote} aria-label={recommendedNote}>●</span>}
+          </p>
+          <p class="mode-label">{labels[mode.id]}</p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <p class="caption">{caption}</p>
+</figure>
+
+<style>
+  .modes {
+    margin: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  svg {
+    inline-size: 100%;
+    block-size: auto;
+    color: var(--color-line-strong);
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+    background: var(--color-surface);
+    padding: 0.5rem;
+  }
+
+  .region {
+    fill: color-mix(in srgb, var(--color-accent) 22%, transparent);
+    stroke: var(--color-accent);
+    stroke-width: 1.1;
+    opacity: 0;
+    transform: scale(0.82);
+    transform-origin: center;
+                       transform-box: fill-box;
+  }
+
+  html.js [data-reveal].is-visible .region {
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      opacity 620ms var(--ease-out-quart) var(--d),
+      transform 760ms var(--ease-out-expo) var(--d);
+  }
+
+  html:not(.js) .region {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mode-id {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-fg);
+    font-size: 0.8125rem;
+    letter-spacing: 0.16em;
+  }
+
+  .star {
+    color: var(--color-accent);
+    font-size: 0.5rem;
+  }
+
+  .mode-label {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-fg-muted);
+  }
+
+  .item[data-recommended] svg {
+    border-color: var(--color-accent);
+  }
+
+  .caption {
+    padding-block-start: 1.5rem;
+    max-inline-size: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-subtle);
+  }
+
+  @media (min-width: 40rem) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1.5rem 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .region {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

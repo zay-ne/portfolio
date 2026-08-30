@@ -1,0 +1,85 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SplitLines from '../components/SplitLines.astro';
+import { SITE, type Locale } from '../consts';
+
+interface Props {
+  locale: Locale;
+  altHref: string;
+  title: string;
+  lead: string;
+}
+
+const { locale, altHref, title, lead } = Astro.props;
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${title} · ${SITE.name}`}
+  description={lead}
+  altHref={altHref}
+  noindex
+>
+  <div class="shell legal">
+    <header class="legal-head">
+      <SplitLines lines={[title]} as="h1" class="heading-lg" />
+      <div data-reveal style="--reveal-delay:160ms">
+        <p class="prose-measure prose-measure-wide lead">{lead}</p>
+      </div>
+    </header>
+
+    <div class="legal-body" data-reveal style="--reveal-delay:200ms">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding-block: clamp(2rem, 8vh, 5rem) 0;
+  }
+
+  .legal-head {
+    padding-block-end: var(--spacing-block);
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .lead {
+    padding-block-start: 1.5rem;
+  }
+
+  .legal-body {
+    padding-block-start: var(--spacing-block);
+    max-inline-size: 66ch;
+  }
+
+  .legal-body :global(h2) {
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-block: 2.5rem 0.75rem;
+  }
+
+  .legal-body :global(h2:first-child) {
+    margin-block-start: 0;
+  }
+
+  .legal-body :global(p),
+  .legal-body :global(li) {
+    color: var(--color-fg-muted);
+    line-height: 1.7;
+  }
+
+  .legal-body :global(p) {
+    margin-block-end: 1rem;
+  }
+
+  .legal-body :global(ul) {
+    padding-inline-start: 1.2rem;
+    margin-block-end: 1.5rem;
+  }
+
+  .legal-body :global(li) {
+    margin-block-end: 0.4rem;
+  }
+</style>

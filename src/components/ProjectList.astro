@@ -1,0 +1,244 @@
+---
+import Icon from './Icon.astro';
+import type { Project } from '../lib/projects';
+import type { Locale } from '../consts';
+import { projectPath, t } from '../i18n/utils';
+
+interface Props {
+  projects: Project[];
+  locale: Locale;
+  /** Fortlaufende Nummerierung über Sektionsgrenzen hinweg. */
+  startIndex?: number;
+}
+
+const { projects, locale, startIndex = 0 } = Astro.props;
+const strings = t(locale);
+---
+
+{
+  projects.length === 0 ? (
+    <p class="empty label">{strings.projects.empty}</p>
+  ) : (
+    <ol class="project-list" data-project-list>
+      {projects.map((project, i) => {
+        const { data } = project;
+        const num = String(startIndex + i + 1).padStart(2, '0');
+        return (
+          <li class="row-item" data-reveal style={`--reveal-delay:${i * 60}ms`}>
+            <a
+              class="row"
+              href={projectPath(data.key, locale)}
+              data-row
+              data-cover={data.cover ?? ''}
+              data-cover-alt={data.coverAlt ?? ''}
+              data-summary={data.summary}
+              data-title={data.title}
+              data-num={num}
+            >
+              <span class="label row-num">{num}</span>
+
+              <span class="row-main">
+                <span class="row-title">{data.title}</span>
+                <span class="row-summary">{data.summary}</span>
+              </span>
+
+              <span class="row-meta">
+                <span class="label row-status" data-status={data.status}>
+                  <span class="dot" aria-hidden="true" />
+                  {strings.projects.statusLabels[data.status]}
+                </span>
+                <span class="label row-year tabular">{data.year}</span>
+              </span>
+
+              <span class="row-arrow" aria-hidden="true">
+                <Icon name="arrow-up-right" size={16} />
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  )
+}
+
+<style>
+  .empty {
+    padding-block: 2rem;
+    color: var(--color-fg-subtle);
+  }
+
+  .project-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .row-item {
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'num main arrow'
+      '.   meta meta';
+    align-items: baseline;
+    column-gap: clamp(0.875rem, 2.5vw, 2rem);
+    row-gap: 0.5rem;
+    /* Großzügig: die Zeile ist die eigentliche Trefferfläche, weit über 44px. */
+    padding-block: clamp(1.25rem, 2.6vw, 2.125rem);
+    isolation: isolate;
+  }
+
+  /* Akzentlinie, die beim Überfahren von links durchläuft. */
+  .row::after {
+    content: '';
+    position: absolute;
+    inset-block-end: -1px;
+    inset-inline: 0;
+    block-size: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 520ms var(--ease-out-expo);
+  }
+
+  .row:hover::after,
+  .row:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .row-num {
+    grid-area: num;
+    color: var(--color-fg-subtle);
+    transition: color var(--duration-base) var(--ease-out-quart);
+  }
+
+  .row-main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-inline-size: 0;
+  }
+
+  .row-title {
+    font-size: clamp(1.375rem, 4.2vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    text-wrap: balance;
+    transition: transform 520ms var(--ease-out-expo);
+  }
+
+  .row:hover .row-title,
+  .row:focus-visible .row-title {
+    transform: translate3d(clamp(6px, 1vw, 14px), 0, 0);
+  }
+
+  .row-summary {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-fg-muted);
+    max-inline-size: 46ch;
+  }
+
+  /* Auf schmalen Viewports tragen Status und Jahr gemeinsam die zweite Zeile.
+     Ohne diese Hülle lägen beide in derselben Rasterzelle und würden sich
+     überlagern. */
+  .row-meta {
+    grid-area: meta;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.25rem;
+    min-inline-size: 0;
+  }
+
+  .row-status,
+  .row-year {
+    white-space: nowrap;
+  }
+
+  .row-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .dot {
+    inline-size: 5px;
+    block-size: 5px;
+    border-radius: 999px;
+    background: var(--color-fg-subtle);
+  }
+
+  /* Status wird nicht allein über Farbe erzählt, der Text steht immer daneben. */
+  .row-status[data-status='live'] .dot {
+    background: var(--color-accent);
+  }
+
+  .row-status[data-status='wip'] .dot {
+    background: var(--color-fg-muted);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-fg-muted) 18%, transparent);
+  }
+
+  .row-arrow {
+    grid-area: arrow;
+    display: grid;
+    place-items: center;
+    inline-size: 34px;
+    block-size: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    color: var(--color-fg-muted);
+    align-self: center;
+    transition:
+      border-color var(--duration-base) var(--ease-out-quart),
+      color var(--duration-base) var(--ease-out-quart),
+      transform 520ms var(--ease-out-expo);
+  }
+
+  .row:hover .row-arrow,
+  .row:focus-visible .row-arrow {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    transform: translate3d(3px, -3px, 0);
+  }
+
+  /* Ab Desktop: eine Zeile, Metadaten rechtsbündig, Beschreibung übernimmt die Vorschau. */
+  @media (min-width: 64rem) {
+    .row {
+      grid-template-columns: 3.5rem minmax(0, 1fr) 9rem 8rem 34px;
+      grid-template-areas: 'num main meta year arrow';
+      align-items: center;
+    }
+
+    .row-summary {
+      display: none;
+    }
+
+    /* display: contents löst die Hülle auf, sodass Status und Jahr wieder
+       eigene Spalten im Zeilenraster bekommen. */
+    .row-meta {
+      display: contents;
+    }
+
+    .row-status {
+      grid-area: meta;
+    }
+
+    .row-year {
+      grid-area: year;
+      text-align: right;
+    }
+
+    .row:hover .row-num,
+    .row:focus-visible .row-num {
+      color: var(--color-fg);
+    }
+  }
+</style>

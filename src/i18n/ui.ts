@@ -1,0 +1,293 @@
+import type { Locale } from '../consts';
+
+/**
+ * Sämtliche Oberflächentexte, zweisprachig an einer Stelle.
+ *
+ * Regel: kein sichtbarer Text steht fest in einer Komponente, alles läuft hier
+ * durch, damit DE und EN nie auseinanderlaufen. Die Nummerierung der Sektionen
+ * steht bewusst nicht hier, sie entsteht automatisch aus der Reihenfolge in
+ * consts.ts.
+ */
+export const ui = {
+  de: {
+    meta: {
+      title: 'Schedi Samet · Medizintechnik, Software, Marke',
+      description:
+        'Ingenieur der Medizintechnik aus Göttingen und Mainz. Ich entwickle Software, gestalte Marken und forsche in der Medizintechnik. Co-Founder von meedup, Gründer von zayne.',
+      langLabel: 'Sprache wechseln',
+      langSwitchTo: 'English',
+      skipToContent: 'Zum Inhalt springen',
+      themeToggle: 'Farbschema wechseln',
+      menuOpen: 'Menü öffnen',
+      menuClose: 'Menü schließen',
+    },
+
+    nav: {
+      work: 'Arbeiten',
+      about: 'Über mich',
+      cv: 'Lebenslauf',
+      contact: 'Kontakt',
+    },
+
+    hero: {
+      eyebrow: 'Portfolio',
+      lines: ['Ich entwickle Software,', 'gestalte Marken', 'und forsche in der Medizintechnik.'],
+      intro:
+        'Ingenieur der Medizintechnik mit wissenschaftlichem Hintergrund. Co-Founder von meedup, Gründer von zayne und Head of Design beim Entrepreneurs Club Mainz. Ich verbinde technisches Verständnis mit Gestaltung und unternehmerischer Praxis.',
+      status: 'Offen für neue Aufgaben',
+      scroll: 'Scrollen',
+    },
+
+    sections: {
+      software: {
+        title: 'Software',
+        description:
+          'Produkte und Werkzeuge, die ich von der Anforderung bis zum Livegang selbst verantworte. Die meisten sind entstanden, weil das passende Werkzeug noch fehlte.',
+      },
+      research: {
+        title: 'Forschung',
+        description:
+          'Arbeiten aus der Medizintechnik: Studiendesign, Messreihen, statistische Auswertung und der Vortrag, mit dem die Ergebnisse beim Fachpublikum ankommen.',
+      },
+      design: {
+        title: 'Design',
+        description:
+          'Markenarbeit, Kampagnen und wiederverwendbare Gestaltungsprozesse, überwiegend für den Entrepreneurs Club Mainz.',
+      },
+      about: {
+        label: 'Über mich',
+        title: 'Kurz zu mir',
+        body: [
+          'Ich habe Medizintechnik studiert, weil mich die Stelle interessiert, an der ein technisches System auf einen Menschen trifft. Dort zählt beides: dass es funktioniert und dass sich das belegen lässt. An der Universitätsmedizin Göttingen leite ich seit 2023 eine Validierungsstudie zum 3D-System Vectra-H2, von der Studienplanung über die Messreihen bis zur statistischen Auswertung.',
+          'Parallel dazu habe ich ab 2022 mit zayne über 120 digitale Kundenprojekte abgewickelt, von der Anforderungsaufnahme über Marke und Gestaltung bis zum Livegang. Seit 2025 bin ich Co-Founder von meedup und Head of Design beim Entrepreneurs Club Mainz. Was sich durch alles zieht: aus einer unklaren Anforderung etwas machen, das man benutzen, messen und zeigen kann.',
+        ],
+        facts: {
+          label: 'Eckdaten',
+          items: [
+            { term: 'Standort', value: 'Göttingen und Mainz' },
+            { term: 'Studium', value: 'M. Eng. Medizintechnik, HAWK Göttingen (Abschluss 12/2026)' },
+            { term: 'Schwerpunkte', value: 'Medizintechnik, Software, Marke, Projektmanagement' },
+            { term: 'Sprachen', value: 'Deutsch, Englisch, Arabisch, Französisch' },
+          ],
+        },
+      },
+      cv: {
+        label: 'Werdegang',
+        title: 'Lebenslauf',
+        description:
+          'Stationen, Ausbildung, Zertifizierungen und Fähigkeiten. Als Seite zum Lesen und als PDF zum Mitnehmen.',
+        cta: 'Lebenslauf ansehen',
+      },
+      contact: {
+        label: 'Kontakt',
+        title: 'Sprechen wir darüber.',
+        description:
+          'Ob Medizintechnik, ein Softwarewerkzeug, eine Marke oder eine Studie: schreiben Sie mir gern. Ich antworte in der Regel innerhalb von zwei Werktagen.',
+      },
+    },
+
+    projects: {
+      viewCase: 'Projekt ansehen',
+      visitSite: 'Zur Website',
+      viewCode: 'Quellcode',
+      readStudy: 'Studie lesen',
+      backToWork: 'Zurück zur Übersicht',
+      role: 'Rolle',
+      year: 'Jahr',
+      status: 'Status',
+      stack: 'Technik',
+      category: 'Kategorie',
+      empty: 'In diesem Bereich ist noch nichts veröffentlicht.',
+      nextProject: 'Nächstes Projekt',
+      statusLabels: {
+        live: 'Live',
+        wip: 'In Arbeit',
+        archived: 'Abgeschlossen',
+        concept: 'Konzept',
+      },
+      disciplineLabels: {
+        software: 'Software',
+        research: 'Forschung',
+        design: 'Design',
+      },
+    },
+
+    contact: {
+      emailLabel: 'E-Mail',
+      copy: 'Adresse kopieren',
+      copied: 'Kopiert',
+      copyFailed: 'Kopieren nicht möglich',
+      elsewhere: 'Anderswo',
+    },
+
+    cv: {
+      title: 'Lebenslauf',
+      lead: 'Ingenieur mit medizintechnischem Studium, vier Jahren unternehmerischer Praxis und wissenschaftlicher Projektleitung.',
+      download: 'Als PDF laden',
+      updated: 'Stand',
+      experience: 'Berufliche Stationen',
+      education: 'Ausbildung',
+      certifications: 'Zertifizierungen',
+      engagement: 'Engagement und Auftritte',
+      skills: 'Fähigkeiten',
+      languages: 'Sprachen',
+      present: 'heute',
+    },
+
+    footer: {
+      builtWith: 'Gebaut mit Astro',
+      backToTop: 'Nach oben',
+      imprint: 'Impressum',
+      privacy: 'Datenschutz',
+      rights: 'Alle Rechte vorbehalten',
+    },
+
+    error: {
+      title: 'Seite nicht gefunden',
+      description: 'Diese Adresse führt ins Leere. Vielleicht hilft der Weg zurück zur Startseite.',
+      home: 'Zur Startseite',
+    },
+  },
+
+  en: {
+    meta: {
+      title: 'Schedi Samet · Medical Technology, Software, Brand',
+      description:
+        'Medical engineer based in Göttingen and Mainz. I develop software, shape brands and research medical technology. Co-founder of meedup, founder of zayne.',
+      langLabel: 'Change language',
+      langSwitchTo: 'Deutsch',
+      skipToContent: 'Skip to content',
+      themeToggle: 'Toggle colour scheme',
+      menuOpen: 'Open menu',
+      menuClose: 'Close menu',
+    },
+
+    nav: {
+      work: 'Work',
+      about: 'About',
+      cv: 'CV',
+      contact: 'Contact',
+    },
+
+    hero: {
+      eyebrow: 'Portfolio',
+      lines: ['I develop software,', 'shape brands', 'and research medical technology.'],
+      intro:
+        'Medical engineer with a research background. Co-founder of meedup, founder of zayne and Head of Design at Entrepreneurs Club Mainz. I combine technical understanding with design and entrepreneurial practice.',
+      status: 'Open to new roles',
+      scroll: 'Scroll',
+    },
+
+    sections: {
+      software: {
+        title: 'Software',
+        description:
+          'Products and tools I own from the first requirement through to go live. Most of them exist because the right tool was missing.',
+      },
+      research: {
+        title: 'Research',
+        description:
+          'Work in medical technology: study design, measurement series, statistical analysis and the talk that brings the results to a specialist audience.',
+      },
+      design: {
+        title: 'Design',
+        description:
+          'Brand work, campaigns and reusable design processes, largely for Entrepreneurs Club Mainz.',
+      },
+      about: {
+        label: 'About',
+        title: 'A little about me',
+        body: [
+          'I studied medical engineering because I am drawn to the point where a technical system meets a person. Both things count there: that it works, and that this can be proven. Since 2023 I have been leading a validation study of the Vectra-H2 3D system at Göttingen University Medical Center, from study planning through the measurement series to statistical analysis.',
+          'Alongside that I delivered over 120 digital client projects through zayne from 2022 onwards, from gathering requirements through brand and design to go live. Since 2025 I have been co-founder of meedup and Head of Design at Entrepreneurs Club Mainz. The thread running through all of it: turning an unclear requirement into something you can use, measure and show.',
+        ],
+        facts: {
+          label: 'At a glance',
+          items: [
+            { term: 'Based in', value: 'Göttingen and Mainz' },
+            { term: 'Studies', value: 'M. Eng. Medical Engineering, HAWK Göttingen (due 12/2026)' },
+            { term: 'Focus', value: 'Medical technology, software, brand, project management' },
+            { term: 'Languages', value: 'German, English, Arabic, French' },
+          ],
+        },
+      },
+      cv: {
+        label: 'Career',
+        title: 'Curriculum vitae',
+        description:
+          'Positions, education, certifications and skills. As a page to read and a PDF to take away.',
+        cta: 'View CV',
+      },
+      contact: {
+        label: 'Contact',
+        title: "Let's talk.",
+        description:
+          'Medical technology, a software tool, a brand or a study: write to me. I usually reply within two working days.',
+      },
+    },
+
+    projects: {
+      viewCase: 'View project',
+      visitSite: 'Visit site',
+      viewCode: 'Source code',
+      readStudy: 'Read study',
+      backToWork: 'Back to all work',
+      role: 'Role',
+      year: 'Year',
+      status: 'Status',
+      stack: 'Stack',
+      category: 'Category',
+      empty: 'Nothing published in this area yet.',
+      nextProject: 'Next project',
+      statusLabels: {
+        live: 'Live',
+        wip: 'In progress',
+        archived: 'Completed',
+        concept: 'Concept',
+      },
+      disciplineLabels: {
+        software: 'Software',
+        research: 'Research',
+        design: 'Design',
+      },
+    },
+
+    contact: {
+      emailLabel: 'Email',
+      copy: 'Copy address',
+      copied: 'Copied',
+      copyFailed: 'Could not copy',
+      elsewhere: 'Elsewhere',
+    },
+
+    cv: {
+      title: 'Curriculum vitae',
+      lead: 'Engineer with a medical technology degree, four years of entrepreneurial practice and scientific project leadership.',
+      download: 'Download PDF',
+      updated: 'Updated',
+      experience: 'Experience',
+      education: 'Education',
+      certifications: 'Certifications',
+      engagement: 'Service and talks',
+      skills: 'Skills',
+      languages: 'Languages',
+      present: 'present',
+    },
+
+    footer: {
+      builtWith: 'Built with Astro',
+      backToTop: 'Back to top',
+      imprint: 'Imprint',
+      privacy: 'Privacy',
+      rights: 'All rights reserved',
+    },
+
+    error: {
+      title: 'Page not found',
+      description: 'This address leads nowhere. The way back to the homepage might help.',
+      home: 'Go to homepage',
+    },
+  },
+} as const;
+
+export type UI = (typeof ui)[Locale];
