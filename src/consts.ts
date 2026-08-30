@@ -8,8 +8,7 @@
 
 export const SITE = {
   name: 'Schedi Samet',
-  /** TODO: echte Domain eintragen, auch in astro.config.mjs unter `site`. */
-  domain: 'example.com',
+  domain: 'schedisamet.de',
   email: 'sametschedi@gmail.com',
   location: {
     de: 'Göttingen · Mainz',

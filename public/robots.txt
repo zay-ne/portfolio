@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
 
-# TODO: Domain eintragen, sobald sie feststeht — muss zu `site`
-# in astro.config.mjs passen.
-Sitemap: https://example.com/sitemap-index.xml
+Sitemap: https://schedisamet.de/sitemap-index.xml

@@ -1,36 +1,36 @@
 ---
 import LegalPage from '../../layouts/LegalPage.astro';
+import { SITE } from '../../consts';
 ---
 
 <LegalPage
   locale="en"
   altHref="/datenschutz"
   title="Privacy"
-  lead="This page is still a scaffold. The text has to describe what actually happens when someone visits, no more and no less."
+  lead="What happens when you visit this site, and what does not."
 >
   <h2>What this site processes</h2>
   <p>
-    The site is static and loads nothing from third parties: fonts are served from this
-    domain, there is no analytics, no embeds and no cookies. Your choice of light or dark
-    appearance is stored locally in your browser and never transmitted.
-  </p>
-  <p>
-    TODO: Update this as soon as anything is added: analytics, a contact form, embedded
-    video or fonts from an external host all change this section fundamentally.
+    The site is static and loads nothing from third parties. Fonts are served
+    from this domain, there is no analytics, no embeds and no cookies. Your
+    choice of light or dark appearance is stored locally in your browser and
+    never transmitted.
   </p>
 
   <h2>Server logs</h2>
   <p>
-    TODO: Name the hosting provider and describe which access data is recorded there and for
-    how long. The provider supplies these details.
+    The site is served through GitHub Pages. For technical reasons the provider
+    records access data. Those details will be added here.
   </p>
 
   <h2>Your rights</h2>
   <p>
-    TODO: Access, rectification, erasure, restriction, portability, objection, and the right
-    to lodge a complaint with a supervisory authority, plus a way to exercise them.
+    You have the right to access, rectification, erasure, restriction of
+    processing, data portability and objection, as well as the right to lodge a
+    complaint with a supervisory authority. To exercise them, write to
+    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
   </p>
 
   <h2>Controller</h2>
-  <p>TODO: name, postal address and email address.</p>
+  <p>Schedi Samet, reachable at <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
 </LegalPage>

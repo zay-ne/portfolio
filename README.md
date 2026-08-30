@@ -95,18 +95,24 @@ gestaltete typografische Fläche.
 
 ## Was noch offen ist
 
-Vor dem ersten Deployment zwingend:
+**Impressum.** `src/pages/impressum.astro` nennt bisher nur Name und
+E-Mail-Adresse. Nach § 5 DDG gehören bei geschäftlicher Nutzung zusätzlich
+dazu: ladungsfähige Anschrift (ein Postfach genügt nicht), Telefonnummer,
+Umsatzsteuer-Identifikationsnummer sofern vorhanden, und bei freien Berufen
+Kammer, Berufsbezeichnung und Staat der Verleihung. Dasselbe in
+`src/pages/en/imprint.astro`.
 
-- **Domain eintragen** in `astro.config.mjs` (`site`) und `public/robots.txt`.
-- **Impressum und Datenschutz** füllen (`src/pages/impressum.astro`,
-  `datenschutz.astro` und die englischen Entsprechungen). Bei geschäftlicher
-  Nutzung in Deutschland ist beides Pflicht.
+**Datenschutz.** Der Abschnitt zu den Server-Logdateien braucht die Angaben des
+Hosters. Für GitHub Pages stehen sie in deren Datenschutzerklärung.
 
 Danach, nach Wichtigkeit:
 
 - Verbleibende `TODO`-Absätze in den Projektdateien. Das sind fast durchweg
   Ergebnisse und Zahlen: durchgeführte Challenges bei meedup, Referenzprojekte
-  bei zayne, Reichweiten bei den ECM-Arbeiten.
+  bei zayne, Reichweiten bei den ECM-Arbeiten. Sie erscheinen nicht auf der
+  Seite, siehe unten unter Konventionen.
+- `src/content/projects/*/ecm-kampagnen.md` ist inhaltlich noch sehr dünn.
+  Entweder füllen oder vorübergehend auf `draft: true` setzen.
 - Bei Maps Scout steht ein `TODO` zur Abwägung: das Werkzeug liest öffentlich
   sichtbare Google-Maps-Daten, was den dortigen Nutzungsbedingungen
   widerspricht. Entscheide, ob das Projekt öffentlich gezeigt werden soll.
@@ -114,8 +120,7 @@ Danach, nach Wichtigkeit:
   eintragen. Solange dort `null` steht, erscheint der Download-Knopf nicht.
 - `public/og.png` (1200 x 630) für Vorschaubilder beim Teilen anlegen.
 - Titelbilder unter `public/work/` ablegen und im Frontmatter als `cover`
-  eintragen. Ohne Bild zeigt die Seite eine gestaltete typografische Fläche.
-  Das funktioniert, aber Bilder tragen die Projektliste deutlich weiter.
+  eintragen.
 
 ## Projekte mit eigenem Layout
 
@@ -138,6 +143,13 @@ bewusst nicht eingebunden, sondern als Schema neu gezeichnet.
 Die Namen der Mitwirkenden stehen ausschließlich als Initialen im Quelltext.
 
 ## Konventionen
+
+**TODO-Notizen erscheinen nie auf der Seite.** Ein Absatz oder Listenpunkt, der
+mit `TODO` beginnt, wird beim Bauen aus dem Markdown entfernt, ebenso eine
+Überschrift, unter der dadurch nichts mehr steht. Der Vermerk bleibt in der
+Datei stehen und dient als Erinnerung. Die Regel steckt als kleines
+rehype-Plugin in `astro.config.mjs`. Wer sie abschalten will, entfernt dort den
+Eintrag unter `markdown.rehypePlugins`.
 
 **Kein Gedankenstrich mitten im Satz.** Weder im Fließtext der Seite noch in
 Kommentaren. Wo sich ein Einschub aufdrängt, steht stattdessen ein Komma, ein
@@ -177,9 +189,18 @@ ein Analysewerkzeug dazu, muss dieser Abschnitt angepasst werden.
 
 ## Ausliefern
 
-Der Build erzeugt reine statische Dateien in `dist/`. Auf Cloudflare Pages:
-Build-Befehl `npm run build`, Ausgabeverzeichnis `dist`, Wurzelverzeichnis
-`portfolio`. Vercel, Netlify und jeder Webspace funktionieren genauso.
+Die Seite liegt unter **https://schedisamet.de** und wird über GitHub Pages
+ausgeliefert. Jeder Push auf `main` stößt den Workflow in
+`.github/workflows/deploy.yml` an, der die Seite baut und veröffentlicht. Ein
+manueller Schritt ist nicht nötig.
 
-Vor dem ersten Deployment `site` in `astro.config.mjs` auf die echte Domain
-setzen. Daraus entstehen Canonical-URLs, hreflang-Angaben und die Sitemap.
+Die Domain ist bei IONOS registriert. Die dort nötigen DNS-Einträge stehen in
+der GitHub-Dokumentation unter „Managing a custom domain for your GitHub Pages
+site". Ändert sich die Domain, müssen drei Stellen mitgezogen werden:
+`site` in `astro.config.mjs`, `public/CNAME` und `public/robots.txt`.
+
+Lokal bauen und den fertigen Stand ansehen:
+
+```bash
+npm run build && npm run preview
+```

@@ -1,26 +1,20 @@
 ---
 import LegalPage from '../../layouts/LegalPage.astro';
+import { SITE } from '../../consts';
 ---
 
 <LegalPage
   locale="en"
   altHref="/impressum"
   title="Imprint"
-  lead="This page is still a scaffold. A site used professionally in Germany must carry the details below under § 5 DDG."
+  lead="The details required under § 5 DDG are currently being added."
 >
-  <h2>Details under § 5 DDG</h2>
-  <ul>
-    <li>TODO: full name</li>
-    <li>TODO: postal address (street, number, postcode, city), a PO box is not sufficient</li>
-    <li>TODO: email address</li>
-    <li>TODO: phone number</li>
-    <li>TODO: VAT identification number, if you have one</li>
-    <li>TODO: for regulated professions, the chamber, professional title and the state that granted it</li>
-  </ul>
+  <h2>Contact</h2>
+  <p>
+    Until the full details appear here, you can reach me at
+    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+  </p>
 
   <h2>Responsible for content</h2>
-  <p>TODO: name and address of the responsible person.</p>
-
-  <h2>Liability for links</h2>
-  <p>TODO: Write your own reviewed text here rather than copying a boilerplate notice.</p>
+  <p>Schedi Samet</p>
 </LegalPage>
