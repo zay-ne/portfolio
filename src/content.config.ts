@@ -42,7 +42,7 @@ const projects = defineCollection({
      * Nur für Arbeiten, die mehr als Fließtext brauchen, etwa eine Studie mit
      * eigenen Diagrammen. Der Fließtext der Datei wird dann nicht gerendert.
      */
-    feature: z.enum(['vectra-h2']).optional(),
+    feature: z.enum(['vectra-h2', 'periorbital-week']).optional(),
     /** Auf true setzen, um ein Projekt zu verstecken, ohne es zu löschen. */
     draft: z.boolean().default(false),
   }),

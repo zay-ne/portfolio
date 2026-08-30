@@ -5,9 +5,10 @@ import SplitLines from '../components/SplitLines.astro';
 import BarStat from '../components/study/BarStat.astro';
 import IccScale from '../components/study/IccScale.astro';
 import ModeDiagram from '../components/study/ModeDiagram.astro';
+import TimelineChart from '../components/study/TimelineChart.astro';
 import { SITE, type Locale } from '../consts';
 import { projectPath, route, t } from '../i18n/utils';
-import { vectraStudy } from '../data/vectra-study';
+import { studies, type StudyKey } from '../data/studies';
 import { getProjects, nextProject, type Project } from '../lib/projects';
 
 export interface Props {
@@ -18,10 +19,18 @@ export interface Props {
 
 const { locale, altHref, project } = Astro.props;
 const strings = t(locale);
-const s = vectraStudy[locale];
+
+/* Welche Studie gezeigt wird, entscheidet das Feld `feature` im Frontmatter. */
+const s = studies[project.data.feature as StudyKey][locale];
 
 const all = await getProjects(locale);
 const next = nextProject(all, project);
+
+const pad = (n: number) => String(n).padStart(2, '0');
+const creditsIndex = pad(s.sections.length + 1);
+
+/* Nennt das Manuskript keine Einzelbeiträge, wird nur die Autorenliste gezeigt. */
+const hasRoles = s.credits.people.some((person) => person.role);
 ---
 
 <BaseLayout
@@ -77,177 +86,129 @@ const next = nextProject(all, project);
         </ol>
       </section>
 
-      <!-- ---------- 01 Aufbau ---------- -->
+      <!-- ---------- Abschnitte ---------- -->
+      {
+        s.sections.map((section, i) => {
+          const v = section.visual;
+          return (
+            <section class="block">
+              <div class="block-grid">
+                <div class="block-head" data-reveal>
+                  <p class="label idx">{pad(i + 1)}</p>
+                  <h2 class="heading-md">{section.title}</h2>
+                </div>
+                <div class="block-body" data-reveal style="--reveal-delay:100ms">
+                  {section.body.map((paragraph) => (
+                    <p class="prose-measure prose-measure-wide">{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+
+              {v && (
+                <div class:list={['visual', section.wide && 'visual-wide']}>
+                  {v.kind === 'modes' && (
+                    <ModeDiagram caption={v.caption} labels={v.labels} recommendedNote={v.recommendedNote} />
+                  )}
+
+                  {v.kind === 'bars' && (
+                    <BarStat
+                      title={v.title}
+                      unit={v.unit}
+                      caption={v.caption}
+                      bars={v.bars}
+                      digits={v.digits}
+                      locale={locale}
+                    />
+                  )}
+
+                  {v.kind === 'icc' && (
+                    <IccScale title={v.title} caption={v.caption} bands={v.bands} items={v.items} locale={locale} />
+                  )}
+
+                  {v.kind === 'timeline' && (
+                    <TimelineChart
+                      title={v.title}
+                      unit={v.unit}
+                      caption={v.caption}
+                      points={v.points}
+                      bands={v.bands}
+                      threshold={v.threshold}
+                      thresholdLabel={v.thresholdLabel}
+                      baselineLabel={v.baselineLabel}
+                      locale={locale}
+                    />
+                  )}
+
+                  {v.kind === 'table' && (
+                    <div data-reveal>
+                      <div class="table-scroll">
+                        <table class="tradeoff">
+                          <thead>
+                            <tr>
+                              {v.columns.map((c) => (
+                                <th scope="col" class="label">
+                                  {c}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {v.rows.map((row, j) => (
+                              <tr data-recommended={row.recommended ? '' : undefined} style={`--d:${j * 80}ms`}>
+                                <th scope="row" class="mode-cell">
+                                  <span class="mode-id">{row.id}</span>
+                                  {row.recommended && <span class="label pill">{v.recommendedNote}</span>}
+                                </th>
+                                <td>{row.coverage}</td>
+                                <td class="tabular num">{row.deviation}</td>
+                                <td class="tabular num">{row.icc}</td>
+                                <td class="rationale">{row.rationale}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
+          );
+        })
+      }
+
+      <!-- ---------- Beteiligte ---------- -->
       <section class="block">
         <div class="block-grid">
           <div class="block-head" data-reveal>
-            <p class="label idx">{s.setup.index}</p>
-            <h2 class="heading-md">{s.setup.title}</h2>
+            <p class="label idx">{creditsIndex}</p>
+            <h2 class="heading-md">{s.credits.title}</h2>
           </div>
           <div class="block-body" data-reveal style="--reveal-delay:100ms">
-            {s.setup.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
-          </div>
-        </div>
-      </section>
+            {s.credits.body.map((paragraph) => (
+              <p class="prose-measure prose-measure-wide">{paragraph}</p>
+            ))}
 
-      <!-- ---------- 02 Modi ---------- -->
-      <section class="block">
-        <div class="block-grid">
-          <div class="block-head" data-reveal>
-            <p class="label idx">{s.modes.section.index}</p>
-            <h2 class="heading-md">{s.modes.section.title}</h2>
-          </div>
-          <div class="block-body" data-reveal style="--reveal-delay:100ms">
-            {s.modes.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
-          </div>
-        </div>
-        <div class="visual visual-wide">
-          <ModeDiagram
-            caption={s.modes.caption}
-            labels={s.modes.labels}
-            recommendedNote={s.tradeoff.recommendedNote}
-          />
-        </div>
-      </section>
-
-      <!-- ---------- 03 Distanzen ---------- -->
-      <section class="block">
-        <div class="block-grid">
-          <div class="block-head" data-reveal>
-            <p class="label idx">{s.distance.section.index}</p>
-            <h2 class="heading-md">{s.distance.section.title}</h2>
-          </div>
-          <div class="block-body" data-reveal style="--reveal-delay:100ms">
-            {s.distance.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
-          </div>
-        </div>
-        <div class="visual">
-          <BarStat
-            title={s.distance.chartTitle}
-            unit={s.distance.chartUnit}
-            caption={s.distance.chartCaption}
-            bars={s.distance.bars}
-            locale={locale}
-          />
-        </div>
-      </section>
-
-      <!-- ---------- 04 Volumen ---------- -->
-      <section class="block">
-        <div class="block-grid">
-          <div class="block-head" data-reveal>
-            <p class="label idx">{s.volume.section.index}</p>
-            <h2 class="heading-md">{s.volume.section.title}</h2>
-          </div>
-          <div class="block-body" data-reveal style="--reveal-delay:100ms">
-            {s.volume.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
-          </div>
-        </div>
-        <div class="visual">
-          <BarStat
-            title={s.volume.chartTitle}
-            unit={s.volume.chartUnit}
-            caption={s.volume.chartCaption}
-            bars={s.volume.bars}
-            locale={locale}
-          />
-        </div>
-      </section>
-
-      <!-- ---------- 05 Wiederholbarkeit ---------- -->
-      <section class="block">
-        <div class="block-grid">
-          <div class="block-head" data-reveal>
-            <p class="label idx">{s.reliability.section.index}</p>
-            <h2 class="heading-md">{s.reliability.section.title}</h2>
-          </div>
-          <div class="block-body" data-reveal style="--reveal-delay:100ms">
-            {s.reliability.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
-          </div>
-        </div>
-        <div class="visual">
-          <IccScale
-            title={s.reliability.chartTitle}
-            caption={s.reliability.chartCaption}
-            bands={s.reliability.bands}
-            items={s.reliability.items}
-            locale={locale}
-          />
-        </div>
-      </section>
-
-      <!-- ---------- 06 Abwägung ---------- -->
-      <section class="block">
-        <div class="block-grid">
-          <div class="block-head" data-reveal>
-            <p class="label idx">{s.tradeoff.section.index}</p>
-            <h2 class="heading-md">{s.tradeoff.section.title}</h2>
-          </div>
-          <div class="block-body" data-reveal style="--reveal-delay:100ms">
-            {s.tradeoff.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
-          </div>
-        </div>
-
-        <div class="visual visual-wide" data-reveal>
-          <div class="table-scroll">
-            <table class="tradeoff">
-              <thead>
-                <tr>{s.tradeoff.columns.map((c) => <th scope="col" class="label">{c}</th>)}</tr>
-              </thead>
-              <tbody>
-                {
-                  s.tradeoff.rows.map((row, i) => (
-                    <tr data-recommended={row.recommended ? '' : undefined} style={`--d:${i * 80}ms`}>
-                      <th scope="row" class="mode-cell">
-                        <span class="mode-id">{row.id}</span>
-                        {row.recommended && <span class="label pill">{s.tradeoff.recommendedNote}</span>}
-                      </th>
-                      <td>{row.coverage}</td>
-                      <td class="tabular num">{row.deviation}</td>
-                      <td class="tabular num">{row.icc}</td>
-                      <td class="rationale">{row.rationale}</td>
-                    </tr>
-                  ))
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ---------- 07 Schlussfolgerung ---------- -->
-      <section class="block conclusion">
-        <div class="block-grid">
-          <div class="block-head" data-reveal>
-            <p class="label idx">{s.conclusion.index}</p>
-            <h2 class="heading-md">{s.conclusion.title}</h2>
-          </div>
-          <div class="block-body" data-reveal style="--reveal-delay:100ms">
-            {s.conclusion.body.map((p) => <p class="prose-measure prose-measure-wide lead-out">{p}</p>)}
-          </div>
-        </div>
-      </section>
-
-      <!-- ---------- 08 Beteiligte ---------- -->
-      <section class="block">
-        <div class="block-grid">
-          <div class="block-head" data-reveal>
-            <p class="label idx">{s.credits.section.index}</p>
-            <h2 class="heading-md">{s.credits.section.title}</h2>
-          </div>
-          <div class="block-body" data-reveal style="--reveal-delay:100ms">
-            {s.credits.section.body.map((p) => <p class="prose-measure prose-measure-wide">{p}</p>)}
-
-            <dl class="people">
-              {
-                s.credits.people.map((p) => (
-                  <div class="person" data-self={p.self ? '' : undefined}>
-                    <dt class="initials tabular">{p.initials}</dt>
-                    <dd>{p.role}</dd>
-                  </div>
-                ))
-              }
-            </dl>
+            {
+              hasRoles ? (
+                <dl class="people">
+                  {s.credits.people.map((person) => (
+                    <div class="person" data-self={person.self ? '' : undefined}>
+                      <dt class="initials tabular">{person.initials}</dt>
+                      <dd>{person.role}</dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : (
+                <ol class="authors">
+                  {s.credits.people.map((person) => (
+                    <li class="author tabular" data-self={person.self ? '' : undefined}>
+                      {person.initials}
+                    </li>
+                  ))}
+                </ol>
+              )
+            }
 
             <p class="label status-label">{s.credits.statusLabel}</p>
             <p class="status">{s.credits.status}</p>
@@ -433,11 +394,6 @@ const next = nextProject(all, project);
     color: var(--color-fg-muted);
   }
 
-  .lead-out {
-    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
-    color: var(--color-fg);
-  }
-
   .visual {
     padding-block-start: clamp(2rem, 5vh, 3rem);
   }
@@ -553,6 +509,30 @@ const next = nextProject(all, project);
     margin: 0;
     font-size: 0.9375rem;
     color: var(--color-fg-muted);
+  }
+
+  /* Autorenliste ohne Beitragsangaben. */
+  .authors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .author {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-fg-muted);
+  }
+
+  .author[data-self] {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 
   .status-label {

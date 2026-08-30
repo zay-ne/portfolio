@@ -61,7 +61,10 @@ src/
     de/*.md              Ein Projekt je Datei, deutsche Fassung
     en/*.md              Dieselben Projekte, englische Fassung
   data/cv.ts             Lebenslaufdaten, zweisprachig
+  data/study-types.ts    Gemeinsame Struktur aller Studienseiten
+  data/studies.ts        Zuordnung von `feature` zu den Studieninhalten
   data/vectra-study.ts   Inhalte und Messwerte der Vectra-H2-Studie
+  data/week-study.ts     Inhalte und Messwerte der Wochenverlauf-Studie
   i18n/
     ui.ts                Sämtliche Oberflächentexte, DE und EN
     utils.ts             Sprache aus der URL, Routentabelle, Datumsformat
@@ -126,21 +129,35 @@ Danach, nach Wichtigkeit:
 
 Die meisten Projekte laufen über `layouts/ProjectPage.astro` und bestehen aus
 dem Fließtext ihrer Markdown-Datei. Arbeiten, die mehr brauchen, bekommen ein
-eigenes Layout. Dafür gibt es im Frontmatter das Feld `feature`.
+eigenes Layout. Dafür gibt es im Frontmatter das Feld `feature`. Ist es
+gesetzt, rendert `layouts/StudyPage.astro` die Seite, und der Fließtext der
+Markdown-Datei wird nicht verwendet. Die Datei bleibt trotzdem nötig, damit das
+Projekt in der Übersicht erscheint.
 
-Bislang gilt das nur für die Vectra-H2-Studie: `feature: vectra-h2` schaltet
-`layouts/StudyPage.astro` frei. Der Fließtext der Markdown-Datei wird dann
-nicht gerendert, alle Inhalte kommen aus `data/vectra-study.ts`. Das Feld bleibt
-trotzdem nötig, damit das Projekt in der Übersicht erscheint.
+Bislang nutzen das die beiden Studien:
 
-Die Diagramme der Studienseite sind von Hand gezeichnetes Inline-SVG und CSS,
-keine Diagrammbibliothek. Sie beziehen ihre Farben aus denselben Tokens wie der
-Rest der Seite und funktionieren dadurch in hell und dunkel gleichermaßen.
-Sämtliche Zahlen stammen aus dem Manuskript und sind in `vectra-study.ts` mit
-der jeweiligen Tabelle belegt. Die Originalabbildungen aus dem Paper wurden
-bewusst nicht eingebunden, sondern als Schema neu gezeichnet.
+| `feature`           | Inhalte in                  |
+| ------------------- | --------------------------- |
+| `vectra-h2`         | `src/data/vectra-study.ts`  |
+| `periorbital-week`  | `src/data/week-study.ts`    |
+
+Beide teilen sich ein Layout. Eine Studie beschreibt ihre Abschnitte als Liste,
+und jeder Abschnitt kann eine Grafik tragen, die über das Feld `kind` gewählt
+wird. Verfügbar sind derzeit `modes`, `bars`, `icc`, `table` und `timeline`.
+Die Typen dazu stehen in `src/data/study-types.ts`, die Zuordnung von
+`feature` zu Inhalt in `src/data/studies.ts`. Eine dritte Studie braucht also
+eine Datendatei, einen Eintrag in der Registry und einen im Schema.
+
+Die Grafiken liegen unter `src/components/study/` und sind von Hand gezeichnetes
+Inline-SVG und CSS, ohne Diagrammbibliothek. Sie beziehen ihre Farben aus
+denselben Tokens wie der Rest der Seite und funktionieren dadurch in hell und
+dunkel gleichermaßen. Sämtliche Zahlen stammen aus den Manuskripten und sind in
+den Datendateien mit der jeweiligen Tabelle belegt. Originalabbildungen aus den
+Papers wurden bewusst nicht eingebunden, sondern neu gezeichnet.
 
 Die Namen der Mitwirkenden stehen ausschließlich als Initialen im Quelltext.
+Enthält ein Manuskript keine Aufschlüsselung der Beiträge, zeigt die Seite nur
+die Autorenliste ohne Rollen.
 
 ## Konventionen
 

@@ -7,7 +7,7 @@ year: "2024"
 role: "Referent"
 summary: "Vortrag zur Methodik und zu den Ergebnissen der Vectra-H2-Validierung auf der 73. Tagung der Vereinigung Norddeutscher Augenärzte in Hannover."
 status: archived
-order: 20
+order: 30
 # cover: "/work/vortrag-vna-2024.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
 draft: false
 ---

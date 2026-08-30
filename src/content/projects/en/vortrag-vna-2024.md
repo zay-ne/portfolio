@@ -7,7 +7,7 @@ year: "2024"
 role: "Speaker"
 summary: "A talk on the method and results of the Vectra-H2 validation at the 73rd meeting of the North German Ophthalmological Society in Hanover."
 status: archived
-order: 20
+order: 30
 # cover: "/work/vortrag-vna-2024.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
 draft: false
 ---

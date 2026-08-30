@@ -1,0 +1,357 @@
+---
+import type { TimelineBand, TimelinePoint } from '../../data/study-types';
+import type { Locale } from '../../consts';
+
+export interface Props {
+  title: string;
+  unit: string;
+  caption: string;
+  points: TimelinePoint[];
+  bands: TimelineBand[];
+  threshold: number;
+  thresholdLabel: string;
+  baselineLabel: string;
+  locale: Locale;
+}
+
+const { title, unit, caption, points, bands, threshold, thresholdLabel, baselineLabel, locale } =
+  Astro.props;
+
+const nf = new Intl.NumberFormat(locale === 'de' ? 'de-DE' : 'en-GB', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+  signDisplay: 'exceptZero',
+});
+
+/* Die Skala umschließt beide Bänder und die Schwelle, mit etwas Luft nach
+   oben und unten. Symmetrisch um null, damit die Nulllinie in der Mitte liegt. */
+const span = Math.max(threshold, ...bands.flatMap((b) => [Math.abs(b.from), Math.abs(b.to)])) * 1.15;
+const min = -span;
+const max = span;
+const y = (v: number) => `${((max - v) / (max - min)) * 100}%`;
+const x = (i: number) => `${((i + 0.5) / points.length) * 100}%`;
+
+/* Verbindungslinie in viewBox-Einheiten, damit sie sich mit der Fläche dehnt. */
+const polyline = points
+  .map((p, i) => `${((i + 0.5) / points.length) * 100},${((max - p.value) / (max - min)) * 100}`)
+  .join(' ');
+
+const ticks = [threshold, 0, -threshold];
+---
+
+<figure class="timeline" data-reveal>
+  <figcaption class="head">
+    <h3 class="chart-title">{title}</h3>
+    <span class="label unit">{unit}</span>
+  </figcaption>
+
+  <div class="frame">
+    <div class="yaxis" aria-hidden="true">
+      {ticks.map((t) => <span class="ytick tabular" style={`--y:${y(t)}`}>{nf.format(t)}</span>)}
+    </div>
+
+    <div class="plot">
+      {
+        bands.map((b) => (
+          <span
+            class="band"
+            data-strong={b.strong ? '' : undefined}
+            style={`--top:${y(b.to)};--bottom:${y(b.from)}`}
+          />
+        ))
+      }
+
+      <span class="rule zero" style={`--y:${y(0)}`} aria-hidden="true"></span>
+      <span class="rule limit" style={`--y:${y(threshold)}`} aria-hidden="true"></span>
+      <span class="rule limit" style={`--y:${y(-threshold)}`} aria-hidden="true"></span>
+
+      <svg class="link" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points={polyline} vector-effect="non-scaling-stroke" />
+      </svg>
+
+      <ol class="points">
+        {
+          points.map((p, i) => (
+            <li class="point" style={`--x:${x(i)};--y:${y(p.value)};--d:${300 + i * 110}ms`}>
+              <span class="dot" />
+              <span class="pvalue tabular">{nf.format(p.value)}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+
+  <ol class="xaxis">
+    {points.map((p) => <li class="label">{p.label}</li>)}
+  </ol>
+
+  <p class="caption">
+    <span class="legend">
+      <span class="legend-item"><span class="key key-strong" aria-hidden="true" />{bands.find((b) => b.strong)?.label}</span>
+      <span class="legend-item"><span class="key key-wide" aria-hidden="true" />{bands.find((b) => !b.strong)?.label}</span>
+      <span class="legend-item"><span class="key key-limit" aria-hidden="true" />{thresholdLabel}</span>
+      <span class="legend-item"><span class="key key-zero" aria-hidden="true" />{baselineLabel}</span>
+    </span>
+    {caption}
+  </p>
+</figure>
+
+<style>
+  .timeline {
+    margin: 0;
+    border-block-start: 1px solid var(--color-line);
+    padding-block-start: 1.25rem;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block-end: 1.5rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .unit {
+    color: var(--color-fg-subtle);
+  }
+
+  .frame {
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .yaxis {
+    position: relative;
+  }
+
+  .ytick {
+    position: absolute;
+    inset-inline-end: 0;
+    inset-block-start: var(--y);
+    transform: translateY(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    color: var(--color-fg-subtle);
+  }
+
+  .plot {
+    position: relative;
+    block-size: clamp(13rem, 30vw, 17rem);
+    border-inline-start: 1px solid var(--color-line);
+  }
+
+  /* Intervallbänder: das weitere blass, das engere kräftiger. */
+  .band {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: var(--top);
+    block-size: calc(var(--bottom) - var(--top));
+    background: color-mix(in srgb, var(--color-fg) 5%, transparent);
+    transform: scaleY(0);
+    transform-origin: center;
+  }
+
+  .band[data-strong] {
+    background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  }
+
+  .rule {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: var(--y);
+    border-block-start: 1px solid var(--color-line-strong);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* Die Nulllinie liegt innerhalb des Konfidenzbandes und braucht deshalb
+     genug Kontrast, um dort noch durchzukommen. */
+  .rule.zero {
+    border-block-start-color: var(--color-fg-muted);
+  }
+
+  .rule.limit {
+    border-block-start-style: dashed;
+    border-block-start-color: var(--color-fg-muted);
+  }
+
+  /* Der Aufbau der Linie läuft über eine Maske, nicht über stroke-dasharray.
+     Die Fläche wird ungleichmäßig skaliert, wodurch Strichmuster im
+     Bildschirmraum berechnet werden und die Linie mittendrin abrisse. */
+  .link {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .link polyline {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+
+  .points {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .point {
+    position: absolute;
+    inset-inline-start: var(--x);
+    inset-block-start: var(--y);
+    transform: translate(-50%, -50%);
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+  }
+
+  .dot {
+    inline-size: 11px;
+    block-size: 11px;
+    border-radius: 999px;
+    background: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    transform: scale(0);
+  }
+
+  .pvalue {
+    position: absolute;
+    inset-block-end: 100%;
+    margin-block-end: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    white-space: nowrap;
+    color: var(--color-fg);
+    opacity: 0;
+  }
+
+  html.js [data-reveal].is-visible .band {
+    transform: scaleY(1);
+    transition: transform 900ms var(--ease-out-expo);
+  }
+
+  html.js [data-reveal].is-visible .rule {
+    transform: scaleX(1);
+    transition: transform 900ms var(--ease-out-expo) 150ms;
+  }
+
+  html.js [data-reveal].is-visible .link {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 1400ms var(--ease-out-quart) 300ms;
+  }
+
+  html.js [data-reveal].is-visible .dot {
+    transform: scale(1);
+    transition: transform 520ms var(--ease-out-expo) var(--d);
+  }
+
+  html.js [data-reveal].is-visible .pvalue {
+    opacity: 1;
+    transition: opacity 500ms var(--ease-out-quart) calc(var(--d) + 240ms);
+  }
+
+  html:not(.js) .band,
+  html:not(.js) .rule,
+  html:not(.js) .dot {
+    transform: none;
+  }
+
+  html:not(.js) .link {
+    clip-path: none;
+  }
+
+  html:not(.js) .pvalue {
+    opacity: 1;
+  }
+
+  .xaxis {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    padding-inline-start: 4rem;
+    list-style: none;
+    text-align: center;
+    color: var(--color-fg-muted);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.1rem;
+    padding-block-end: 0.6rem;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .key {
+    inline-size: 16px;
+    block-size: 10px;
+    border-radius: 2px;
+  }
+
+  .key-strong {
+    background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+  }
+
+  .key-wide {
+    background: color-mix(in srgb, var(--color-fg) 5%, transparent);
+    border: 1px solid var(--color-line);
+  }
+
+  .key-limit {
+    block-size: 0;
+    border-block-start: 1px dashed var(--color-fg-muted);
+  }
+
+  .key-zero {
+    block-size: 0;
+    border-block-start: 1px solid var(--color-line-strong);
+  }
+
+  .caption {
+    padding-block-start: 1.25rem;
+    max-inline-size: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-subtle);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .band,
+    .rule,
+    .dot {
+      transform: none;
+    }
+
+    .link {
+      clip-path: none;
+    }
+
+    .pvalue {
+      opacity: 1;
+    }
+  }
+</style>

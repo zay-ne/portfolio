@@ -23,7 +23,7 @@ const { project, altHref } = Astro.props;
 {
   /* Arbeiten mit eigenem Layout bekommen ihre eigene Seite, alle anderen
      laufen über die Standard-Projektseite. */
-  project.data.feature === 'vectra-h2' ? (
+  project.data.feature ? (
     <StudyPage locale="en" project={project} altHref={altHref} />
   ) : (
     <ProjectPage locale="en" project={project} altHref={altHref} />
