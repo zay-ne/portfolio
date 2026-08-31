@@ -84,7 +84,7 @@ export const cv: Record<'de' | 'en', CvContent> = {
         ],
       },
       {
-        period: '02/2022 – 06/2026',
+        period: '02/2022 – heute',
         role: 'Founder, digitale Kundenprojekte und Umsetzung',
         org: 'zayne',
         description:
@@ -241,7 +241,7 @@ export const cv: Record<'de' | 'en', CvContent> = {
         ],
       },
       {
-        period: '02/2022 – 06/2026',
+        period: '02/2022 – present',
         role: 'Founder, digital client projects and delivery',
         org: 'zayne',
         description:

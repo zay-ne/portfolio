@@ -33,7 +33,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Aufbau',
         body: [
-          'Lebende Menschen bewegen sich. Sie atmen, blinzeln und verziehen das Gesicht, und jede dieser Bewegungen landet als Messfehler im Ergebnis. Wer wissen will, wie genau ein Gerät wirklich misst, muss diese Störgrößen zuerst ausschließen.',
+          'Lebende Menschen bewegen sich. Atmung, Lidschlag und Mimik erzeugen Bewegungen, die als Messfehler in das Ergebnis eingehen. Um die tatsächliche Messgenauigkeit eines Geräts zu bestimmen, müssen diese Störgrößen zuerst ausgeschlossen werden.',
           'Deshalb wurde an zwei Schaufensterköpfen und an fünf Körperspendern gemessen, nicht an Patientinnen und Patienten. Zwei Beobachter nahmen die Dummys unabhängig voneinander je sechsmal auf, ein dritter Beobachter die Körperspender je viermal. Was danach an Abweichung übrig bleibt, geht auf das Gerät, die Software und die Bedienung zurück, auf sonst nichts.',
         ],
       },
@@ -98,7 +98,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Der eigentliche Befund',
         body: [
-          'Bis hierhin sieht alles hervorragend aus. Der entscheidende Unterschied liegt aber woanders: Wird derselbe Scan zweimal ausgewertet, stimmen die Ergebnisse fast perfekt überein. Wird dagegen zweimal neu fotografiert, fällt die Übereinstimmung deutlich ab.',
+          'Damit ist die Präzision innerhalb einer Aufnahme belegt. Der entscheidende Unterschied liegt jedoch an anderer Stelle: Wird derselbe Scan zweimal ausgewertet, stimmen die Ergebnisse nahezu perfekt überein. Wird dagegen zweimal neu aufgenommen, fällt die Übereinstimmung deutlich ab.',
           'Am auffälligsten ist die Seitendifferenz bei den Körperspendern. Das linke Auge erreicht einen ICC von 0,83, das rechte nur 0,15. Eine naheliegende, aber ungeprüfte Erklärung ist die Kameraführung eines rechtshändigen Bedieners. Genau diese Asymmetrie, nicht der Mittelwert, begrenzt derzeit den Einsatz für Verlaufskontrollen.',
         ],
         visual: {
@@ -216,7 +216,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Setup',
         body: [
-          'Living people move. They breathe, blink and pull faces, and every one of those movements lands in the result as measurement error. To find out how precisely a device actually measures, those confounders have to be removed first.',
+          'Living people move. Respiration, blinking and facial expression produce movement that enters the result as measurement error. To establish a device’s actual precision, those confounders have to be excluded first.',
           'So the measurements were taken on two mannequin heads and five body donors, not on patients. Two observers captured each dummy six times independently, a third observer captured each body donor four times. Whatever deviation remains comes from the device, the software and the operator, and from nothing else.',
         ],
       },
@@ -281,7 +281,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'The actual finding',
         body: [
-          'Up to this point everything looks excellent. The decisive difference lies elsewhere: evaluate the same scan twice and the results agree almost perfectly. Photograph twice from scratch and agreement drops sharply.',
+          'Precision within a single capture is thereby established. The decisive difference lies elsewhere: evaluate the same scan twice and the results agree almost perfectly. Capture twice from scratch and agreement drops sharply.',
           'The most striking part is the left to right difference in body donors. The left eye reaches an ICC of 0.83, the right only 0.15. A plausible but unverified explanation is the camera handling of a right handed operator. It is this asymmetry, not the average, that currently limits use for longitudinal monitoring.',
         ],
         visual: {

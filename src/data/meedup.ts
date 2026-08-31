@@ -35,7 +35,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Das Problem',
         body: [
-          'Unternehmen außerhalb der bekannten Zielbranchen erreichen Top-Talente kaum. Wer nicht Beratung, Technologie oder Automobil heißt, taucht in der Zielliste von Berufseinsteigern schlicht nicht auf. Eine unbesetzte Stelle kostet trotzdem Geld, jeden Monat.',
+          'Unternehmen außerhalb der bekannten Zielbranchen erreichen Top-Talente kaum. Wer nicht zu Beratung, Technologie oder Automobilindustrie zählt, erscheint auf der Zielliste von Berufseinsteigern selten. Eine unbesetzte Stelle verursacht dennoch monatlich Kosten.',
           'Gleichzeitig ist die Auswahl selbst unzuverlässig. Eine Bewerbungsmappe zeigt, wie jemand sich darstellt, nicht wie jemand arbeitet. Arbeitsproben und praktische Projekte gelten dagegen seit Jahrzehnten als das aussagekräftigste Auswahlverfahren für späteren beruflichen Erfolg.',
         ],
         wide: true,
@@ -196,7 +196,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
       {
         title: 'The problem',
         body: [
-          'Companies outside the well known target industries barely reach top talent. If you are not consulting, tech or automotive, you simply do not appear on a graduate’s shortlist. An unfilled position still costs money, every month.',
+          'Companies outside the well known target industries barely reach top talent. Those not counted among consulting, technology or automotive rarely appear on a graduate’s shortlist. An unfilled position nonetheless incurs cost every month.',
           'At the same time selection itself is unreliable. An application shows how someone presents themselves, not how they work. Work samples and practical projects, by contrast, have been considered the most predictive selection method for later professional success for decades.',
         ],
         wide: true,

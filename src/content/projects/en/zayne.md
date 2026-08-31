@@ -3,10 +3,10 @@ key: zayne
 lang: en
 title: "zayne"
 discipline: software
-year: "2022 – 2026"
-role: "Founder, acquisition through delivery"
-summary: "My own studio for digital client work, 2022 to 2026. Over 150 sales delivered for more than 50 clients, from brand and website through copy to video and sound."
-status: archived
+year: "2022 – present"
+role: "Founder, acquisition through invoicing"
+summary: "My own studio for digital client work, since 2022. Over 150 sales delivered for more than 50 clients, from brand and website through copy to film and sound."
+status: live
 order: 20
 # cover: "/work/zayne.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
 feature: zayne

@@ -213,7 +213,7 @@ const stationeryEn: GalleryWork[] = [
 export const ecmKampagnen: Record<'de' | 'en', StudyContent> = {
   de: {
     eyebrow: 'Design · Entrepreneurs Club Mainz',
-    headline: ['Jede Woche', 'ein Auftritt.', 'Immer dieselbe Handschrift.'],
+    headline: ['Jede Woche', 'ein Auftritt.', 'Immer dieselbe Gestaltungssprache.'],
     lead: 'Der Entrepreneurs Club Mainz veranstaltet Hackathons, Summer Schools, Pitch-Abende und internationale Challenges. Jede Veranstaltung braucht Plakat, Social Post und oft eine Urkunde, und jede muss auf den ersten Blick nach ECM aussehen.',
     meta: [
       { term: 'Rolle', value: 'Head of Design' },
@@ -279,7 +279,7 @@ export const ecmKampagnen: Record<'de' | 'en', StudyContent> = {
 
   en: {
     eyebrow: 'Design · Entrepreneurs Club Mainz',
-    headline: ['A new event', 'every week.', 'Always the same hand.'],
+    headline: ['A new event', 'every week.', 'Always the same design language.'],
     lead: 'Entrepreneurs Club Mainz runs hackathons, summer schools, pitch evenings and international challenges. Every event needs a poster, a social post and often a certificate, and every one has to read as ECM at first glance.',
     meta: [
       { term: 'Role', value: 'Head of Design' },

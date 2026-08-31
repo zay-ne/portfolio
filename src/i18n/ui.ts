@@ -58,8 +58,8 @@ export const ui = {
         label: 'Über mich',
         title: 'Kurz zu mir',
         body: [
-          'Ich habe Medizintechnik studiert, weil mich die Stelle interessiert, an der ein technisches System auf einen Menschen trifft. Dort zählt beides: dass es funktioniert und dass sich das belegen lässt. An der Universitätsmedizin Göttingen leite ich seit 2023 eine Validierungsstudie zum 3D-System Vectra-H2, von der Studienplanung über die Messreihen bis zur statistischen Auswertung.',
-          'Parallel dazu habe ich ab 2022 mit zayne über 120 digitale Kundenprojekte abgewickelt, von der Anforderungsaufnahme über Marke und Gestaltung bis zum Livegang. Seit 2025 bin ich Co-Founder von meedup und Head of Design beim Entrepreneurs Club Mainz. Was sich durch alles zieht: aus einer unklaren Anforderung etwas machen, das man benutzen, messen und zeigen kann.',
+          'Ich habe Medizintechnik studiert, weil mich der Punkt interessiert, an dem ein technisches System auf einen Menschen trifft. Dort zählt beides: dass es funktioniert und dass sich das belegen lässt. An der Universitätsmedizin Göttingen leite ich seit 2023 eine Validierungsstudie zum 3D-System Vectra-H2, von der Studienplanung über die Messreihen bis zur statistischen Auswertung.',
+          'Parallel dazu führe ich seit 2022 mit zayne ein eigenes Studio für digitale Kundenprojekte, von der Anforderungsaufnahme über Marke und Gestaltung bis zum Livegang. Seit 2025 bin ich Co-Founder von meedup und Head of Design beim Entrepreneurs Club Mainz. Ein Muster zieht sich durch alle Tätigkeiten: aus einer unklaren Anforderung etwas entstehen zu lassen, das sich benutzen, messen und vorzeigen lässt.',
         ],
         facts: {
           label: 'Eckdaten',
@@ -206,7 +206,7 @@ export const ui = {
         title: 'A little about me',
         body: [
           'I studied medical engineering because I am drawn to the point where a technical system meets a person. Both things count there: that it works, and that this can be proven. Since 2023 I have been leading a validation study of the Vectra-H2 3D system at Göttingen University Medical Center, from study planning through the measurement series to statistical analysis.',
-          'Alongside that I delivered over 120 digital client projects through zayne from 2022 onwards, from gathering requirements through brand and design to go live. Since 2025 I have been co-founder of meedup and Head of Design at Entrepreneurs Club Mainz. The thread running through all of it: turning an unclear requirement into something you can use, measure and show.',
+          'Alongside that I have run zayne, my own studio for digital client work, since 2022, from gathering requirements through brand and design to go live. Since 2025 I have been co-founder of meedup and Head of Design at Entrepreneurs Club Mainz. One pattern runs through all of it: turning an unclear requirement into something that can be used, measured and shown.',
         ],
         facts: {
           label: 'At a glance',

@@ -45,7 +45,7 @@ export const weekStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Aufbau',
         body: [
-          '19 gesunde Teilnehmende zwischen 20 und 65 Jahren, Durchschnittsalter 32. An fünf aufeinanderfolgenden Tagen wurde jeweils zur selben Tageszeit gemessen, damit tageszeitliche Schwankungen im Weichgewebe nicht ins Ergebnis wandern. Schmuck ab, Haare zurück, entspannter Kiefer, geschlossene Lippen, Blick auf einen festen Punkt.',
+          '19 gesunde Teilnehmende zwischen 20 und 65 Jahren, Durchschnittsalter 32. An fünf aufeinanderfolgenden Tagen wurde jeweils zur selben Tageszeit gemessen, damit tageszeitliche Schwankungen im Weichgewebe nicht ins Ergebnis wandern. Schmuck abgelegt, Haare zurückgebunden, Kiefer entspannt, Lippen geschlossen, Blick auf einen festen Punkt.',
           'Der erste Tag ist der Bezugspunkt, jeder weitere Tag wird gegen ihn verglichen. Pro Tag entstanden drei Aufnahmen, und jeder Vergleich wurde dreimal ausgewertet, linkes und rechtes Auge getrennt. Zusammen ergibt das 456 Volumenmessungen.',
         ],
       },

@@ -11,13 +11,13 @@ import type { StudyContent } from './study-types';
 export const zayne: Record<'de' | 'en', StudyContent> = {
   de: {
     eyebrow: 'Software · zayne',
-    headline: ['Vier Jahre', 'eigenes Studio.', 'Alles in einer Hand.'],
-    lead: 'Von 2022 bis 2026 habe ich mit zayne digitale Kundenprojekte umgesetzt: Marke, Website, Text, Video und Ton. Akquise, Konzept, Umsetzung, Abnahme und Abrechnung lagen bei mir.',
+    headline: ['Marke, Website,', 'Text, Film und Ton.', 'Aus einer Hand.'],
+    lead: 'Seit 2022 setze ich mit zayne digitale Kundenprojekte um: Markenauftritt, Website, Text, Film und Ton. Akquisition, Konzeption, Umsetzung, Abnahme und Abrechnung liegen in meiner Verantwortung.',
     meta: [
-      { term: 'Rolle', value: 'Founder, Akquise bis Abrechnung' },
-      { term: 'Zeitraum', value: '2022 bis 2026' },
-      { term: 'Leistung', value: 'Branding, Text, Video, Audio' },
-      { term: 'Stand', value: 'Abgeschlossen' },
+      { term: 'Rolle', value: 'Founder, Akquisition bis Abrechnung' },
+      { term: 'Zeitraum', value: 'seit 2022' },
+      { term: 'Leistung', value: 'Branding, Text, Film, Audio' },
+      { term: 'Stand', value: 'Laufend' },
     ],
     stats: {
       label: 'Bilanz',
@@ -33,14 +33,14 @@ export const zayne: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Das Studio',
         body: [
-          'zayne war mein eigenes Studio für digitale Kundenprojekte. Angefangen hat es mit Websites und Markenauftritten, dazugekommen sind über die Jahre Text, Video und Ton.',
-          'Die Arbeit lag vollständig bei mir: Kundschaft gewinnen, Anforderungen aufnehmen, das Konzept bauen, umsetzen oder die Umsetzung steuern, abnehmen und abrechnen. Volle Umsatzverantwortung, kein Team im Hintergrund.',
+          'zayne ist mein eigenes Studio für digitale Kundenprojekte. Begonnen hat es mit Websites und Markenauftritten. Text, Film und Ton sind über die Jahre hinzugekommen.',
+          'Die gesamte Wertschöpfung liegt bei mir: Kundengewinnung, Anforderungsaufnahme, Konzeption, Umsetzung oder Steuerung der Umsetzung, Abnahme und Abrechnung, mit voller Umsatzverantwortung.',
         ],
       },
       {
         title: 'Vier Leistungsbereiche',
         body: [
-          'Über die Laufzeit sind vier Bereiche entstanden, die sich gegenseitig getragen haben. Wer eine Marke bekommt, braucht Text dafür. Wer ein Video will, braucht Ton, der sitzt.',
+          'Über die Laufzeit sind vier Bereiche entstanden, die sich gegenseitig tragen. Ein Markenauftritt braucht Text, ein Film braucht Ton. Die Bereiche greifen ineinander, statt nebeneinander zu stehen.',
         ],
         wide: true,
         visual: {
@@ -52,23 +52,23 @@ export const zayne: Record<'de' | 'en', StudyContent> = {
             },
             {
               title: 'Copywriting',
-              body: 'Texte für Website und Kampagne, geschrieben für Leserinnen und Leser und gleichzeitig für Suchmaschinen.',
+              body: 'Texte für Website und Kampagne, verfasst für die Leserschaft und zugleich für Suchmaschinen optimiert.',
             },
             {
               title: 'Video-Produktion',
-              body: 'Dreh und Schnitt, von der Aufnahme über die Farbkorrektur bis zum ausgespielten Film.',
+              body: 'Dreh und Schnitt, von der Aufnahme über die Farbkorrektur bis zur Ausspielung.',
             },
             {
               title: 'Audio-Produktion',
-              body: 'Vocal Engineering: Aufnahme, Bearbeitung und Abmischung von Stimmen, bis die Spur trägt.',
+              body: 'Vocal Engineering: Aufnahme, Bearbeitung und Abmischung von Stimmen bis zur sendefähigen Spur.',
             },
           ],
         },
       },
       {
-        title: 'Ausgewählte Kundschaft',
+        title: 'Ausgewählte Referenzen',
         body: [
-          'Vier Namen aus der Kundschaft. Die Bandbreite reicht von Unternehmensgruppen über Mittelstand bis zu einzelnen Künstlern, was den Zuschnitt der vier Leistungsbereiche gut erklärt.',
+          'Vier Referenzen aus der Kundschaft. Die Bandbreite reicht von Unternehmensgruppen über den Mittelstand bis zu einzelnen Künstlern, was den Zuschnitt der vier Leistungsbereiche erklärt.',
         ],
         wide: true,
         visual: {
@@ -82,17 +82,17 @@ export const zayne: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Wie gearbeitet wurde',
+        title: 'Vorgehen',
         body: [
-          'Jedes Projekt lief nach demselben Muster. Anforderungen im direkten Gespräch erheben, bewerten und in etwas übersetzen, das man bauen kann. Danach in Arbeitspakete zerlegen, Prioritäten und Abhängigkeiten festlegen.',
-          'In der Umsetzung war ich die Schnittstelle zwischen Kundschaft, Entwicklung und Dienstleistern, inklusive der unangenehmen Aufgabe, widersprüchliche Wünsche zu klären. Am Ende stand die Abnahme gemeinsam mit dem Kunden: funktionale Tests, Korrekturschleifen, finale Freigabe.',
+          'Jedes Projekt folgt demselben Muster. Anforderungen werden im direkten Gespräch erhoben, bewertet und in umsetzbare Vorgaben übersetzt. Anschließend erfolgt die Zerlegung in Arbeitspakete mit Prioritäten und Abhängigkeiten.',
+          'In der Umsetzung bin ich die Schnittstelle zwischen Kundschaft, Entwicklung und Dienstleistern, einschließlich der Klärung widersprüchlicher Anforderungen. Am Ende steht die Abnahme gemeinsam mit dem Kunden: funktionale Tests, Korrekturschleifen, finale Freigabe.',
         ],
       },
       {
-        title: 'Was geblieben ist',
+        title: 'Stand heute',
         body: [
-          'Über 150 abgewickelte Verkäufe für mehr als 50 Kunden. Schwerer als die Zahl wiegen die wiederverwendbaren Vorlagen und standardisierten Abläufe, die die Durchlaufzeit je Projekt spürbar verkürzt haben.',
-          'Dazu die Erfahrung, dass der schwierigste Teil eines Projekts fast nie die Umsetzung ist, sondern die Klärung davor.',
+          'Über 150 abgewickelte Verkäufe für mehr als 50 Kunden. Schwerer als die Zahl wiegen die wiederverwendbaren Vorlagen und standardisierten Abläufe, die die Durchlaufzeit je Projekt deutlich verkürzt haben.',
+          'Die belastbarste Erkenntnis aus vier Jahren: Der aufwendigste Teil eines Projekts ist selten die Umsetzung, sondern die Klärung der Anforderungen davor.',
         ],
       },
     ],
@@ -100,13 +100,13 @@ export const zayne: Record<'de' | 'en', StudyContent> = {
 
   en: {
     eyebrow: 'Software · zayne',
-    headline: ['Four years', 'of my own studio.', 'Everything in one pair of hands.'],
-    lead: 'From 2022 to 2026 I delivered digital client work through zayne: brand, website, copy, video and sound. Acquisition, concept, delivery, sign off and invoicing were all mine.',
+    headline: ['Brand, website,', 'copy, film and sound.', 'From a single source.'],
+    lead: 'Since 2022 I have delivered digital client work through zayne: brand identity, website, copy, film and sound. Acquisition, concept, delivery, sign off and invoicing all sit with me.',
     meta: [
       { term: 'Role', value: 'Founder, acquisition through invoicing' },
-      { term: 'Period', value: '2022 to 2026' },
-      { term: 'Services', value: 'Branding, copy, video, audio' },
-      { term: 'Status', value: 'Completed' },
+      { term: 'Period', value: 'since 2022' },
+      { term: 'Services', value: 'Branding, copy, film, audio' },
+      { term: 'Status', value: 'Ongoing' },
     ],
     stats: {
       label: 'Track record',
@@ -122,14 +122,14 @@ export const zayne: Record<'de' | 'en', StudyContent> = {
       {
         title: 'The studio',
         body: [
-          'zayne was my own studio for digital client work. It started with websites and brand identities; copy, video and sound came along over the years.',
-          'The work sat entirely with me: winning clients, gathering requirements, building the concept, delivering it or steering delivery, signing off and invoicing. Full revenue responsibility, no team behind the scenes.',
+          'zayne is my own studio for digital client work. It began with websites and brand identities. Copy, film and sound were added over the years.',
+          'The entire value chain sits with me: winning clients, gathering requirements, concept, delivery or steering delivery, sign off and invoicing, with full revenue responsibility.',
         ],
       },
       {
         title: 'Four service areas',
         body: [
-          'Four areas grew over the studio’s lifetime, each carrying the others. A brand needs copy to go with it. A video needs sound that holds up.',
+          'Four areas have grown over the studio’s lifetime, each supporting the others. A brand identity needs copy, a film needs sound. The areas interlock rather than sit side by side.',
         ],
         wide: true,
         visual: {
@@ -149,13 +149,13 @@ export const zayne: Record<'de' | 'en', StudyContent> = {
             },
             {
               title: 'Audio production',
-              body: 'Vocal engineering: recording, editing and mixing voices until the track carries.',
+              body: 'Vocal engineering: recording, editing and mixing voices through to a broadcast-ready track.',
             },
           ],
         },
       },
       {
-        title: 'Selected clients',
+        title: 'Selected references',
         body: [
           'Four names from the client list. The range runs from corporate groups through mid-sized businesses to individual artists, which explains the shape of the four service areas well.',
         ],
@@ -171,17 +171,17 @@ export const zayne: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'How the work ran',
+        title: 'Approach',
         body: [
-          'Every project followed the same pattern. Elicit requirements in direct conversation, assess them, translate them into something buildable. Then break it into work packages and set priorities and dependencies.',
-          'During delivery I was the interface between client, development and suppliers, including the unpleasant job of resolving contradictory wishes. At the end came sign off with the client: functional tests, correction rounds, final release.',
+          'Every project follows the same pattern. Requirements are elicited in direct conversation, assessed, and translated into something buildable. The work is then broken into packages with priorities and dependencies.',
+          'During delivery I am the interface between client, development and suppliers, including the resolution of contradictory requirements. At the end comes sign off with the client: functional tests, correction rounds, final release.',
         ],
       },
       {
-        title: 'What remained',
+        title: 'Where it stands',
         body: [
           'Over 150 sales delivered for more than 50 clients. Heavier than the number are the reusable templates and standardised processes that measurably shortened turnaround per project.',
-          'Along with the lesson that the hardest part of a project is almost never the build, but the clarification before it.',
+          'The most durable lesson from four years: the most demanding part of a project is rarely the build, but the clarification of requirements before it.',
         ],
       },
     ],
