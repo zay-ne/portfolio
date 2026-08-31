@@ -6,6 +6,7 @@ import BarStat from '../components/study/BarStat.astro';
 import CardGrid from '../components/study/CardGrid.astro';
 import FigureGrid from '../components/study/FigureGrid.astro';
 import Lightbox from '../components/study/Lightbox.astro';
+import LinkList from '../components/study/LinkList.astro';
 import ProcessFlow from '../components/study/ProcessFlow.astro';
 import SlideDeck from '../components/study/SlideDeck.astro';
 import Vernissage from '../components/study/Vernissage.astro';
@@ -158,6 +159,8 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
                   {v.kind === 'figures' && <FigureGrid items={v.items} caption={v.caption} />}
 
                   {v.kind === 'cards' && <CardGrid items={v.items} />}
+
+                  {v.kind === 'links' && <LinkList items={v.items} caption={v.caption} />}
 
                   {v.kind === 'gallery' && (
                     <Vernissage works={v.works} caption={v.caption} zoomLabel={strings.media.zoom} />

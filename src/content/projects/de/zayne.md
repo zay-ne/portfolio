@@ -5,10 +5,11 @@ title: "zayne"
 discipline: software
 year: "2022 – 2026"
 role: "Founder, Akquise bis Umsetzung"
-summary: "Eigenes Studio für digitale Kundenprojekte. Über 120 Web- und Content-Lösungen von der Anforderung bis zum Livegang, inklusive Marke, Gestaltung und SEO."
+summary: "Eigenes Studio für digitale Kundenprojekte, 2022 bis 2026. Über 150 abgewickelte Verkäufe für mehr als 50 Kunden, von Marke und Website über Text bis Video und Ton."
 status: archived
 order: 20
 # cover: "/work/zayne.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
+feature: zayne
 stack: ["Web", "Content", "SEO", "Brand Identity"]
 draft: false
 ---

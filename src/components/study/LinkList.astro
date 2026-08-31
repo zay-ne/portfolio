@@ -1,0 +1,147 @@
+---
+import Icon from '../Icon.astro';
+
+export interface Props {
+  items: { label: string; href?: string; note?: string }[];
+  caption?: string;
+}
+
+const { items, caption } = Astro.props;
+---
+
+<figure class="linklist" data-reveal>
+  <ol class="list">
+    {
+      items.map((item, i) => {
+        const inner = (
+          <Fragment>
+            <span class="label num tabular">{String(i + 1).padStart(2, '0')}</span>
+            <span class="name">{item.label}</span>
+            {item.note && <span class="note">{item.note}</span>}
+            {item.href && (
+              <span class="arrow" aria-hidden="true">
+                <Icon name="arrow-up-right" size={15} />
+              </span>
+            )}
+          </Fragment>
+        );
+        return (
+          <li class="item" style={`--d:${i * 80}ms`}>
+            {item.href ? (
+              <a class="row" href={item.href} target="_blank" rel="noopener noreferrer">
+                {inner}
+              </a>
+            ) : (
+              <span class="row">{inner}</span>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+  {caption && <figcaption class="caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .linklist {
+    margin: 0;
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .item {
+    border-block-end: 1px solid var(--color-line);
+    opacity: 0;
+    transform: translate3d(0, 0.5rem, 0);
+  }
+
+  html.js [data-reveal].is-visible .item {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 620ms var(--ease-out-quart) var(--d),
+      transform 620ms var(--ease-out-expo) var(--d);
+  }
+
+  html:not(.js) .item {
+    opacity: 1;
+    transform: none;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+    /* Reichlich Trefferhöhe, die Zeile ist die Fläche. */
+    padding-block: 1.1rem;
+  }
+
+  a.row {
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .num {
+    color: var(--color-fg-subtle);
+  }
+
+  .name {
+    font-size: clamp(1.0625rem, 1.8vw, 1.375rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .note {
+    grid-column: 2;
+    font-size: 0.9375rem;
+    color: var(--color-fg-muted);
+  }
+
+  .arrow {
+    grid-column: 3;
+    grid-row: 1;
+    display: grid;
+    place-items: center;
+    inline-size: 30px;
+    block-size: 30px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-fg-muted);
+    align-self: center;
+    transition:
+      transform 520ms var(--ease-out-expo),
+      border-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  a.row:hover .arrow,
+  a.row:focus-visible .arrow {
+    transform: translate3d(3px, -3px, 0);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  a.row:hover .name {
+    color: var(--color-accent);
+  }
+
+  .caption {
+    padding-block-start: 1.25rem;
+    max-inline-size: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-subtle);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .item {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

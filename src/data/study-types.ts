@@ -88,6 +88,11 @@ export type StudyVisual =
     }
   | { kind: 'cards'; items: { title: string; body: string }[] }
   | {
+      kind: 'links';
+      caption?: string;
+      items: { label: string; href?: string; note?: string }[];
+    }
+  | {
       kind: 'process';
       stepLabel: string;
       benefitLabel: string;
