@@ -135,13 +135,14 @@ gesetzt, rendert `layouts/StudyPage.astro` die Seite, und der Fließtext der
 Markdown-Datei wird nicht verwendet. Die Datei bleibt trotzdem nötig, damit das
 Projekt in der Übersicht erscheint.
 
-Bislang nutzen das drei Arbeiten:
+Bislang nutzen das vier Arbeiten:
 
-| `feature`           | Inhalte in                  |
-| ------------------- | --------------------------- |
-| `meedup`            | `src/data/meedup.ts`        |
-| `vectra-h2`         | `src/data/vectra-study.ts`  |
-| `periorbital-week`  | `src/data/week-study.ts`    |
+| `feature`           | Inhalte in                    |
+| ------------------- | ----------------------------- |
+| `meedup`            | `src/data/meedup.ts`          |
+| `ecm-kampagnen`     | `src/data/ecm-kampagnen.ts`   |
+| `vectra-h2`         | `src/data/vectra-study.ts`    |
+| `periorbital-week`  | `src/data/week-study.ts`      |
 
 Alle teilen sich ein Layout. Eine Arbeit beschreibt ihre Abschnitte als Liste,
 und jeder Abschnitt kann eine Grafik tragen, die über das Feld `kind` gewählt
@@ -157,6 +158,8 @@ wird. Verfügbar sind:
 | `cards`    | gleichrangige Kurztexte nebeneinander                    |
 | `table`    | Vergleichstabelle mit hervorgehobener Zeile              |
 | `modes`    | die fünf Messbereiche der Vectra-Studie als Schema        |
+| `gallery`  | Arbeiten einzeln und groß, Seiten im Wechsel, mit Vollansicht |
+| `slides`   | waagerechte Folienfolge mit Einrasten und Tastaturbedienung |
 
 Die Typen dazu stehen in `src/data/study-types.ts`, die Zuordnung von `feature`
 zu Inhalt in `src/data/studies.ts`. Eine weitere Arbeit braucht also eine
@@ -165,6 +168,24 @@ Datendatei, einen Eintrag in der Registry und einen im Schema.
 Der Abschnitt zu den Beteiligten ist optional. Fehlt `credits`, entfällt er.
 Externe Links kommen aus dem Frontmatter der Projektdatei, nicht aus der
 Inhaltsdatei.
+
+## Bilder
+
+Bilder liegen unter `src/assets/`, nicht unter `public/`. Nur so laufen sie
+durch Astros Bildpipeline, die daraus WebP in mehreren Breiten erzeugt und ein
+`srcset` setzt. Die Datendateien importieren sie als Modul, dadurch prüft der
+Compiler, dass jede Datei existiert.
+
+Die Folien einer Folienfolge werden über `import.meta.glob` nach Dateinamen
+eingelesen. Eine weitere Folie braucht also nur eine Datei mit passender
+Nummer und einen Alternativtext im selben Array.
+
+Vor dem Einbinden werden Quellbilder auf maximal 1400 Pixel lange Kante
+gebracht und als JPEG mit Qualität 90 gespeichert. Das hält das Repository
+klein, die Auslieferung übernimmt ohnehin WebP.
+
+Jedes Bild braucht einen Alternativtext, der beschreibt, was zu sehen ist,
+nicht bloß den Titel wiederholt.
 
 Die Grafiken liegen unter `src/components/study/` und sind von Hand gezeichnetes
 Inline-SVG und CSS, ohne Diagrammbibliothek. Sie beziehen ihre Farben aus

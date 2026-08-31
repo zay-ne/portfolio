@@ -7,8 +7,10 @@ year: "2025 – present"
 role: "Concept and design"
 summary: "Concept and delivery of digital campaigns from idea to publication, including social media design and member communication."
 status: live
+externalUrl: https://ecm-mainz.de
 order: 20
 # cover: "/work/ecm-kampagnen.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
+feature: ecm-kampagnen
 draft: false
 ---
 

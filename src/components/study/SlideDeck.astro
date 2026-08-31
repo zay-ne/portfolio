@@ -1,0 +1,276 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  title: string;
+  caption?: string;
+  slides: { image: ImageMetadata; alt: string }[];
+  prevLabel: string;
+  nextLabel: string;
+  zoomLabel: string;
+}
+
+const { title, caption, slides, prevLabel, nextLabel, zoomLabel } = Astro.props;
+
+const full = await Promise.all(
+  slides.map((slide) => getImage({ src: slide.image, width: 1600, format: 'webp' })),
+);
+const total = String(slides.length).padStart(2, '0');
+---
+
+<figure class="deck" data-reveal>
+  <figcaption class="head">
+    <h3 class="chart-title">{title}</h3>
+    <span class="label counter tabular" data-deck-counter>01 / {total}</span>
+  </figcaption>
+
+  <ol class="strip" data-deck-strip tabindex="0" aria-label={title}>
+    {
+      slides.map((slide, i) => (
+        <li class="slide">
+          <button
+            type="button"
+            class="frame"
+            data-lightbox={full[i].src}
+            data-lightbox-alt={slide.alt}
+            data-lightbox-caption={`${title} · ${i + 1} / ${slides.length}`}
+            aria-label={`${slide.alt}. ${zoomLabel}`}
+          >
+            <Image
+              src={slide.image}
+              alt={slide.alt}
+              widths={[640, 960, 1280]}
+              sizes="(min-width: 64rem) 62vw, 88vw"
+              loading={i < 2 ? 'eager' : 'lazy'}
+            />
+          </button>
+          <span class="label num tabular">{String(i + 1).padStart(2, '0')}</span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="controls">
+    <button type="button" class="nav" data-deck-prev aria-label={prevLabel} disabled>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
+    </button>
+    <button type="button" class="nav" data-deck-next aria-label={nextLabel}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+    </button>
+  </div>
+
+  {caption && <p class="caption">{caption}</p>}
+</figure>
+
+<style>
+  .deck {
+    margin: 0;
+    border-block-start: 1px solid var(--color-line);
+    padding-block-start: 1.25rem;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block-end: 1.5rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .counter {
+    color: var(--color-fg-subtle);
+  }
+
+  /* Waagerechte Folge mit Einrasten. Die Leiste ist selbst fokussierbar,
+     damit sie auch mit den Pfeiltasten bedienbar ist. */
+  .strip {
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0 0 1rem;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+  }
+
+  .strip:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .slide {
+    flex: 0 0 auto;
+    inline-size: min(88%, 44rem);
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .frame {
+    display: block;
+    padding: 0;
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--color-surface);
+    cursor: zoom-in;
+    transition: border-color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .frame:hover,
+  .frame:focus-visible {
+    border-color: var(--color-line-strong);
+  }
+
+  .frame img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .num {
+    color: var(--color-fg-subtle);
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+    padding-block-start: 0.25rem;
+  }
+
+  .nav {
+    display: grid;
+    place-items: center;
+    inline-size: 44px;
+    block-size: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-fg);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-out-quart),
+      opacity var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .nav:hover:not(:disabled) {
+    border-color: var(--color-fg);
+  }
+
+  .nav:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .caption {
+    padding-block-start: 1.25rem;
+    max-inline-size: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-subtle);
+  }
+
+  @media (min-width: 64rem) {
+    .slide {
+      inline-size: min(62%, 46rem);
+    }
+  }
+</style>
+
+<script>
+  let controller: AbortController | null = null;
+
+  function initDecks() {
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+
+    document.querySelectorAll<HTMLElement>('.deck').forEach((deck) => {
+      const strip = deck.querySelector<HTMLElement>('[data-deck-strip]');
+      const counter = deck.querySelector<HTMLElement>('[data-deck-counter]');
+      const prev = deck.querySelector<HTMLButtonElement>('[data-deck-prev]');
+      const next = deck.querySelector<HTMLButtonElement>('[data-deck-next]');
+      if (!strip || !counter || !prev || !next) return;
+
+      const slides = [...strip.children] as HTMLElement[];
+      const total = String(slides.length).padStart(2, '0');
+
+      /** Die Folie, deren Mitte der Mitte der Leiste am nächsten liegt. */
+      const currentIndex = () => {
+        const mid = strip.scrollLeft + strip.clientWidth / 2;
+        let best = 0;
+        let bestGap = Infinity;
+        slides.forEach((slide, i) => {
+          const gap = Math.abs(slide.offsetLeft + slide.offsetWidth / 2 - mid);
+          if (gap < bestGap) {
+            bestGap = gap;
+            best = i;
+          }
+        });
+        return best;
+      };
+
+      const sync = () => {
+        const i = currentIndex();
+        counter.textContent = `${String(i + 1).padStart(2, '0')} / ${total}`;
+        prev.disabled = i === 0;
+        next.disabled = i === slides.length - 1;
+      };
+
+      const go = (delta: number) => {
+        const target = slides[Math.min(Math.max(currentIndex() + delta, 0), slides.length - 1)];
+        strip.scrollTo({
+          left: target.offsetLeft - (strip.clientWidth - target.offsetWidth) / 2,
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        });
+      };
+
+      prev.addEventListener('click', () => go(-1), { signal });
+      next.addEventListener('click', () => go(1), { signal });
+
+      let ticking = false;
+      strip.addEventListener(
+        'scroll',
+        () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            sync();
+            ticking = false;
+          });
+        },
+        { passive: true, signal },
+      );
+
+      strip.addEventListener(
+        'keydown',
+        (event) => {
+          if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            go(1);
+          } else if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            go(-1);
+          }
+        },
+        { signal },
+      );
+
+      sync();
+    });
+  }
+
+  initDecks();
+  document.addEventListener('astro:page-load', initDecks);
+</script>

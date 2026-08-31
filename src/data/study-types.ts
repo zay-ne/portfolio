@@ -1,5 +1,7 @@
+import type { ImageMetadata } from 'astro';
+
 /**
- * Gemeinsame Struktur aller Studienseiten.
+ * Gemeinsame Struktur aller ausführlichen Seiten.
  *
  * Eine Studie beschreibt ihre Abschnitte als Liste. Jeder Abschnitt kann eine
  * Grafik tragen, die über `kind` ausgewählt wird. Dadurch teilen sich beide
@@ -63,12 +65,27 @@ export interface ProcessStep {
   benefit: string;
 }
 
+/** Eine gezeigte Arbeit mit ihren Angaben. */
+export interface GalleryWork {
+  image: ImageMetadata;
+  alt: string;
+  title: string;
+  meta: { term: string; value: string }[];
+}
+
 export type StudyVisual =
   | { kind: 'modes'; caption: string; labels: Record<'A' | 'B' | 'C' | 'D' | 'E', string>; recommendedNote: string }
   | { kind: 'bars'; title: string; unit: string; caption: string; bars: BarDatum[]; digits?: number }
   | { kind: 'icc'; title: string; caption: string; bands: { label: string; from: number; to: number }[]; items: IccDatum[] }
   | { kind: 'table'; columns: string[]; rows: ModeInfo[]; recommendedNote: string }
   | { kind: 'figures'; caption?: string; items: FigureItem[] }
+  | { kind: 'gallery'; caption?: string; works: GalleryWork[] }
+  | {
+      kind: 'slides';
+      title: string;
+      caption?: string;
+      slides: { image: ImageMetadata; alt: string }[];
+    }
   | { kind: 'cards'; items: { title: string; body: string }[] }
   | {
       kind: 'process';

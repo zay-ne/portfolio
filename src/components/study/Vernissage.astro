@@ -1,0 +1,226 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { GalleryWork } from '../../data/study-types';
+
+export interface Props {
+  works: GalleryWork[];
+  caption?: string;
+  zoomLabel: string;
+}
+
+const { works, caption, zoomLabel } = Astro.props;
+
+/* Für die Vollansicht wird je Arbeit eine große Fassung erzeugt. Sie liegt nur
+   als Adresse im Markup und wird erst geladen, wenn jemand sie öffnet. */
+const full = await Promise.all(
+  works.map((work) => getImage({ src: work.image, width: 1600, format: 'webp' })),
+);
+---
+
+<figure class="vernissage">
+  <ol class="works">
+    {
+      works.map((work, i) => (
+        <li class="work" data-reveal>
+          <button
+            type="button"
+            class="frame"
+            data-lightbox={full[i].src}
+            data-lightbox-alt={work.alt}
+            data-lightbox-caption={work.title}
+            aria-label={`${work.title}. ${zoomLabel}`}
+          >
+            <Image
+              src={work.image}
+              alt={work.alt}
+              widths={[480, 720, 1080]}
+              sizes="(min-width: 64rem) 46vw, (min-width: 40rem) 70vw, 88vw"
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
+            <span class="zoom label" aria-hidden="true">{zoomLabel}</span>
+          </button>
+
+          <div class="meta">
+            <p class="label idx">{String(i + 1).padStart(2, '0')}</p>
+            <h3 class="work-title">{work.title}</h3>
+            <dl class="specs">
+              {work.meta.map((m) => (
+                <div class="spec">
+                  <dt class="label">{m.term}</dt>
+                  <dd>{m.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  {caption && <figcaption class="caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .vernissage {
+    margin: 0;
+  }
+
+  .works {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3.5rem, 9vw, 7rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .work {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .frame {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    padding: 0;
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--color-surface);
+    cursor: zoom-in;
+    transition: border-color var(--duration-base) var(--ease-out-quart);
+  }
+
+  .frame:hover,
+  .frame:focus-visible {
+    border-color: var(--color-line-strong);
+  }
+
+  .frame img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    transition: transform 900ms var(--ease-out-expo);
+  }
+
+  .frame:hover img {
+    transform: scale(1.015);
+  }
+
+  .zoom {
+    position: absolute;
+    inset-block-end: 0.75rem;
+    inset-inline-end: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    color: var(--color-fg);
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity var(--duration-base) var(--ease-out-quart),
+      transform var(--duration-base) var(--ease-out-quart);
+  }
+
+  .frame:hover .zoom,
+  .frame:focus-visible .zoom {
+    opacity: 1;
+    transform: none;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .idx {
+    color: var(--color-fg-subtle);
+  }
+
+  .work-title {
+    font-size: clamp(1.25rem, 2.4vw, 1.875rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .specs {
+    margin: 0.5rem 0 0;
+  }
+
+  .spec {
+    display: grid;
+    gap: 0.15rem;
+    padding-block: 0.6rem;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .spec:last-child {
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .spec dd {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--color-fg-muted);
+  }
+
+  .caption {
+    padding-block-start: clamp(2rem, 5vw, 3rem);
+    max-inline-size: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-fg-subtle);
+  }
+
+  /* Ab Desktop stehen Bild und Angaben nebeneinander und wechseln die Seite. */
+  @media (min-width: 64rem) {
+    .work {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: clamp(2rem, 4vw, 4rem);
+    }
+
+    /* Beim Seitenwechsel müssen auch die Spaltenbreiten tauschen, sonst
+       landet das Bild in der schmalen Spalte. */
+    .work:nth-child(even) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    }
+
+    .work:nth-child(even) .frame {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .work:nth-child(even) .meta {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    /* Die Angaben laufen etwas später ein als das Bild. */
+    html.js .work .meta {
+      opacity: 0;
+      transform: translate3d(0, 0.75rem, 0);
+    }
+
+    html.js .work.is-visible .meta {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 800ms var(--ease-out-quart) 220ms,
+        transform 800ms var(--ease-out-expo) 220ms;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .frame img,
+    .work .meta {
+      transform: none !important;
+      opacity: 1 !important;
+    }
+  }
+</style>

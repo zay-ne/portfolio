@@ -5,7 +5,10 @@ import SplitLines from '../components/SplitLines.astro';
 import BarStat from '../components/study/BarStat.astro';
 import CardGrid from '../components/study/CardGrid.astro';
 import FigureGrid from '../components/study/FigureGrid.astro';
+import Lightbox from '../components/study/Lightbox.astro';
 import ProcessFlow from '../components/study/ProcessFlow.astro';
+import SlideDeck from '../components/study/SlideDeck.astro';
+import Vernissage from '../components/study/Vernissage.astro';
 import IccScale from '../components/study/IccScale.astro';
 import ModeDiagram from '../components/study/ModeDiagram.astro';
 import TimelineChart from '../components/study/TimelineChart.astro';
@@ -154,6 +157,21 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
 
                   {v.kind === 'cards' && <CardGrid items={v.items} />}
 
+                  {v.kind === 'gallery' && (
+                    <Vernissage works={v.works} caption={v.caption} zoomLabel={strings.media.zoom} />
+                  )}
+
+                  {v.kind === 'slides' && (
+                    <SlideDeck
+                      title={v.title}
+                      caption={v.caption}
+                      slides={v.slides}
+                      prevLabel={strings.media.prevSlide}
+                      nextLabel={strings.media.nextSlide}
+                      zoomLabel={strings.media.zoom}
+                    />
+                  )}
+
                   {v.kind === 'process' && (
                     <ProcessFlow
                       stepLabel={v.stepLabel}
@@ -274,6 +292,8 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
       }
     </div>
   </article>
+
+  <Lightbox closeLabel={strings.media.close} />
 </BaseLayout>
 
 <style>

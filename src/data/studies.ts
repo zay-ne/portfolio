@@ -1,4 +1,5 @@
 import type { StudyContent } from './study-types';
+import { ecmKampagnen } from './ecm-kampagnen';
 import { meedup } from './meedup';
 import { vectraStudy } from './vectra-study';
 import { weekStudy } from './week-study';
@@ -9,6 +10,7 @@ import type { Locale } from '../consts';
  * `feature` im Frontmatter der Projektdatei.
  */
 export const studies = {
+  'ecm-kampagnen': ecmKampagnen,
   meedup,
   'vectra-h2': vectraStudy,
   'periorbital-week': weekStudy,

@@ -19,15 +19,15 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
       { term: 'Rolle', value: 'Co-Founder, Produkt und Geschäftsmodell' },
       { term: 'Gegründet', value: '2025' },
       { term: 'Modell', value: 'Challenges für Unternehmen' },
-      { term: 'Stand', value: 'Challenges laufen' },
+      { term: 'Stand', value: 'Vier Challenges abgeschlossen, eine läuft' },
     ],
     stats: {
       label: 'Netzwerk',
       items: [
+        { value: '4', label: 'abgeschlossene Challenges' },
+        { value: '1', label: 'Challenge läuft aktuell' },
         { value: '1.000+', label: 'Studenteninitiativen' },
         { value: '10.000+', label: 'erreichbare Studierende' },
-        { value: '4', label: 'Schritte je Challenge' },
-        { value: '2025', label: 'gegründet' },
       ],
     },
 
@@ -41,7 +41,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
         wide: true,
         visual: {
           kind: 'figures',
-          caption: 'Quellen wie angegeben. Die letzte Zahl beschreibt die Reichweite des meedup-Netzwerks.',
+          caption: 'Quellen wie angegeben.',
           items: [
             {
               value: '2,8 %',
@@ -54,14 +54,14 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
               source: 'StepStone, 2022',
             },
             {
+              value: '89 %',
+              label: 'der Kündigungen gehen auf mangelnde Soft Skills zurück, nicht auf fehlendes Fachwissen',
+              source: 'Forbes, 2025',
+            },
+            {
               value: '80 %',
               label: 'der Talente bauen ihre Soft Skills in praktischen Formaten auf',
               source: 'NSLS, 2022',
-            },
-            {
-              value: '10.000+',
-              label: 'Studierende erreicht meedup über sein Netzwerk',
-              source: 'meedup',
             },
           ],
         },
@@ -180,15 +180,15 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
       { term: 'Role', value: 'Co-founder, product and business model' },
       { term: 'Founded', value: '2025' },
       { term: 'Model', value: 'Challenges for companies' },
-      { term: 'Status', value: 'Challenges running' },
+      { term: 'Status', value: 'Four challenges completed, one running' },
     ],
     stats: {
       label: 'Network',
       items: [
+        { value: '4', label: 'challenges completed' },
+        { value: '1', label: 'challenge running now' },
         { value: '1,000+', label: 'student initiatives' },
         { value: '10,000+', label: 'students reachable' },
-        { value: '4', label: 'steps per challenge' },
-        { value: '2025', label: 'founded' },
       ],
     },
 
@@ -202,7 +202,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
         wide: true,
         visual: {
           kind: 'figures',
-          caption: 'Sources as stated. The last figure describes the reach of the meedup network.',
+          caption: 'Sources as stated.',
           items: [
             {
               value: '2.8 %',
@@ -215,14 +215,14 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
               source: 'StepStone, 2022',
             },
             {
+              value: '89 %',
+              label: 'of hiring failures come down to missing soft skills, not missing expertise',
+              source: 'Forbes, 2025',
+            },
+            {
               value: '80 %',
               label: 'of talent build their soft skills in practical formats',
               source: 'NSLS, 2022',
-            },
-            {
-              value: '10,000+',
-              label: 'students meedup reaches through its network',
-              source: 'meedup',
             },
           ],
         },

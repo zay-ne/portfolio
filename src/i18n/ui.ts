@@ -112,6 +112,13 @@ export const ui = {
       },
     },
 
+    media: {
+      zoom: 'Vergrößern',
+      close: 'Vollansicht schließen',
+      prevSlide: 'Vorherige Folie',
+      nextSlide: 'Nächste Folie',
+    },
+
     contact: {
       emailLabel: 'E-Mail',
       copy: 'Adresse kopieren',
@@ -250,6 +257,13 @@ export const ui = {
         research: 'Research',
         design: 'Design',
       },
+    },
+
+    media: {
+      zoom: 'Enlarge',
+      close: 'Close full view',
+      prevSlide: 'Previous slide',
+      nextSlide: 'Next slide',
     },
 
     contact: {

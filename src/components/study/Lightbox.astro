@@ -1,0 +1,132 @@
+---
+/**
+ * Vollansicht für Bilder. Einmal pro Seite eingebunden, reagiert per Delegation
+ * auf jedes Element mit [data-lightbox]. Nutzt das native dialog-Element, damit
+ * Fokusfalle, Escape und Rücksprung ohne eigenen Code funktionieren.
+ */
+interface Props {
+  closeLabel: string;
+}
+const { closeLabel } = Astro.props;
+---
+
+<dialog class="lightbox" data-lightbox-dialog aria-label={closeLabel}>
+  <button type="button" class="close" data-lightbox-close aria-label={closeLabel}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+      <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+    </svg>
+  </button>
+  <img data-lightbox-image alt="" />
+  <p class="caption label" data-lightbox-caption></p>
+</dialog>
+
+<style>
+  .lightbox {
+    max-inline-size: 100vw;
+    max-block-size: 100dvh;
+    inline-size: 100vw;
+    block-size: 100dvh;
+    padding: 0;
+    border: 0;
+    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+    backdrop-filter: blur(18px);
+    color: var(--color-fg);
+  }
+
+  .lightbox::backdrop {
+    background: transparent;
+  }
+
+  .lightbox[open] {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    place-items: center;
+    gap: 1rem;
+    padding: clamp(3.5rem, 8vh, 5rem) var(--spacing-gutter) 2rem;
+  }
+
+  img {
+    max-inline-size: 100%;
+    max-block-size: 100%;
+    object-fit: contain;
+    border-radius: 3px;
+  }
+
+  .close {
+    position: fixed;
+    inset-block-start: max(1rem, env(safe-area-inset-top, 0px));
+    inset-inline-end: var(--spacing-gutter);
+    display: grid;
+    place-items: center;
+    inline-size: 44px;
+    block-size: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .close:hover {
+    border-color: var(--color-fg);
+  }
+
+  .caption {
+    text-align: center;
+    color: var(--color-fg-muted);
+    text-transform: none;
+    letter-spacing: 0.06em;
+  }
+</style>
+
+<script>
+  let controller: AbortController | null = null;
+
+  function initLightbox() {
+    controller?.abort();
+    const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox-dialog]');
+    if (!dialog) return;
+    controller = new AbortController();
+    const { signal } = controller;
+
+    const image = dialog.querySelector<HTMLImageElement>('[data-lightbox-image]')!;
+    const caption = dialog.querySelector<HTMLElement>('[data-lightbox-caption]')!;
+    const closeBtn = dialog.querySelector<HTMLButtonElement>('[data-lightbox-close]')!;
+
+    document.addEventListener(
+      'click',
+      (event) => {
+        const trigger = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-lightbox]');
+        if (!trigger) return;
+        event.preventDefault();
+        image.src = trigger.dataset.lightbox ?? '';
+        image.alt = trigger.dataset.lightboxAlt ?? '';
+        caption.textContent = trigger.dataset.lightboxCaption ?? '';
+        dialog.showModal();
+      },
+      { signal },
+    );
+
+    closeBtn.addEventListener('click', () => dialog.close(), { signal });
+
+    // Klick auf die Fläche neben dem Bild schließt ebenfalls.
+    dialog.addEventListener(
+      'click',
+      (event) => {
+        if (event.target === dialog) dialog.close();
+      },
+      { signal },
+    );
+
+    // Beim Schließen die Quelle leeren, damit kein großes Bild im Speicher bleibt.
+    dialog.addEventListener('close', () => {
+      image.removeAttribute('src');
+    }, { signal });
+
+    document.addEventListener('astro:before-swap', () => dialog.close(), { signal });
+  }
+
+  initLightbox();
+  document.addEventListener('astro:page-load', initLightbox);
+</script>
