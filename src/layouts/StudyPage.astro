@@ -99,7 +99,8 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
         }
       </header>
 
-      <!-- ---------- Kennzahlen ---------- -->
+      <!-- ---------- Kennzahlen, falls die Arbeit welche ausweist ---------- -->
+      {s.stats && (
       <section class="stats" data-reveal aria-label={s.stats.label}>
         <p class="label stats-label">{s.stats.label}</p>
         <ol class="stat-grid">
@@ -113,6 +114,7 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
           }
         </ol>
       </section>
+      )}
 
       <!-- ---------- Abschnitte ---------- -->
       {

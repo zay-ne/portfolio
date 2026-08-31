@@ -221,15 +221,6 @@ export const ecmKampagnen: Record<'de' | 'en', StudyContent> = {
       { term: 'Zeitraum', value: '2025 bis heute' },
       { term: 'Kanäle', value: 'Social Media, Print, Veranstaltung' },
     ],
-    stats: {
-      label: 'Umfang',
-      items: [
-        { value: '7', label: 'gezeigte Arbeiten' },
-        { value: '4', label: 'Veranstaltungskampagnen' },
-        { value: '11', label: 'Folien im Challenge-Deck' },
-        { value: '3', label: 'Kanäle' },
-      ],
-    },
 
     sections: [
       {
@@ -296,15 +287,6 @@ export const ecmKampagnen: Record<'de' | 'en', StudyContent> = {
       { term: 'Period', value: '2025 to present' },
       { term: 'Channels', value: 'Social media, print, on site' },
     ],
-    stats: {
-      label: 'Scale',
-      items: [
-        { value: '7', label: 'pieces shown' },
-        { value: '4', label: 'event campaigns' },
-        { value: '11', label: 'slides in the challenge deck' },
-        { value: '3', label: 'channels' },
-      ],
-    },
 
     sections: [
       {

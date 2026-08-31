@@ -127,7 +127,8 @@ export interface StudyContent {
   headline: string[];
   lead: string;
   meta: { term: string; value: string }[];
-  stats: { label: string; items: StudyStat[] };
+  /** Entfällt, wenn eine Arbeit keine sinnvollen Kennzahlen hat. */
+  stats?: { label: string; items: StudyStat[] };
   sections: StudySection[];
   /** Entfällt, wenn eine Arbeit keine Mitwirkenden ausweist. */
   credits?: {
