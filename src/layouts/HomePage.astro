@@ -22,14 +22,6 @@ const groups = await getProjectsByDiscipline(locale);
 /* Der Anker aus der Navigation zeigt auf die erste Disziplin-Sektion. */
 const firstDiscipline = groups[0]?.discipline;
 
-/* Die Nummerierung entsteht aus der Reihenfolge, nicht aus fest eingetragenen
-   Zahlen. So verschiebt sich alles korrekt, wenn eine Disziplin dazukommt oder
-   wegfällt. */
-const pad = (n: number) => String(n).padStart(2, '0');
-const sections = groups.map((group, i) => ({ ...group, index: pad(i + 1) }));
-const aboutIndex = pad(groups.length + 1);
-const cvIndex = pad(groups.length + 2);
-const contactIndex = pad(groups.length + 3);
 ---
 
 <BaseLayout
@@ -71,11 +63,10 @@ const contactIndex = pad(groups.length + 3);
 
   <!-- ---------- Arbeiten, nach Disziplin getrennt ---------- -->
   {
-    sections.map(({ discipline, projects, index }) => (
+    groups.map(({ discipline, projects }) => (
       <section class="shell work-section">
         <SectionHeading
           id={discipline === firstDiscipline ? anchors.work : undefined}
-          index={index}
           title={strings.sections[discipline].title}
           description={strings.sections[discipline].description}
         />
@@ -90,7 +81,6 @@ const contactIndex = pad(groups.length + 3);
   <section class="shell about-section">
     <SectionHeading
       id={anchors.about}
-      index={aboutIndex}
       title={strings.sections.about.title}
     />
     <div class="about-grid">
@@ -116,7 +106,6 @@ const contactIndex = pad(groups.length + 3);
   <section class="shell cv-section">
     <SectionHeading
       id={anchors.cv}
-      index={cvIndex}
       title={strings.sections.cv.title}
       description={strings.sections.cv.description}
     />
@@ -132,7 +121,6 @@ const contactIndex = pad(groups.length + 3);
   <section class="shell contact-section">
     <SectionHeading
       id={anchors.contact}
-      index={contactIndex}
       title={strings.sections.contact.title}
       description={strings.sections.contact.description}
     />

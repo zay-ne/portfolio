@@ -67,14 +67,14 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Die Idee',
+        title: 'Das Modell',
         body: [
           'Statt einer Stellenanzeige stellt ein Unternehmen eine echte Aufgabe aus dem eigenen Betrieb. Studierendenteams bearbeiten sie über einen festgelegten Zeitraum und stellen ihre Lösung am Ende einer Jury des Unternehmens vor.',
           'Dabei entstehen drei Dinge gleichzeitig, für die es sonst drei getrennte Maßnahmen bräuchte: Sichtbarkeit bei einer Zielgruppe, die das Unternehmen sonst kaum erreicht, konkrete Lösungsansätze zu einem realen Problem, und ein Recruiting-Vorlauf, weil die Teams ihre Arbeitsweise bereits gezeigt haben.',
         ],
       },
       {
-        title: 'So läuft eine Challenge',
+        title: 'Ablauf einer Challenge',
         body: [
           'Der Ablauf ist bewusst schlank gehalten. Für das Unternehmen bleibt der Aufwand auf ein Auftaktgespräch, die Abstimmung der Rahmenbedingungen und die Jury beschränkt. Alles dazwischen übernimmt meedup.',
         ],
@@ -108,7 +108,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Was am Ende dabei herauskommt',
+        title: 'Nutzen für das Unternehmen',
         body: [
           'Eine Challenge zahlt gleichzeitig auf Employer Branding, Recruiting und die inhaltliche Arbeit ein. Genau diese Kombination unterscheidet sie von einer Messe oder einer Anzeigenkampagne.',
         ],
@@ -122,7 +122,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
             },
             {
               title: 'Erleichtertes Recruiting',
-              body: 'Die Teams haben eine Art Auswahlverfahren bereits durchlaufen. Der lange Aufnahmeprozess entfällt, die Arbeitsweise ist trotzdem bekannt.',
+              body: 'Die Teams haben faktisch ein Auswahlverfahren durchlaufen. Der langwierige Aufnahmeprozess entfällt, die Arbeitsweise ist dennoch bekannt.',
             },
             {
               title: 'Vielseitige Lösungsansätze',
@@ -228,14 +228,14 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'The idea',
+        title: 'The model',
         body: [
           'Instead of a job posting, a company sets a real task from its own operation. Student teams work on it over a defined period and present their solution to the company’s jury at the end.',
           'Three things happen at once that would otherwise take three separate initiatives: visibility with an audience the company barely reaches, concrete solutions to a real problem, and a recruiting head start, because the teams have already shown how they work.',
         ],
       },
       {
-        title: 'How a challenge runs',
+        title: 'Course of a challenge',
         body: [
           'The process is deliberately lean. For the company the effort is limited to a kick-off conversation, agreeing the frame, and the jury. Everything in between is handled by meedup.',
         ],
@@ -269,7 +269,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'What comes out of it',
+        title: 'Benefit for the company',
         body: [
           'A challenge pays into employer branding, recruiting and the actual work at the same time. That combination is what sets it apart from a careers fair or an advertising campaign.',
         ],
@@ -283,7 +283,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
             },
             {
               title: 'Easier recruiting',
-              body: 'The teams have effectively been through a selection process already. The long intake procedure falls away while the way they work is still known.',
+              body: 'The teams have effectively completed a selection process. The lengthy intake procedure is unnecessary while their way of working is nonetheless known.',
             },
             {
               title: 'Varied solutions',

@@ -6,8 +6,8 @@ import type { StudyContent } from './study-types';
  *
  * Bewusst ohne Ergebnisse. Das Manuskript ist in Vorbereitung, und die
  * Erstautorenschaft liegt nicht bei mir. Gezeigt werden deshalb nur Anlass,
- * Aufbau und Auswertungsmethodik. Die Befunde kommen dazu, sobald die Arbeit
- * veröffentlicht ist; die Zahlen dafür stehen im Manuskript, nicht hier.
+ * Aufbau und Auswertungsmethodik. Die Befunde folgen nach der
+ * Veröffentlichung; die Zahlen dafür stehen im Manuskript, nicht hier.
  *
  * Das Manuskript enthält keine Angaben zu den einzelnen Beiträgen der
  * Autorinnen und Autoren, deshalb stehen die Mitwirkenden nur mit Initialen
@@ -36,16 +36,16 @@ export const weekStudy: Record<'de' | 'en', StudyContent> = {
 
     sections: [
       {
-        title: 'Warum das nötig ist',
+        title: 'Ausgangslage',
         body: [
-          'Nach einem Eingriff am Lid will man wissen, ob die Schwellung zurückgeht. Dafür misst man das Volumen vorher und nachher. Nur schwankt Gewebe auch ganz ohne Eingriff, beeinflusst von Flüssigkeitshaushalt, Schwerkraft, Lymphfluss und Muskeltonus. Solange niemand weiß, wie groß dieses natürliche Rauschen ist, lässt sich eine echte Schwellung nicht sicher davon trennen.',
-          'Die Vorgängerstudie hat gezeigt, dass das Messgerät dafür genau genug ist, und Modus C als klinisch sinnvollen Zuschnitt empfohlen. Diese Studie setzt genau dort an: sie verwendet diesen Modus und misst damit an gesunden Menschen, was das Gewebe von allein tut.',
+          'Nach einem Eingriff am Lid ist zu beurteilen, ob die Schwellung zurückgeht. Dafür wird das Volumen vor und nach dem Eingriff gemessen. Gewebe schwankt jedoch auch ohne Eingriff, beeinflusst von Flüssigkeitshaushalt, Schwerkraft, Lymphfluss und Muskeltonus. Solange niemand weiß, wie groß dieses natürliche Rauschen ist, lässt sich eine echte Schwellung nicht sicher davon trennen.',
+          'Die Vorgängerstudie hat gezeigt, dass das Messgerät dafür genau genug ist, und Modus C als klinisch sinnvollen Zuschnitt empfohlen. Diese Studie setzt genau dort an: sie verwendet diesen Modus und quantifiziert an gesunden Probanden die Eigendynamik des Gewebes.',
         ],
       },
       {
         title: 'Aufbau',
         body: [
-          '19 gesunde Teilnehmende zwischen 20 und 65 Jahren, Durchschnittsalter 32. An fünf aufeinanderfolgenden Tagen wurde jeweils zur selben Tageszeit gemessen, damit tageszeitliche Schwankungen im Weichgewebe nicht ins Ergebnis wandern. Schmuck abgelegt, Haare zurückgebunden, Kiefer entspannt, Lippen geschlossen, Blick auf einen festen Punkt.',
+          '19 gesunde Teilnehmende zwischen 20 und 65 Jahren, Durchschnittsalter 32. An fünf aufeinanderfolgenden Tagen wurde jeweils zur selben Tageszeit gemessen, um tageszeitliche Schwankungen im Weichgewebe auszuschließen. Schmuck abgelegt, Haare zurückgebunden, Kiefer entspannt, Lippen geschlossen, Blick auf einen festen Punkt.',
           'Der erste Tag ist der Bezugspunkt, jeder weitere Tag wird gegen ihn verglichen. Pro Tag entstanden drei Aufnahmen, und jeder Vergleich wurde dreimal ausgewertet, linkes und rechtes Auge getrennt. Zusammen ergibt das 456 Volumenmessungen.',
         ],
       },
@@ -61,7 +61,7 @@ export const weekStudy: Record<'de' | 'en', StudyContent> = {
         title: 'Stand',
         body: [
           'Die Messungen sind abgeschlossen, die Auswertung ebenfalls. Das Manuskript ist in Vorbereitung.',
-          'Die Ergebnisse stehen hier bewusst noch nicht. Sie kommen dazu, sobald die Arbeit veröffentlicht ist.',
+          'Die Ergebnisse werden hier bewusst zurückgehalten. Sie werden ergänzt, sobald die Arbeit veröffentlicht ist.',
         ],
       },
     ],
@@ -105,16 +105,16 @@ export const weekStudy: Record<'de' | 'en', StudyContent> = {
 
     sections: [
       {
-        title: 'Why this is needed',
+        title: 'Background',
         body: [
-          'After eyelid surgery you want to know whether the swelling is going down, so you measure the volume before and after. But tissue also fluctuates without any intervention, driven by fluid balance, gravity, lymphatic flow and muscle tone. Until someone knows how large that natural noise is, real swelling cannot be told apart from it with any confidence.',
-          'The preceding study showed the device is precise enough for the job and recommended mode C as the clinically sensible outline. This study starts exactly there: it uses that mode and measures what the tissue does on its own in healthy people.',
+          'After eyelid surgery it must be assessed whether the swelling is receding, which means measuring volume before and after. Tissue fluctuates without any intervention as well, driven by fluid balance, gravity, lymphatic flow and muscle tone. Until someone knows how large that natural noise is, real swelling cannot be told apart from it with any confidence.',
+          'The preceding study showed the device is precise enough for the job and recommended mode C as the clinically sensible outline. This study starts exactly there: it uses that mode and quantifies the intrinsic dynamics of the tissue in healthy volunteers.',
         ],
       },
       {
         title: 'Setup',
         body: [
-          'Nineteen healthy participants aged 20 to 65, mean age 32. Measurements were taken on five consecutive days at the same time of day, so that time of day variation in the soft tissue does not leak into the result. Jewellery off, hair tied back, relaxed jaw, closed lips, gaze on a fixed point.',
+          'Nineteen healthy participants aged 20 to 65, mean age 32. Measurements were taken on five consecutive days at the same time of day, in order to exclude time of day variation in the soft tissue. Jewellery off, hair tied back, relaxed jaw, closed lips, gaze on a fixed point.',
           'Day one is the reference; every later day is compared against it. Three captures were taken per day and each comparison was evaluated three times, left and right eye separately. Together that makes 456 volume measurements.',
         ],
       },
@@ -127,10 +127,10 @@ export const weekStudy: Record<'de' | 'en', StudyContent> = {
         ],
       },
       {
-        title: 'Where it stands',
+        title: 'Status',
         body: [
           'Data collection is complete and so is the analysis. The manuscript is in preparation.',
-          'The results are deliberately not shown here yet. They will follow once the work is published.',
+          'The results are deliberately withheld here. They will be added once the work is published.',
         ],
       },
     ],

@@ -42,12 +42,12 @@ export const ui = {
       software: {
         title: 'Software',
         description:
-          'Produkte und Werkzeuge, die ich von der Anforderung bis zum Livegang selbst verantworte. Die meisten sind entstanden, weil das passende Werkzeug noch fehlte.',
+          'Produkte und Werkzeuge, die ich von der Anforderung bis zum Livegang selbst verantworte. Sie sind überwiegend entstanden, weil kein passendes Werkzeug verfügbar war.',
       },
       research: {
         title: 'Forschung',
         description:
-          'Arbeiten aus der Medizintechnik: Studiendesign, Messreihen, statistische Auswertung und der Vortrag, mit dem die Ergebnisse beim Fachpublikum ankommen.',
+          'Arbeiten aus der Medizintechnik: Studiendesign, Messreihen, statistische Auswertung sowie die Vermittlung der Ergebnisse an das Fachpublikum.',
       },
       design: {
         title: 'Design',
@@ -58,7 +58,7 @@ export const ui = {
         label: 'Über mich',
         title: 'Kurz zu mir',
         body: [
-          'Ich habe Medizintechnik studiert, weil mich der Punkt interessiert, an dem ein technisches System auf einen Menschen trifft. Dort zählt beides: dass es funktioniert und dass sich das belegen lässt. An der Universitätsmedizin Göttingen leite ich seit 2023 eine Validierungsstudie zum 3D-System Vectra-H2, von der Studienplanung über die Messreihen bis zur statistischen Auswertung.',
+          'Ich habe Medizintechnik studiert, weil mich der Punkt interessiert, an dem ein technisches System auf einen Menschen trifft. Dort gelten zwei Anforderungen gleichzeitig: dass ein System funktioniert und dass sich das belegen lässt. An der Universitätsmedizin Göttingen leite ich seit 2023 eine Validierungsstudie zum 3D-System Vectra-H2, von der Studienplanung über die Messreihen bis zur statistischen Auswertung.',
           'Parallel dazu führe ich seit 2022 mit zayne ein eigenes Studio für digitale Kundenprojekte, von der Anforderungsaufnahme über Marke und Gestaltung bis zum Livegang. Seit 2025 bin ich Co-Founder von meedup und Head of Design beim Entrepreneurs Club Mainz. Ein Muster zieht sich durch alle Tätigkeiten: aus einer unklaren Anforderung etwas entstehen zu lassen, das sich benutzen, messen und vorzeigen lässt.',
         ],
         facts: {
@@ -80,9 +80,9 @@ export const ui = {
       },
       contact: {
         label: 'Kontakt',
-        title: 'Sprechen wir darüber.',
+        title: 'Nehmen Sie Kontakt auf.',
         description:
-          'Ob Medizintechnik, ein Softwarewerkzeug, eine Marke oder eine Studie: schreiben Sie mir gern. Ich antworte in der Regel innerhalb von zwei Werktagen.',
+          'Für Anfragen aus Medizintechnik, Softwareentwicklung, Markengestaltung oder Forschung erreichen Sie mich per E-Mail. Ich antworte in der Regel innerhalb von zwei Werktagen.',
       },
     },
 
@@ -151,7 +151,7 @@ export const ui = {
 
     error: {
       title: 'Seite nicht gefunden',
-      description: 'Diese Adresse führt ins Leere. Vielleicht hilft der Weg zurück zur Startseite.',
+      description: 'Diese Adresse existiert nicht. Über die Startseite erreichen Sie alle Inhalte.',
       home: 'Zur Startseite',
     },
   },
@@ -189,12 +189,12 @@ export const ui = {
       software: {
         title: 'Software',
         description:
-          'Products and tools I own from the first requirement through to go live. Most of them exist because the right tool was missing.',
+          'Products and tools I own from the first requirement through to go live. They exist largely because no suitable tool was available.',
       },
       research: {
         title: 'Research',
         description:
-          'Work in medical technology: study design, measurement series, statistical analysis and the talk that brings the results to a specialist audience.',
+          'Work in medical technology: study design, measurement series, statistical analysis, and the communication of results to a specialist audience.',
       },
       design: {
         title: 'Design',
@@ -205,7 +205,7 @@ export const ui = {
         label: 'About',
         title: 'A little about me',
         body: [
-          'I studied medical engineering because I am drawn to the point where a technical system meets a person. Both things count there: that it works, and that this can be proven. Since 2023 I have been leading a validation study of the Vectra-H2 3D system at Göttingen University Medical Center, from study planning through the measurement series to statistical analysis.',
+          'I studied medical engineering because I am drawn to the point where a technical system meets a person. Two requirements apply at once: that a system works, and that this can be demonstrated. Since 2023 I have been leading a validation study of the Vectra-H2 3D system at Göttingen University Medical Center, from study planning through the measurement series to statistical analysis.',
           'Alongside that I have run zayne, my own studio for digital client work, since 2022, from gathering requirements through brand and design to go live. Since 2025 I have been co-founder of meedup and Head of Design at Entrepreneurs Club Mainz. One pattern runs through all of it: turning an unclear requirement into something that can be used, measured and shown.',
         ],
         facts: {
@@ -227,9 +227,9 @@ export const ui = {
       },
       contact: {
         label: 'Contact',
-        title: "Let's talk.",
+        title: 'Get in touch.',
         description:
-          'Medical technology, a software tool, a brand or a study: write to me. I usually reply within two working days.',
+          'For enquiries in medical technology, software development, brand design or research, you can reach me by email. I usually reply within two working days.',
       },
     },
 
@@ -298,7 +298,7 @@ export const ui = {
 
     error: {
       title: 'Page not found',
-      description: 'This address leads nowhere. The way back to the homepage might help.',
+      description: 'This address does not exist. The homepage leads to all content.',
       home: 'Go to homepage',
     },
   },

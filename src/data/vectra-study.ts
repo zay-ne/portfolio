@@ -40,7 +40,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Fünf Zuschnitte',
         body: [
-          'Ein Volumen misst man nicht am ganzen Gesicht, sondern an einem festgelegten Ausschnitt. Fünf solcher Zuschnitte wurden definiert, von der reinen Unterlidregion bis zu einer großen Fläche über beide Augen und den Nasenrücken hinweg. Je größer die Fläche, desto mehr Angriffsfläche für Fehler.',
+          'Ein Volumen misst man nicht am ganzen Gesicht, sondern an einem festgelegten Ausschnitt. Fünf solcher Zuschnitte wurden definiert, von der reinen Unterlidregion bis zu einer großen Fläche über beide Augen und den Nasenrücken hinweg. Je größer die Fläche, desto höher die Fehleranfälligkeit.',
         ],
         wide: true,
         visual: {
@@ -57,7 +57,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Erst die Strecken',
+        title: 'Distanzmessungen',
         body: [
           'Vor dem Volumen steht die Strecke. Zwischen 18 anatomischen Landmarken wurden 20 Distanzen definiert und jede fünfmal gemessen, einmal digital am 3D-Modell und einmal von Hand mit dem Messschieber.',
           'Die mittlere Abweichung zwischen beiden Verfahren beträgt 0,019 Millimeter pro Millimeter. Auf eine Strecke von 50 Millimetern gerechnet ist das nicht einmal ein Millimeter. Die Wiederholbarkeit lag bei einem ICC von 0,997 für die digitale und 0,996 für die manuelle Messung.',
@@ -77,7 +77,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Dann das Volumen',
+        title: 'Volumenmessungen',
         body: [
           'Bei den Körperspendern liegt die mittlere Volumenabweichung über alle Modi bei 0,032 ± 0,113 Millilitern. In 14,1 Prozent der Messungen gab es überhaupt keine Abweichung. Bei den Dummys waren es 8,1 Prozent bei einem Mittelwert von -0,005 ± 0,083 Millilitern.',
           'Der Zusammenhang ist eindeutig: je größer der gemessene Bereich, desto größer die Abweichung. Modus A bleibt bei 0,037 Millilitern, Modus D erreicht 0,099.',
@@ -96,7 +96,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Der eigentliche Befund',
+        title: 'Der zentrale Befund',
         body: [
           'Damit ist die Präzision innerhalb einer Aufnahme belegt. Der entscheidende Unterschied liegt jedoch an anderer Stelle: Wird derselbe Scan zweimal ausgewertet, stimmen die Ergebnisse nahezu perfekt überein. Wird dagegen zweimal neu aufgenommen, fällt die Übereinstimmung deutlich ab.',
           'Am auffälligsten ist die Seitendifferenz bei den Körperspendern. Das linke Auge erreicht einen ICC von 0,83, das rechte nur 0,15. Eine naheliegende, aber ungeprüfte Erklärung ist die Kameraführung eines rechtshändigen Bedieners. Genau diese Asymmetrie, nicht der Mittelwert, begrenzt derzeit den Einsatz für Verlaufskontrollen.',
@@ -124,7 +124,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Die Abwägung',
         body: [
-          'Der präziseste Zuschnitt ist nicht automatisch der klinisch nützlichste. Modus B misst am genauesten, lässt aber die Braue außen vor. Für die Lidchirurgie ist genau die relevant.',
+          'Der präziseste Zuschnitt ist nicht zwangsläufig der klinisch nützlichste. Modus B misst am genauesten, schließt die Braue jedoch aus. Für die Lidchirurgie ist genau diese Struktur maßgeblich.',
         ],
         wide: true,
         visual: {
@@ -137,7 +137,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
               coverage: 'nur Unterlid, bis zur unteren Braukante',
               deviation: '0,037 ± 0,045 ml',
               icc: '0,869 / 0,009',
-              rationale: 'Höchste Präzision, aber ohne Braue. Für Braupathologien kaum brauchbar.',
+              rationale: 'Höchste Präzision, jedoch ohne Braue. Für braubezogene Fragestellungen nur eingeschränkt geeignet.',
             },
             {
               id: 'B',
@@ -166,10 +166,10 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Was daraus folgt',
+        title: 'Schlussfolgerung',
         body: [
-          'Das VECTRA H2 misst Strecken und Volumina in der Augenregion reproduzierbar, solange innerhalb einer Aufnahme gearbeitet wird. Für die Dokumentation und die Operationsplanung ist es damit brauchbar.',
-          'Für Verlaufskontrollen über Wochen und Monate reicht es nach diesem Stand noch nicht, weil zwischen zwei getrennten Aufnahmen zu viel Streuung entsteht. Der nächste Schritt ist deshalb eine Studie an lebenden Patientinnen und Patienten, unter genau den Bedingungen, die hier bewusst ausgeschlossen wurden.',
+          'Das VECTRA H2 misst Strecken und Volumina in der Augenregion reproduzierbar, solange innerhalb einer Aufnahme gearbeitet wird. Für Dokumentation und Operationsplanung ist es damit geeignet.',
+          'Für Verlaufskontrollen über Wochen und Monate genügt es nach derzeitigem Stand nicht, weil zwischen zwei getrennten Aufnahmen zu viel Streuung entsteht. Der nächste Schritt ist deshalb eine Studie an lebenden Patientinnen und Patienten, unter genau den Bedingungen, die hier bewusst ausgeschlossen wurden.',
         ],
       },
     ],
@@ -223,7 +223,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Five outlines',
         body: [
-          'Volume is not measured across a whole face but within a defined outline. Five such outlines were specified, from the lower eyelid alone to a large area spanning both eyes and the bridge of the nose. The larger the area, the more surface there is for error to accumulate.',
+          'Volume is not measured across a whole face but within a defined outline. Five such outlines were specified, from the lower eyelid alone to a large area spanning both eyes and the bridge of the nose. The larger the area, the higher the susceptibility to error.',
         ],
         wide: true,
         visual: {
@@ -240,7 +240,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Distances first',
+        title: 'Distance measurements',
         body: [
           'Before volume comes distance. Twenty distances were defined between 18 anatomical landmarks and each was measured five times, once digitally on the 3D model and once by hand with a calliper.',
           'The mean deviation between the two methods is 0.019 millimetres per millimetre. Over a 50 millimetre distance that is less than a single millimetre. Repeatability reached an ICC of 0.997 for the digital and 0.996 for the manual measurement.',
@@ -260,7 +260,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'Then volume',
+        title: 'Volume measurements',
         body: [
           'Across all modes the mean volume deviation in body donors is 0.032 ± 0.113 millilitres. In 14.1 per cent of measurements there was no deviation at all. For the dummies it was 8.1 per cent at a mean of -0.005 ± 0.083 millilitres.',
           'The pattern is clear: the larger the region measured, the larger the deviation. Mode A stays at 0.037 millilitres, mode D reaches 0.099.',
@@ -279,7 +279,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'The actual finding',
+        title: 'The central finding',
         body: [
           'Precision within a single capture is thereby established. The decisive difference lies elsewhere: evaluate the same scan twice and the results agree almost perfectly. Capture twice from scratch and agreement drops sharply.',
           'The most striking part is the left to right difference in body donors. The left eye reaches an ICC of 0.83, the right only 0.15. A plausible but unverified explanation is the camera handling of a right handed operator. It is this asymmetry, not the average, that currently limits use for longitudinal monitoring.',
@@ -307,7 +307,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
       {
         title: 'The trade-off',
         body: [
-          'The most precise outline is not automatically the most clinically useful one. Mode B measures most accurately but leaves out the eyebrow, and for eyelid surgery that is exactly the structure that matters.',
+          'The most precise outline is not necessarily the most clinically useful one. Mode B measures most accurately but excludes the eyebrow, and for eyelid surgery that structure is decisive.',
         ],
         wide: true,
         visual: {
@@ -320,7 +320,7 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
               coverage: 'lower eyelid only, up to the lower brow margin',
               deviation: '0.037 ± 0.045 ml',
               icc: '0.869 / 0.009',
-              rationale: 'Highest precision but no eyebrow. Of little use for brow pathology.',
+              rationale: 'Highest precision, but without the eyebrow. Of limited suitability for brow related questions.',
             },
             {
               id: 'B',
@@ -349,9 +349,9 @@ export const vectraStudy: Record<'de' | 'en', StudyContent> = {
         },
       },
       {
-        title: 'What follows from it',
+        title: 'Conclusion',
         body: [
-          'The VECTRA H2 measures distances and volumes in the eye region reproducibly as long as the work stays within a single capture. For documentation and surgical planning that makes it usable.',
+          'The VECTRA H2 measures distances and volumes in the eye region reproducibly as long as the work stays within a single capture. For documentation and surgical planning it is therefore suitable.',
           'For monitoring over weeks and months it is not yet sufficient on this evidence, because too much scatter arises between two separate captures. The next step is therefore a study on living patients, under exactly the conditions deliberately excluded here.',
         ],
       },

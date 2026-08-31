@@ -33,8 +33,6 @@ const s = studies[project.data.feature as StudyKey][locale];
 const all = await getProjects(locale);
 const next = nextProject(all, project);
 
-const pad = (n: number) => String(n).padStart(2, '0');
-const creditsIndex = pad(s.sections.length + 1);
 
 /* Nennt eine Arbeit keine Einzelbeiträge, wird nur die Namensliste gezeigt. */
 const hasRoles = s.credits?.people.some((person) => person.role) ?? false;
@@ -119,13 +117,12 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
 
       <!-- ---------- Abschnitte ---------- -->
       {
-        s.sections.map((section, i) => {
+        s.sections.map((section) => {
           const v = section.visual;
           return (
             <section class="block">
               <div class="block-grid">
                 <div class="block-head" data-reveal>
-                  <p class="label idx">{pad(i + 1)}</p>
                   <h2 class="heading-md">{section.title}</h2>
                 </div>
                 <div class="block-body" data-reveal style="--reveal-delay:100ms">
@@ -243,7 +240,6 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
       <section class="block">
         <div class="block-grid">
           <div class="block-head" data-reveal>
-            <p class="label idx">{creditsIndex}</p>
             <h2 class="heading-md">{s.credits.title}</h2>
           </div>
           <div class="block-body" data-reveal style="--reveal-delay:100ms">
@@ -481,10 +477,6 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-  }
-
-  .idx {
-    color: var(--color-fg-subtle);
   }
 
   .block-body {

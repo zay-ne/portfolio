@@ -1,6 +1,5 @@
 ---
 export interface Props {
-  index: string;
   title: string;
   description?: string;
   /** Anker-Id, falls die Sektion aus der Navigation erreichbar sein soll. */
@@ -9,14 +8,13 @@ export interface Props {
   as?: 'h1' | 'h2';
 }
 
-const { index, title, description, id, as: Tag = 'h2' } = Astro.props;
+const { title, description, id, as: Tag = 'h2' } = Astro.props;
 ---
 
 <header class="section-head" id={id}>
   <hr class="hairline" />
   <div class="inner">
     <div class="lead" data-reveal>
-      <p class="label idx">{index}</p>
       <Tag class="heading-lg title">{title}</Tag>
     </div>
     {
@@ -46,10 +44,6 @@ const { index, title, description, id, as: Tag = 'h2' } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 0.875rem;
-  }
-
-  .idx {
-    color: var(--color-fg-subtle);
   }
 
   .title {

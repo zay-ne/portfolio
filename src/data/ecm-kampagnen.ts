@@ -233,7 +233,7 @@ export const ecmKampagnen: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Vier Kampagnen',
         body: [
-          'Vier Arbeiten aus dem laufenden Betrieb, jede für einen anderen Anlass und einen anderen Kanal. Am Hackathon-Flyer lässt sich gut sehen, was die Regeln leisten müssen: sechs Partnerlogos, ein Ortshinweis, ein Datum und ein QR-Code, und trotzdem soll das Plakat aus zehn Metern lesbar bleiben.',
+          'Vier Arbeiten aus dem laufenden Betrieb, jede für einen anderen Anlass und einen anderen Kanal. Der Hackathon-Flyer zeigt exemplarisch, was die Regeln leisten müssen: sechs Partnerlogos, ein Ortshinweis, ein Datum und ein QR-Code, und trotzdem soll das Plakat aus zehn Metern lesbar bleiben.',
         ],
         wide: true,
         visual: {
@@ -299,7 +299,7 @@ export const ecmKampagnen: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Four campaigns',
         body: [
-          'Four pieces from live operation, each for a different occasion and a different channel. The hackathon flyer shows well what the rules have to carry: six partner logos, a venue, a date and a QR code, and the poster still has to read from ten metres away.',
+          'Four pieces from live operation, each for a different occasion and a different channel. The hackathon flyer illustrates what the rules have to carry: six partner logos, a venue, a date and a QR code, and the poster still has to read from ten metres away.',
         ],
         wide: true,
         visual: {
