@@ -36,6 +36,44 @@ export const ui = {
       scroll: 'Scrollen',
     },
 
+    /* Die drei Kacheln über der aufklappbaren Liste. `key` ist die Kennung des
+       Projekts und bildet den Link, `art` wählt die Signaturgrafik. */
+    highlights: {
+      label: 'Ausgewählte Arbeiten',
+      items: [
+        {
+          key: 'meedup',
+          art: 'network' as const,
+          eyebrow: 'Gründung',
+          title: 'meedup',
+          claim:
+            'Ein Netzwerk, das engagierte Studierende mit Unternehmen zusammenbringt, getragen von einer deutschlandweiten Datenbank studentischer Initiativen.',
+          figure: '1.000+',
+          figureLabel: 'Initiativen in der Datenbank',
+        },
+        {
+          key: 'bewerbungstracker',
+          art: 'funnel' as const,
+          eyebrow: 'Software',
+          title: 'Bewerbungstracker',
+          claim:
+            'Der Nachfolger der Bewerbungstabelle. Dokumentiert jede Station mit Datum und zeigt im Sankey-Diagramm, wo der Prozess abbricht.',
+          figure: '11',
+          figureLabel: 'Stationen je Bewerbung',
+        },
+        {
+          key: 'vectra-h2',
+          art: 'measure' as const,
+          eyebrow: 'Forschung',
+          title: 'Vectra-H2',
+          claim:
+            'Validierung eines 3D-Systems für die periorbitale Volumetrie, von der Studienplanung bis zur statistischen Auswertung.',
+          figure: '1.280',
+          figureLabel: 'ausgewertete Einzelmessungen',
+        },
+      ],
+    },
+
     sections: {
       venture: {
         title: 'Gründung',
@@ -189,6 +227,42 @@ export const ui = {
       intro:
         'Medical engineer with a research background. Co-founder of meedup, founder of zayne and Head of Design at Entrepreneurs Club Mainz. I combine technical understanding with design and entrepreneurial practice.',
       scroll: 'Scroll',
+    },
+
+    highlights: {
+      label: 'Selected work',
+      items: [
+        {
+          key: 'meedup',
+          art: 'network' as const,
+          eyebrow: 'Ventures',
+          title: 'meedup',
+          claim:
+            'A network connecting committed students with companies, built on a Germany wide database of student initiatives.',
+          figure: '1,000+',
+          figureLabel: 'initiatives in the database',
+        },
+        {
+          key: 'bewerbungstracker',
+          art: 'funnel' as const,
+          eyebrow: 'Software',
+          title: 'Application Tracker',
+          claim:
+            'The successor to the application spreadsheet. It documents every station with its date and shows in a Sankey diagram where the process breaks off.',
+          figure: '11',
+          figureLabel: 'stations per application',
+        },
+        {
+          key: 'vectra-h2',
+          art: 'measure' as const,
+          eyebrow: 'Research',
+          title: 'Vectra-H2',
+          claim:
+            'Validation of a 3D system for periorbital volumetry, from study design through to statistical analysis.',
+          figure: '1,280',
+          figureLabel: 'individual measurements analysed',
+        },
+      ],
     },
 
     sections: {

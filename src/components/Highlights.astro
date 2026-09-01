@@ -1,0 +1,518 @@
+---
+import Icon from './Icon.astro';
+import type { Locale } from '../consts';
+import { projectPath, t } from '../i18n/utils';
+
+/**
+ * Drei hervorgehobene Arbeiten, direkt über der aufklappbaren Liste.
+ *
+ * Bewusst ohne Fotos: die Seite verwendet nirgends Titelbilder, und für meedup
+ * und die Vectra-Studie gibt es keine, die zeigen würden, worum es geht. Statt
+ * dessen trägt jede Kachel eine eigene kleine Signaturgrafik, die beim
+ * Überfahren gezeichnet wird. Sie steht für die Sache selbst: ein Netzwerk,
+ * ein Trichter, eine Messstrecke.
+ *
+ * Der Lichtschein, der dem Zeiger folgt, kommt aus dem Skript am Ende der
+ * Datei. Fällt es aus, bleibt die Kachel eine gewöhnliche verlinkte Fläche.
+ */
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = t(locale);
+---
+
+<section class="shell highlights" aria-labelledby="highlights-label">
+  <p class="label highlights-label" id="highlights-label" data-reveal>
+    {strings.highlights.label}
+  </p>
+
+  <ol class="tiles">
+    {
+      strings.highlights.items.map((item, i) => (
+        <li class="tile-item" data-reveal style={`--reveal-delay:${i * 110}ms`}>
+          <a class="tile" href={projectPath(item.key, locale)} data-tile>
+            <span class="glow" aria-hidden="true" />
+
+            <span class="tile-top">
+              <span class="label tile-eyebrow">{item.eyebrow}</span>
+              <span class="tile-arrow" aria-hidden="true">
+                <Icon name="arrow-up-right" size={15} />
+              </span>
+            </span>
+
+            <span class="tile-art" aria-hidden="true">
+              {item.art === 'network' && (
+                <svg viewBox="0 0 120 60" fill="none" preserveAspectRatio="xMidYMid meet">
+                  <g class="edges" stroke="currentColor" stroke-width="1">
+                    <path d="M10 30 35 12" style="--i:0" />
+                    <path d="M10 30 35 48" style="--i:1" />
+                    <path d="M35 12 60 30" style="--i:2" />
+                    <path d="M35 48 60 30" style="--i:3" />
+                    <path d="M60 30 85 14" style="--i:4" />
+                    <path d="M60 30 85 46" style="--i:5" />
+                    <path d="M85 14 110 30" style="--i:6" />
+                    <path d="M85 46 110 30" style="--i:7" />
+                  </g>
+                  <g class="nodes">
+                    <circle cx="10" cy="30" r="3" style="--i:0" />
+                    <circle cx="35" cy="12" r="3" style="--i:1" />
+                    <circle cx="35" cy="48" r="3" style="--i:2" />
+                    <circle class="hub" cx="60" cy="30" r="4.5" style="--i:3" />
+                    <circle cx="85" cy="14" r="3" style="--i:4" />
+                    <circle cx="85" cy="46" r="3" style="--i:5" />
+                    <circle cx="110" cy="30" r="3" style="--i:6" />
+                  </g>
+                </svg>
+              )}
+
+              {item.art === 'funnel' && (
+                <svg viewBox="0 0 120 60" fill="none" preserveAspectRatio="xMidYMid meet">
+                  <rect class="stem" x="8" y="8" width="4" height="44" rx="2" />
+                  <g class="ribbons">
+                    <path style="--i:0" d="M12 8C56 8 64 10 108 10L108 23C64 23 56 27 12 27Z" />
+                    <path style="--i:1" d="M12 27C46 27 44 29 78 29L78 39C44 39 46 41 12 41Z" />
+                    <path style="--i:2" d="M12 41C32 41 32 45 52 45L52 52C32 52 32 52 12 52Z" />
+                  </g>
+                  <g class="ends">
+                    <rect style="--i:0" x="108" y="10" width="4" height="13" rx="2" />
+                    <rect style="--i:1" x="78" y="29" width="4" height="10" rx="2" />
+                    <rect style="--i:2" x="52" y="45" width="4" height="7" rx="2" />
+                  </g>
+                </svg>
+              )}
+
+              {item.art === 'measure' && (
+                <svg viewBox="0 0 120 60" fill="none" preserveAspectRatio="xMidYMid meet">
+                  <g class="axis" stroke="currentColor" stroke-width="1">
+                    <path d="M10 44H110" />
+                    <path d="M10 44v6" />
+                    <path d="M35 44v4" />
+                    <path d="M60 44v6" />
+                    <path d="M85 44v4" />
+                    <path d="M110 44v6" />
+                  </g>
+                  <path class="span" d="M28 24V16h64v8" stroke-width="1.5" />
+                  <circle class="marker" cx="92" cy="44" r="4" />
+                </svg>
+              )}
+            </span>
+
+            <span class="tile-main">
+              <span class="tile-title">{item.title}</span>
+              <span class="tile-claim">{item.claim}</span>
+            </span>
+
+            <span class="tile-figure">
+              <span class="fig-value tabular">{item.figure}</span>
+              <span class="label fig-label">{item.figureLabel}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .highlights {
+    padding-block-end: var(--spacing-block);
+  }
+
+  .highlights-label {
+    display: block;
+    padding-block-end: 1.25rem;
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* ---------- Die Kachel ---------- */
+  .tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+    block-size: 100%;
+    padding: 1.375rem;
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+    background: var(--color-surface);
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      border-color 420ms var(--ease-out-quart),
+      transform 560ms var(--ease-out-expo);
+  }
+
+  .tile:hover,
+  .tile:focus-visible {
+    border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-line));
+    transform: translate3d(0, -3px, 0);
+  }
+
+  /* Lichtschein, der dem Zeiger folgt. Die Koordinaten setzt das Skript. */
+  .glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      16rem circle at var(--mx, 50%) var(--my, 0%),
+      color-mix(in srgb, var(--color-accent) 14%, transparent),
+      transparent 70%
+    );
+    transition: opacity 380ms var(--ease-out-quart);
+  }
+
+  .tile:hover .glow,
+  .tile:focus-visible .glow {
+    opacity: 1;
+  }
+
+  .tile-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .tile-eyebrow {
+    color: var(--color-fg-subtle);
+    transition: color 420ms var(--ease-out-quart);
+  }
+
+  .tile:hover .tile-eyebrow,
+  .tile:focus-visible .tile-eyebrow {
+    color: var(--color-accent);
+  }
+
+  .tile-arrow {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 32px;
+    block-size: 32px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-fg-muted);
+    transition:
+      transform 560ms var(--ease-out-expo),
+      border-color 420ms var(--ease-out-quart),
+      color 420ms var(--ease-out-quart);
+  }
+
+  .tile:hover .tile-arrow,
+  .tile:focus-visible .tile-arrow {
+    transform: translate3d(3px, -3px, 0);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  /* ---------- Signaturgrafik ---------- */
+  .tile-art {
+    /* Nimmt den überschüssigen Raum, damit alle drei Kacheln gleich hoch
+       bleiben, auch wenn die Beschreibungen unterschiedlich lang sind. */
+    flex: 1;
+    min-block-size: 3.25rem;
+    display: grid;
+    place-items: center;
+    color: var(--color-fg-subtle);
+    transition: color 420ms var(--ease-out-quart);
+  }
+
+  .tile:hover .tile-art,
+  .tile:focus-visible .tile-art {
+    color: var(--color-fg-muted);
+  }
+
+  .tile-art svg {
+    inline-size: 100%;
+    max-inline-size: 10rem;
+    block-size: auto;
+  }
+
+  /* Die Grafiken stehen im Ruhezustand vollständig da, nur gedeckt. Beim
+     Überfahren laufen sie einmal an, statt aus dem Nichts zu erscheinen. Das
+     geht über animation statt transition: der Ruhezustand braucht dann keine
+     Vorbereitung, und die letzte Kachel der Bewegung entspricht ihm. */
+  @keyframes draw-line {
+    from {
+      stroke-dasharray: var(--len, 40);
+      stroke-dashoffset: var(--len, 40);
+    }
+    to {
+      stroke-dasharray: var(--len, 40);
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      transform: scale(0.55);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes wipe {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(-64px) scale(0.5);
+    }
+    to {
+      transform: translateX(0) scale(1);
+    }
+  }
+
+  /* Netzwerk: die Kanten werden nachgezogen, die Knoten setzen sich. */
+  .edges path {
+    --len: 34;
+  }
+
+  .tile:hover .edges path,
+  .tile:focus-visible .edges path {
+    animation: draw-line 620ms var(--ease-out-quart) calc(var(--i) * 45ms) both;
+  }
+
+  .nodes circle {
+    fill: currentColor;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .nodes .hub {
+    fill: var(--color-accent);
+  }
+
+  .tile:hover .nodes circle,
+  .tile:focus-visible .nodes circle {
+    animation: pop 520ms var(--ease-out-expo) calc(var(--i) * 45ms) both;
+  }
+
+  /* Trichter: die Bänder laufen von links durch, die Endmarken setzen sich danach. */
+  .stem {
+    fill: var(--color-accent);
+  }
+
+  .ribbons path {
+    fill: currentColor;
+    opacity: 0.26;
+    transition: opacity 420ms var(--ease-out-quart);
+  }
+
+  .tile:hover .ribbons path,
+  .tile:focus-visible .ribbons path {
+    opacity: 0.42;
+    animation: wipe 720ms var(--ease-out-quart) calc(var(--i) * 110ms) both;
+  }
+
+  .ends rect {
+    fill: var(--color-accent);
+  }
+
+  .tile:hover .ends rect,
+  .tile:focus-visible .ends rect {
+    animation: fade-in 420ms var(--ease-out-quart) calc(320ms + var(--i) * 110ms) both;
+  }
+
+  /* Messstrecke: die Spanne wird aufgezogen, die Marke fährt an ihre Stelle. */
+  .span {
+    --len: 80;
+    stroke: var(--color-accent);
+  }
+
+  .tile:hover .span,
+  .tile:focus-visible .span {
+    animation: draw-line 720ms var(--ease-out-quart) both;
+  }
+
+  .marker {
+    fill: var(--color-accent);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .tile:hover .marker,
+  .tile:focus-visible .marker {
+    animation: slide-in 760ms var(--ease-out-expo) 120ms both;
+  }
+
+  /* ---------- Text und Kennzahl ---------- */
+  .tile-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tile-title {
+    font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    transition: transform 520ms var(--ease-out-expo);
+  }
+
+  .tile:hover .tile-title,
+  .tile:focus-visible .tile-title {
+    transform: translate3d(4px, 0, 0);
+  }
+
+  .tile-claim {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-fg-muted);
+  }
+
+  .tile-figure {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-block-start: 1.125rem;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .fig-value {
+    font-size: 1.625rem;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .fig-label {
+    color: var(--color-fg-subtle);
+  }
+
+  @media (min-width: 48rem) {
+    .tiles {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+
+    .tile {
+      gap: 1.5rem;
+      padding: 1.75rem;
+    }
+
+    .tile-art {
+      min-block-size: 5rem;
+    }
+
+    .tile-art svg {
+      max-inline-size: 13rem;
+    }
+  }
+
+  /* Der Ruhezustand ist von sich aus vollständig. Ohne Zeiger und bei
+     reduzierter Bewegung bleibt es dabei, es entfällt lediglich das Anlaufen. */
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .tile:hover .edges path,
+    .tile:hover .nodes circle,
+    .tile:hover .ribbons path,
+    .tile:hover .ends rect,
+    .tile:hover .span,
+    .tile:hover .marker,
+    .tile:focus-visible .edges path,
+    .tile:focus-visible .nodes circle,
+    .tile:focus-visible .ribbons path,
+    .tile:focus-visible .ends rect,
+    .tile:focus-visible .span,
+    .tile:focus-visible .marker {
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile,
+    .tile-title,
+    .tile-arrow,
+    .tile-art,
+    .ribbons path {
+      transition: none;
+    }
+  }
+</style>
+<script>
+  // Lichtschein, der dem Zeiger folgt. Reine Zugabe: ohne dieses Skript bleibt
+  // die Kachel eine verlinkte Fläche mit allen übrigen Übergängen.
+  let controller: AbortController | null = null;
+
+  function initHighlights() {
+    controller?.abort();
+
+    const tiles = document.querySelectorAll<HTMLElement>('[data-tile]');
+    if (tiles.length === 0) return;
+
+    // Ohne Zeiger und bei reduzierter Bewegung gibt es nichts zu verfolgen.
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!fine || reduced) return;
+
+    controller = new AbortController();
+    const { signal } = controller;
+
+    tiles.forEach((tile) => {
+      let frame = 0;
+      let point = { x: 0, y: 0 };
+
+      const apply = () => {
+        frame = 0;
+        tile.style.setProperty('--mx', `${point.x}px`);
+        tile.style.setProperty('--my', `${point.y}px`);
+      };
+
+      tile.addEventListener(
+        'pointermove',
+        (event) => {
+          const box = tile.getBoundingClientRect();
+          point = { x: event.clientX - box.left, y: event.clientY - box.top };
+          // Ein Anstrich je Frame reicht, pointermove feuert deutlich häufiger.
+          if (!frame) frame = requestAnimationFrame(apply);
+        },
+        { passive: true, signal },
+      );
+
+      tile.addEventListener(
+        'pointerleave',
+        () => {
+          cancelAnimationFrame(frame);
+          frame = 0;
+          // Zurück auf die Ausgangslage, damit der Schein beim nächsten Mal
+          // nicht an der letzten Stelle aufblitzt.
+          tile.style.removeProperty('--mx');
+          tile.style.removeProperty('--my');
+        },
+        { signal },
+      );
+    });
+  }
+
+  initHighlights();
+  document.addEventListener('astro:page-load', initHighlights);
+</script>

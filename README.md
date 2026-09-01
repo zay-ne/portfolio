@@ -70,7 +70,7 @@ src/
     ui.ts                Sämtliche Oberflächentexte, DE und EN
     utils.ts             Sprache aus der URL, Routentabelle, Datumsformat
   lib/projects.ts        Projekte laden, sortieren, gruppieren
-  components/            Kopf, Fuß, Projektliste, Aufklapp-Sektionen, Icons …
+  components/            Kopf, Fuß, Projektliste, Kacheln, Aufklapp-Sektionen …
   components/study/      Diagramme der ausführlichen Seiten, ohne Bibliothek
   layouts/               Ganze Seitentypen: Start, Projekt, Lebenslauf, Recht
   pages/                 Routen, dünne Hüllen um die Layouts
@@ -228,6 +228,21 @@ Komponente. Grund: Astro hängt seinen Scope-Hash nicht an Klassen, die als
 Eigenschaft an eine Komponente gehen. `<Reveal class="hero-top">` hätte die
 Layoutregeln zu `.hero-top` stillschweigend verworfen. Ein natives Element mit
 `data-reveal` und optionalem `style="--reveal-delay:200ms"` umgeht das.
+
+**Drei Arbeiten stehen über der Liste.** `components/Highlights.astro` zeigt
+meedup, den Bewerbungstracker und die Vectra-Studie als Kacheln. Welche das
+sind, steht in `src/i18n/ui.ts` unter `highlights.items`: `key` ist die Kennung
+des Projekts und bildet den Link, `art` wählt die Signaturgrafik (`network`,
+`funnel` oder `measure`). Eine andere Auswahl braucht also nur andere Einträge
+dort, keine Änderung an der Komponente. Für eine vierte Grafik kommt ein
+weiterer Zweig in die Komponente.
+
+**Die Grafiken stehen im Ruhezustand vollständig da.** Sie laufen beim
+Überfahren einmal an, und zwar über `animation` statt `transition`. Der Grund:
+mit `transition` müsste der Ruhezustand die Ausgangslage der Bewegung sein, also
+eine halb gezeichnete Linie. Das sieht ohne Zeiger nach einem Fehler aus. Mit
+`animation ... both` bleibt der Ruhezustand das fertige Bild, und ohne Zeiger
+oder bei reduzierter Bewegung entfällt schlicht das Anlaufen.
 
 **Die Startseite klappt ihre Sektionen auf.** Gründung, Software, Forschung,
 Design und Kurz zu mir liegen zugeklappt untereinander, der Inhalt erscheint erst nach
