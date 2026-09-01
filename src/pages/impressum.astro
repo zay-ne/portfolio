@@ -1,20 +1,68 @@
 ---
 import LegalPage from '../layouts/LegalPage.astro';
 import { SITE } from '../consts';
+
+/**
+ * Pflichtangaben nach § 5 DDG.
+ *
+ * Anbieter ist eine natürliche Person, deshalb entfallen Rechtsform,
+ * Vertretungsberechtigte und Registereintrag. Eine
+ * Umsatzsteuer-Identifikationsnummer besteht nicht (Kleinunternehmerregelung),
+ * die Angabe entfällt damit ebenfalls. Die Steuernummer gehört ausdrücklich
+ * nicht hierher.
+ *
+ * Bewusst nicht enthalten: Verweis auf die EU-Plattform zur
+ * Online-Streitbeilegung, die zum 20. Juli 2025 eingestellt wurde, sowie die
+ * Erklärung nach § 36 VSBG, die erst ab mehr als zehn Beschäftigten
+ * verpflichtend ist.
+ *
+ * Die Seite steht über LegalPage auf noindex. Sie bleibt damit für Besucher
+ * unmittelbar erreichbar, wie es § 5 DDG verlangt, taucht aber nicht in
+ * Suchergebnissen auf. Das ist bei einer Privatanschrift die freundlichere
+ * Variante.
+ */
 ---
 
 <LegalPage
   locale="de"
   altHref="/en/imprint"
   title="Impressum"
-  lead="Die Pflichtangaben nach § 5 DDG werden gerade ergänzt."
+  lead="Angaben nach § 5 des Digitale-Dienste-Gesetzes."
 >
+  <h2>Anbieter</h2>
+  <p>
+    Schedi Samet<br />
+    Lützerstraße 14<br />
+    34439 Willebadessen<br />
+    Deutschland
+  </p>
+
   <h2>Kontakt</h2>
   <p>
-    Bis die vollständigen Angaben hier stehen, erreichen Sie mich unter
-    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+    E-Mail: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+  </p>
+  <p>
+    Anfragen beantworte ich in der Regel innerhalb von zwei Werktagen. Eine Telefonnummer ist hier
+    nicht angegeben. Die E-Mail-Adresse ist der schnelle und unmittelbare Kontaktweg im Sinne des
+    § 5 Abs. 1 Nr. 2 DDG.
   </p>
 
   <h2>Verantwortlich für den Inhalt</h2>
-  <p>Schedi Samet</p>
+  <p>Schedi Samet, Anschrift wie oben.</p>
+
+  <h2>Externe Verweise</h2>
+  <p>
+    Diese Seite verweist an mehreren Stellen auf fremde Websites. Für deren Inhalte sind
+    ausschließlich die jeweiligen Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung war dort
+    kein rechtswidriger Inhalt erkennbar. Eine laufende Kontrolle ohne konkreten Anlass ist nicht
+    zumutbar. Wird mir ein Rechtsverstoß bekannt, entferne ich den Verweis.
+  </p>
+
+  <h2>Inhalte dieser Seite</h2>
+  <p>
+    Texte, Diagramme und Abbildungen stammen von mir, soweit nicht anders angegeben. Die Arbeiten
+    für den Entrepreneurs Club Mainz sind im Rahmen meiner Tätigkeit dort entstanden. Die
+    wissenschaftlichen Arbeiten sind Gemeinschaftsarbeiten, die Beteiligten sind auf den jeweiligen
+    Seiten genannt.
+  </p>
 </LegalPage>

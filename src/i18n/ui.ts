@@ -12,7 +12,7 @@ export const ui = {
     meta: {
       title: 'Schedi Samet · Medizintechnik, Software, Marke',
       description:
-        'Ingenieur der Medizintechnik aus Göttingen und Mainz. Ich entwickle Software, gestalte Marken und forsche in der Medizintechnik. Co-Founder von meedup, Gründer von zayne.',
+        'Ingenieur der Medizintechnik aus Göttingen und Bonn. Ich entwickle Software, gestalte Marken und forsche in der Medizintechnik. Co-Founder von meedup, Gründer von zayne.',
       langLabel: 'Sprache wechseln',
       langSwitchTo: 'English',
       skipToContent: 'Zum Inhalt springen',
@@ -67,7 +67,7 @@ export const ui = {
         facts: {
           label: 'Eckdaten',
           items: [
-            { term: 'Standort', value: 'Göttingen und Mainz' },
+            { term: 'Standort', value: 'Göttingen und Bonn' },
             { term: 'Studium', value: 'M. Eng. Medizintechnik, HAWK Göttingen (Abschluss 12/2026)' },
             { term: 'Schwerpunkte', value: 'Medizintechnik, Software, Marke, Projektmanagement' },
             { term: 'Sprachen', value: 'Deutsch, Englisch, Arabisch, Französisch' },
@@ -167,7 +167,7 @@ export const ui = {
     meta: {
       title: 'Schedi Samet · Medical Technology, Software, Brand',
       description:
-        'Medical engineer based in Göttingen and Mainz. I develop software, shape brands and research medical technology. Co-founder of meedup, founder of zayne.',
+        'Medical engineer based in Göttingen and Bonn. I develop software, shape brands and research medical technology. Co-founder of meedup, founder of zayne.',
       langLabel: 'Change language',
       langSwitchTo: 'Deutsch',
       skipToContent: 'Skip to content',
@@ -222,7 +222,7 @@ export const ui = {
         facts: {
           label: 'At a glance',
           items: [
-            { term: 'Based in', value: 'Göttingen and Mainz' },
+            { term: 'Based in', value: 'Göttingen and Bonn' },
             { term: 'Studies', value: 'M. Eng. Medical Engineering, HAWK Göttingen (due 12/2026)' },
             { term: 'Focus', value: 'Medical technology, software, brand, project management' },
             { term: 'Languages', value: 'German, English, Arabic, French' },

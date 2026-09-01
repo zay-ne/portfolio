@@ -74,6 +74,21 @@ const { locale, altHref, title, lead } = Astro.props;
     margin-block-end: 1rem;
   }
 
+  /* Auf einer Rechtsseite ist die E-Mail-Adresse der vorgeschriebene
+     Kontaktweg. Sie muss als Link erkennbar sein, nicht nur anklickbar. */
+  .legal-body :global(a) {
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .legal-body :global(a:hover),
+  .legal-body :global(a:focus-visible) {
+    color: var(--color-accent);
+  }
+
   .legal-body :global(ul) {
     padding-inline-start: 1.2rem;
     margin-block-end: 1.5rem;

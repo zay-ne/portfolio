@@ -11,8 +11,8 @@ export const SITE = {
   domain: 'schedisamet.de',
   email: 'sametschedi@gmail.com',
   location: {
-    de: 'Göttingen · Mainz',
-    en: 'Göttingen · Mainz',
+    de: 'Göttingen · Bonn',
+    en: 'Göttingen · Bonn',
   },
   timezone: 'Europe/Berlin',
 } as const;
