@@ -7,6 +7,11 @@ import sankey from '../assets/bewerbungstracker/sankey.png';
 /**
  * Bewerbungstracker: eigenes Werkzeug für die Stellensuche.
  *
+ * Die Seite ist als Gegenentwurf zur Bewerbungstabelle aufgebaut. Deshalb
+ * stehen die vier Funktionen vorn und danach die Gegenüberstellung, nicht
+ * Kennzahlen: bei einem Werkzeug in der Betaphase sagt die Funktion mehr als
+ * eine Zahl.
+ *
  * Die Abbildungen stammen aus der öffentlichen Demo, die mit Beispieldaten
  * läuft. Es sind also keine echten Bewerbungen zu sehen. Neu erzeugt werden
  * sie mit tools/screenshots/bewerbungstracker.py.
@@ -93,31 +98,89 @@ const oberflaecheEn: GalleryWork[] = [
 export const bewerbungstracker: Record<'de' | 'en', StudyContent> = {
   de: {
     eyebrow: 'Software · Eigenes Werkzeug',
-    headline: ['Wo Bewerbungen', 'tatsächlich enden.'],
-    lead: 'Ein Werkzeug für die eigene Stellensuche. Es speichert nicht einen Status, sondern den vollständigen Verlauf jeder Bewerbung, und zeigt in einem Sankey-Diagramm, an welcher Station der Prozess abbricht.',
+    headline: ['Was die Tabelle', 'nicht leisten kann.'],
+    lead: 'Ein Werkzeug für die eigene Stellensuche, gebaut als Ersatz für die Bewerbungstabelle. Es speichert nicht einen Status, sondern dokumentiert jede Station mit Datum, rechnet die Quoten selbst und zeigt in einem Sankey-Diagramm, an welcher Stelle der Prozess abbricht.',
     meta: [
       { term: 'Rolle', value: 'Konzept, Gestaltung und Entwicklung' },
       { term: 'Zeitraum', value: 'seit 2025' },
       { term: 'Technik', value: 'Cloudflare Workers, JavaScript, macOS' },
-      { term: 'Stand', value: 'Im täglichen Eigengebrauch' },
+      { term: 'Stand', value: 'Betaphase, im täglichen Eigengebrauch' },
     ],
-    stats: {
-      label: 'Eckdaten',
-      items: [
-        { value: '11', label: 'Stationen im Verlauf' },
-        { value: '4', label: 'Sprachen, inklusive Rechts-nach-links' },
-        { value: '0', label: 'externe Abhängigkeiten' },
-        { value: '320 px', label: 'kleinste unterstützte Breite' },
-      ],
-    },
 
     sections: [
       {
-        title: 'Die Ausgangslage',
+        title: 'Vier Funktionen',
         body: [
-          'Eine Stellensuche erzeugt binnen weniger Wochen Dutzende paralleler Vorgänge: Anzeige gefunden, Unterlagen angepasst, abgeschickt, nachgefasst, Gespräch, Rückmeldung. Eine Tabelle trägt das eine Weile.',
-          'Zwei Dinge kann sie nicht. Sie überschreibt beim Statuswechsel die Vorgeschichte, und sie beantwortet nicht die einzige Frage, die für das weitere Vorgehen zählt: an welcher Stelle die Bewerbungen versanden. Genau dafür ist dieses Werkzeug entstanden.',
+          'Zwei davon rechnen aus, was in einer Tabelle nur zwischen den Zeilen steht. Die anderen zwei nehmen bei der Erfassung und beim Wiederfinden Arbeit ab.',
         ],
+        wide: true,
+        visual: {
+          kind: 'cards',
+          items: [
+            {
+              title: 'Sankey-Diagramm',
+              body: 'Der Trichter über alle Bewerbungen in einem Bild. Endstatus zweigen dort ab, wo sie eingetreten sind, sodass eine Absage nach dem ersten Gespräch nicht im selben Topf landet wie eine Absage direkt nach dem Verschicken.',
+            },
+            {
+              title: 'Dokumentation',
+              body: 'Elf Stationen von geplant bis zurückgezogen, jede mit eigenem Datum. Dazu Kanal, Gehalt nach Betrag, Art und Zeitraum, Arbeitszeit, Bewerbungsschluss und die Adresse der Stellenanzeige.',
+            },
+            {
+              title: 'Bewerbungsstatistiken',
+              body: 'Quoten je Übergang: von beworben zu Gespräch, von Gespräch zu Zusage, Zusagequote insgesamt. Darüber die Kennzahlen zu laufenden, entschiedenen und offenen Vorgängen.',
+            },
+            {
+              title: 'Sortierfunktion',
+              body: 'Sortierung nach Datum, Status, Firma oder Gehalt in beide Richtungen, Suche über fünf Felder gleichzeitig und Filterchips je Status. Die Wahl bleibt pro Gerät gespeichert.',
+            },
+          ],
+        },
+      },
+      {
+        title: 'Warum nicht einfach eine Tabelle',
+        body: [
+          'Fast jede Stellensuche beginnt mit einer Tabelle, und eine Weile trägt sie das auch. Zwei Dinge kann sie jedoch grundsätzlich nicht.',
+          'Sie überschreibt beim Statuswechsel die Vorgeschichte, und sie beantwortet nicht die Frage, die für das weitere Vorgehen zählt: an welcher Stelle die Bewerbungen versanden. Alles Übrige folgt daraus.',
+        ],
+        wide: true,
+        visual: {
+          kind: 'compare',
+          columns: ['Bewerbungstabelle', 'Bewerbungstracker'],
+          caption:
+            'Links der Stand, mit dem die meisten Bewerbungsprozesse geführt werden. Rechts, was das Werkzeug an derselben Stelle tut.',
+          rows: [
+            {
+              aspect: 'Statuswechsel',
+              a: 'Die Zelle wird überschrieben. Nach der Absage steht nicht mehr da, dass zuvor zwei Gespräche stattgefunden haben.',
+              b: 'Jede Station bleibt mit eigenem Datum erhalten und ist nachträglich korrigierbar.',
+            },
+            {
+              aspect: 'Auswertung',
+              a: 'Zeilen zählen, Zwischensummen bilden, ein Diagramm von Hand bauen. Meist bleibt es beim Zählen.',
+              b: 'Sankey-Diagramm und Quoten je Übergang entstehen aus den Daten selbst, ohne Zutun.',
+            },
+            {
+              aspect: 'Erfassung',
+              a: 'Jede Spalte einzeln tippen. Nach zwanzig Bewerbungen laufen die Schreibweisen auseinander und die Suche findet nichts mehr.',
+              b: 'Eingabehilfe für rund 300 Arbeitgeber und 175 Orte, Kanäle als Symbol, Gehalt strukturiert nach Betrag, Art und Zeitraum.',
+            },
+            {
+              aspect: 'Nächster Schritt',
+              a: 'Steht nirgends. Wo nachzufassen wäre, muss man selbst im Kopf behalten.',
+              b: 'Ein Knopf in derselben Zeile: Gespräch ansetzen, Zusage, Absage, keine Antwort.',
+            },
+            {
+              aspect: 'Zwei Geräte',
+              a: 'Die Datei hin und her schicken und hoffen, dass die neuere Fassung gewinnt.',
+              b: 'Konto mit Synchronisierung. Bei gleichzeitigen Änderungen legt die Oberfläche beide Stände vor und fragt, welcher gilt.',
+            },
+            {
+              aspect: 'Auf dem Telefon',
+              a: 'Seitliches Scrollen durch zwanzig Spalten.',
+              b: 'Ab 320 Pixeln lesbar, je Bewerbung eine Karte statt einer Zeile.',
+            },
+          ],
+        },
       },
       {
         title: 'Ein Vorgang von Anfang bis Ende',
@@ -197,7 +260,8 @@ export const bewerbungstracker: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Stand',
         body: [
-          'Das Werkzeug ist seit 2025 im täglichen Eigengebrauch. Die Demo läuft ohne Anmeldung mit Beispieldaten, nichts davon wird gespeichert. Der Quellcode ist offen.',
+          'Das Werkzeug ist in der Betaphase und im täglichen Eigengebrauch. Es wird weiterentwickelt, Oberfläche und Datensatz können sich also noch ändern.',
+          'Die Demo läuft ohne Anmeldung mit Beispieldaten, nichts davon wird gespeichert. Der Quellcode ist offen.',
         ],
         visual: {
           kind: 'links',
@@ -220,31 +284,89 @@ export const bewerbungstracker: Record<'de' | 'en', StudyContent> = {
 
   en: {
     eyebrow: 'Software · Own tool',
-    headline: ['Where applications', 'actually end.'],
-    lead: 'A tool for my own job search. It stores not a status but the full history of every application, and shows in a Sankey diagram at which station the process breaks off.',
+    headline: ['What a spreadsheet', 'cannot do.'],
+    lead: 'A tool for my own job search, built to replace the application spreadsheet. It stores not a status but documents every station with its date, works out the conversion rates itself, and shows in a Sankey diagram where the process breaks off.',
     meta: [
       { term: 'Role', value: 'Concept, design and engineering' },
       { term: 'Period', value: 'since 2025' },
       { term: 'Stack', value: 'Cloudflare Workers, JavaScript, macOS' },
-      { term: 'Status', value: 'In daily personal use' },
+      { term: 'Status', value: 'Beta, in daily personal use' },
     ],
-    stats: {
-      label: 'Key facts',
-      items: [
-        { value: '11', label: 'stations in the history' },
-        { value: '4', label: 'languages, right to left included' },
-        { value: '0', label: 'external dependencies' },
-        { value: '320 px', label: 'smallest supported width' },
-      ],
-    },
 
     sections: [
       {
-        title: 'The starting point',
+        title: 'Four functions',
         body: [
-          'A job search produces dozens of parallel threads within weeks: posting found, documents adapted, sent, followed up, interviewed, answered. A spreadsheet carries that for a while.',
-          'Two things it cannot do. It overwrites the history on every status change, and it does not answer the one question that matters for what to do next: where the applications stall. That is what this tool was built for.',
+          'Two of them work out what a spreadsheet only holds between the lines. The other two take work off capturing and finding things again.',
         ],
+        wide: true,
+        visual: {
+          kind: 'cards',
+          items: [
+            {
+              title: 'Sankey diagram',
+              body: 'The funnel across every application in one picture. End states branch off where they occurred, so a rejection after a first interview does not land in the same bucket as a rejection straight after sending.',
+            },
+            {
+              title: 'Documentation',
+              body: 'Eleven stations from planned to withdrawn, each with its own date. Plus channel, salary by amount, type and period, working hours, application deadline and the address of the posting.',
+            },
+            {
+              title: 'Application statistics',
+              body: 'Conversion per transition: applied to interview, interview to offer, overall acceptance rate. Above that the figures for open, decided and running cases.',
+            },
+            {
+              title: 'Sorting',
+              body: 'Sort by date, status, company or salary in both directions, search across five fields at once, and status filter chips. The choice is remembered per device.',
+            },
+          ],
+        },
+      },
+      {
+        title: 'Why not simply a spreadsheet',
+        body: [
+          'Almost every job search starts with a spreadsheet, and for a while it carries the load. Two things it fundamentally cannot do.',
+          'It overwrites the history on every status change, and it does not answer the question that matters for what to do next: where the applications stall. Everything else follows from that.',
+        ],
+        wide: true,
+        visual: {
+          kind: 'compare',
+          columns: ['Spreadsheet', 'Application tracker'],
+          caption:
+            'On the left, how most job searches are actually run. On the right, what the tool does at the same point.',
+          rows: [
+            {
+              aspect: 'Status change',
+              a: 'The cell is overwritten. After the rejection there is no record that two interviews happened first.',
+              b: 'Every station is kept with its own date and can be corrected afterwards.',
+            },
+            {
+              aspect: 'Analysis',
+              a: 'Count rows, build subtotals, draw a chart by hand. Usually it stops at counting.',
+              b: 'The Sankey diagram and the conversion rates come out of the data itself, with no extra effort.',
+            },
+            {
+              aspect: 'Capturing',
+              a: 'Type every column by hand. After twenty applications the spellings drift apart and search stops finding anything.',
+              b: 'Suggestions for around 300 employers and 175 locations, channels as icons, salary structured by amount, type and period.',
+            },
+            {
+              aspect: 'Next step',
+              a: 'Recorded nowhere. Where a follow up is due is something you have to hold in your head.',
+              b: 'A button in the same row: schedule an interview, accept, reject, no answer.',
+            },
+            {
+              aspect: 'Two devices',
+              a: 'Send the file back and forth and hope the newer version wins.',
+              b: 'An account with sync. On simultaneous edits the interface presents both states and asks which one holds.',
+            },
+            {
+              aspect: 'On a phone',
+              a: 'Horizontal scrolling through twenty columns.',
+              b: 'Readable from 320 pixels, one card per application instead of one row.',
+            },
+          ],
+        },
       },
       {
         title: 'One application from start to finish',
@@ -322,7 +444,8 @@ export const bewerbungstracker: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Status',
         body: [
-          'The tool has been in daily personal use since 2025. The demo runs without sign in on sample data, none of which is stored. The source is open.',
+          'The tool is in beta and in daily personal use. It is still being developed, so the interface and the data model may still change.',
+          'The demo runs without sign in on sample data, none of which is stored. The source is open.',
         ],
         visual: {
           kind: 'links',

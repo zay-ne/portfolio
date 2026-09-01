@@ -7,6 +7,9 @@ import kachel from '../assets/maps-scout/kachel.png';
 /**
  * Maps Scout: lokales Werkzeug zur Marktanalyse.
  *
+ * Vorn stehen die Funktionen, nicht Kennzahlen: bei einem Werkzeug in der
+ * Betaphase sagt die Funktion mehr als eine Zahl aus einem einzelnen Lauf.
+ *
  * Die Abbildungen stammen aus einem echten Durchgang, die Firmenangaben darin
  * sind jedoch durch erfundene ersetzt. Auf der Seite steht das auch so. Neu
  * erzeugt werden sie mit tools/screenshots/maps-scout.py, das die
@@ -46,7 +49,7 @@ const oberflaecheDe: GalleryWork[] = [
       { term: 'Funktion', value: 'Branche, Bewertung, Website, Entfernung und Öffnungsstatus als Marken, Telefonnummer automatisch, E-Mail-Adresse auf Knopfdruck von der Firmenwebsite' },
       {
         term: 'Nutzen',
-        value: 'Ob ein Betrieb für eine Ansprache infrage kommt, entscheidet sich an der Kachel. Es braucht keinen Wechsel zu Google Maps und zurück.',
+        value: 'Ob ein Betrieb für die weitere Betrachtung infrage kommt, entscheidet sich an der Kachel. Es braucht keinen Wechsel zu Google Maps und zurück.',
       },
     ],
   },
@@ -85,7 +88,7 @@ const oberflaecheEn: GalleryWork[] = [
       { term: 'Function', value: 'Sector, rating, website, distance and opening status as tags, phone number automatically, email address on demand from the company website' },
       {
         term: 'Benefit',
-        value: 'Whether a business is worth approaching is decided on the card. No switching to Google Maps and back.',
+        value: 'Whether a business is worth a closer look is decided on the card. No switching to Google Maps and back.',
       },
     ],
   },
@@ -100,59 +103,43 @@ export const mapsScout: Record<'de' | 'en', StudyContent> = {
       { term: 'Rolle', value: 'Konzept und Entwicklung' },
       { term: 'Zeitraum', value: 'seit 2025' },
       { term: 'Technik', value: 'Python, FastAPI, SQLite, HTML, CSS, JS' },
-      { term: 'Stand', value: 'Läuft lokal, wird weiterentwickelt' },
+      { term: 'Stand', value: 'Betaphase, läuft lokal' },
     ],
-    stats: {
-      label: 'Aus einem Durchgang',
-      items: [
-        { value: '6', label: 'Branchen gleichzeitig' },
-        { value: '148', label: 'Betriebe im abgebildeten Lauf' },
-        { value: '82 %', label: 'davon mit eigener Website' },
-        { value: 'lokal', label: 'Datenhaltung, ohne gemeinsamen Server' },
-      ],
-    },
-
     sections: [
+      {
+        title: 'Die Funktionen',
+        body: [
+          'Vier Stück, und jede beantwortet einen Teil derselben Frage: welche Betriebe in einer Region tätig sind, wie sie dastehen und wie sie zu erreichen sind.',
+        ],
+        wide: true,
+        visual: {
+          kind: 'cards',
+          items: [
+            {
+              title: 'Regionssuche',
+              body: 'Ort mit Live-Vorschlägen über OpenStreetMap und Photon, bis zu sechs Branchen gleichzeitig, Umkreis von einem bis fünfzig Kilometern. Wahlweise bundesweit statt an einem festen Ort.',
+            },
+            {
+              title: 'Vorfilter',
+              body: 'Mindestbewertung und Website vorhanden oder fehlend greifen bereits während des Durchgangs. Was nicht passt, wird gar nicht erst angereichert, und das spart den größten Teil der Laufzeit.',
+            },
+            {
+              title: 'Kontaktdaten',
+              body: 'Telefonnummer automatisch, E-Mail-Adresse auf Knopfdruck von der Firmenwebsite. Dazu Bewertung, Anzahl der Rezensionen, Entfernung und Öffnungsstatus.',
+            },
+            {
+              title: 'Nachfilter und Ausgabe',
+              body: 'Freitextsuche über Name, Branche und Adresse auf dem geladenen Ergebnis, Umschalter für Website vorhanden oder fehlend, CSV-Ausgabe der gefilterten Auswahl.',
+            },
+          ],
+        },
+      },
       {
         title: 'Die Ausgangslage',
         body: [
           'Die Marktanalyse einer Region beginnt fast immer gleich. Wer ist hier tätig, wie sichtbar sind die Betriebe, und wo fehlt eine digitale Präsenz erkennbar? Von Hand kostet diese Recherche Stunden, Ort für Ort und Branche für Branche.',
           'Am Ende steht eine Tabelle, die niemand mehr anfasst, weil das Zusammentragen länger gedauert hat als die Frage wert war. Das Werkzeug bündelt genau diesen Schritt.',
         ],
-      },
-      {
-        title: 'Vom Ort zur belastbaren Liste',
-        body: [
-          'Vier Schritte, und jeder davon ist so gebaut, dass die Oberfläche bedienbar bleibt, während im Hintergrund gesammelt wird.',
-        ],
-        wide: true,
-        visual: {
-          kind: 'process',
-          stepLabel: 'Schritt',
-          benefitLabel: 'Was das Werkzeug beiträgt',
-          steps: [
-            {
-              title: 'Zuschnitt festlegen',
-              body: 'Ort mit Live-Vorschlägen über OpenStreetMap und Photon, bis zu sechs Branchen gleichzeitig, Umkreis von einem bis fünfzig Kilometern. Wahlweise auch bundesweit.',
-              benefit: 'Der Zuschnitt einer Analyse ist in einer halben Minute gesetzt, statt in mehreren Suchläufen zusammengeklickt zu werden.',
-            },
-            {
-              title: 'Vor dem Sammeln filtern',
-              body: 'Mindestbewertung und Website vorhanden oder fehlend greifen bereits während des Durchgangs, nicht erst auf dem Ergebnis.',
-              benefit: 'Betriebe, die ohnehin nicht infrage kommen, werden gar nicht erst angereichert. Das spart den größten Teil der Laufzeit.',
-            },
-            {
-              title: 'Im Hintergrund sammeln',
-              body: 'Lange Durchgänge laufen als Hintergrundjob mit Fortschrittsanzeige und Stoppknopf. Die Ergebnisse landen fortlaufend in einer lokalen SQLite-Datei.',
-              benefit: 'Die Oberfläche bleibt bedienbar, und ein Abbruch verliert nicht, was bis dahin gesammelt wurde.',
-            },
-            {
-              title: 'Auswerten und übergeben',
-              body: 'Nachfilter und Freitextsuche auf dem geladenen Ergebnis, E-Mail-Adresse auf Knopfdruck von der Firmenwebsite, CSV-Ausgabe der gefilterten Auswahl.',
-              benefit: 'Aus der Recherche wird eine Datei, mit der jemand anderes weiterarbeiten kann.',
-            },
-          ],
-        },
       },
       {
         title: 'Die Oberfläche',
@@ -170,14 +157,15 @@ export const mapsScout: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Grenzen, die dazugehören',
         body: [
-          'Das Werkzeug liest öffentlich sichtbare Angaben aus Google Maps aus. Das steht im Widerspruch zu den dortigen Nutzungsbedingungen, und die Oberfläche weist an Ort und Stelle darauf hin. Gedacht ist es für die interne Marktanalyse, nicht für Kaltakquise, und es kommt entsprechend zurückhaltend zum Einsatz.',
-          'Es gibt keine gemeinsame Instanz und keinen Server im Netz. Wer es benutzt, installiert es selbst, und die erhobenen Daten liegen in einer SQLite-Datei auf dem eigenen Rechner. Diese Entscheidung ist bewusst getroffen: ein zentraler Dienst mit den gleichen Daten wäre eine ganz andere Sache, rechtlich wie im Umgang mit den betroffenen Betrieben.',
+          'Das Werkzeug liest öffentlich sichtbare Angaben aus Google Maps aus. Das steht im Widerspruch zu den dortigen Nutzungsbedingungen, und die Oberfläche weist an Ort und Stelle darauf hin. Der lizenzierte Weg zu denselben Angaben ist die Places API, die pro Abfrage abgerechnet wird. Für eine Auswertung dieser Größe wäre das der saubere, aber kostenpflichtige Weg.',
+          'Gedacht ist das Werkzeug für die interne Marktanalyse, nicht für Kaltakquise. Diese Unterscheidung ist keine Formalie: eine Ansprache ohne vorherige Einwilligung ist bei Unternehmen nach § 7 UWG nur in engen Grenzen zulässig, und die Auswertung einer Region sagt noch nichts darüber, wen man kontaktieren darf.',
+          'Es gibt keine gemeinsame Instanz und keinen Server im Netz. Wer es benutzt, installiert es selbst, und die erhobenen Daten liegen in einer SQLite-Datei auf dem eigenen Rechner. Diese Entscheidung ist bewusst getroffen: ein zentraler Dienst mit denselben Daten wäre eine ganz andere Sache, rechtlich wie im Umgang mit den betroffenen Betrieben.',
         ],
       },
       {
         title: 'Stand',
         body: [
-          'Das Werkzeug läuft lokal und wird weiterentwickelt. Der Quellcode ist offen, die Liesmich beschreibt Einrichtung und Betrieb einschließlich der genannten Einschränkung.',
+          'Das Werkzeug ist in der Betaphase, läuft lokal und wird weiterentwickelt. Der Quellcode ist offen, die Liesmich beschreibt Einrichtung und Betrieb einschließlich der genannten Einschränkung.',
         ],
         visual: {
           kind: 'links',
@@ -201,59 +189,43 @@ export const mapsScout: Record<'de' | 'en', StudyContent> = {
       { term: 'Role', value: 'Concept and engineering' },
       { term: 'Period', value: 'since 2025' },
       { term: 'Stack', value: 'Python, FastAPI, SQLite, HTML, CSS, JS' },
-      { term: 'Status', value: 'Runs locally, still in development' },
+      { term: 'Status', value: 'Beta, runs locally' },
     ],
-    stats: {
-      label: 'From one run',
-      items: [
-        { value: '6', label: 'sectors at once' },
-        { value: '148', label: 'businesses in the run shown' },
-        { value: '82 %', label: 'of them with their own website' },
-        { value: 'local', label: 'storage, with no shared server' },
-      ],
-    },
-
     sections: [
+      {
+        title: 'The functions',
+        body: [
+          'Four of them, each answering part of the same question: which businesses operate in a region, how they stand, and how to reach them.',
+        ],
+        wide: true,
+        visual: {
+          kind: 'cards',
+          items: [
+            {
+              title: 'Regional search',
+              body: 'Location with live suggestions via OpenStreetMap and Photon, up to six sectors at once, a radius from one to fifty kilometres. Nationwide instead of a fixed location as an option.',
+            },
+            {
+              title: 'Pre filters',
+              body: 'Minimum rating and website present or missing apply during the run. What does not fit is never enriched, which saves the bulk of the runtime.',
+            },
+            {
+              title: 'Contact details',
+              body: 'Phone number automatically, email address on demand from the company website. Plus rating, review count, distance and opening status.',
+            },
+            {
+              title: 'Post filters and export',
+              body: 'Free text search across name, sector and address on the loaded result, a toggle for website present or missing, CSV export of the filtered selection.',
+            },
+          ],
+        },
+      },
       {
         title: 'The starting point',
         body: [
           'Market research on a region almost always starts the same way. Who operates here, how visible are they, and where is a digital presence obviously missing? By hand that research costs hours, location by location and sector by sector.',
           'What remains is a spreadsheet nobody opens again, because gathering it took longer than the question was worth. The tool bundles exactly that step.',
         ],
-      },
-      {
-        title: 'From a location to a usable list',
-        body: [
-          'Four steps, each built so the interface stays usable while collection runs in the background.',
-        ],
-        wide: true,
-        visual: {
-          kind: 'process',
-          stepLabel: 'Step',
-          benefitLabel: 'What the tool contributes',
-          steps: [
-            {
-              title: 'Set the scope',
-              body: 'Location with live suggestions via OpenStreetMap and Photon, up to six sectors at once, a radius from one to fifty kilometres. Nationwide as an option.',
-              benefit: 'The scope of an analysis is set in half a minute, instead of being assembled across several separate searches.',
-            },
-            {
-              title: 'Filter before collecting',
-              body: 'Minimum rating and website present or missing apply during the run, not afterwards on the result.',
-              benefit: 'Businesses that are out of scope anyway are never enriched. That saves the bulk of the runtime.',
-            },
-            {
-              title: 'Collect in the background',
-              body: 'Long runs execute as a background job with progress and a stop button. Results land continuously in a local SQLite file.',
-              benefit: 'The interface stays usable, and stopping does not lose what has been collected so far.',
-            },
-            {
-              title: 'Analyse and hand over',
-              body: 'Post filters and free text search on the loaded result, email address on demand from the company website, CSV export of the filtered selection.',
-              benefit: 'The research becomes a file somebody else can work from.',
-            },
-          ],
-        },
       },
       {
         title: 'The interface',
@@ -271,14 +243,15 @@ export const mapsScout: Record<'de' | 'en', StudyContent> = {
       {
         title: 'Limits that come with it',
         body: [
-          'The tool reads publicly visible information from Google Maps. That conflicts with their terms of use, and the interface says so on the spot. It is meant for internal market research, not for cold outreach, and it is used accordingly sparingly.',
+          'The tool reads publicly visible information from Google Maps. That conflicts with their terms of use, and the interface says so on the spot. The licensed route to the same information is the Places API, billed per request. For an analysis of this size that would be the clean but paid path.',
+          'The tool is meant for internal market research, not for cold outreach. That distinction is not a formality: approaching a business without prior consent is only narrowly permitted under German competition law, and analysing a region says nothing about who may be contacted.',
           'There is no shared instance and no server on the internet. Anyone using it installs their own, and the collected data sits in a SQLite file on their machine. That is a deliberate decision: a central service holding the same data would be an entirely different proposition, legally and in how it treats the businesses concerned.',
         ],
       },
       {
         title: 'Status',
         body: [
-          'The tool runs locally and is still being developed. The source is open, and the readme covers setup and operation including the limitation above.',
+          'The tool is in beta, runs locally and is still being developed. The source is open, and the readme covers setup and operation including the limitation above.',
         ],
         visual: {
           kind: 'links',

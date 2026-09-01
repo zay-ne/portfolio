@@ -3,10 +3,10 @@ key: bewerbungstracker
 lang: de
 title: "Bewerbungstracker"
 discipline: software
-year: "2025 – 2026"
+year: "seit 2025"
 role: "Konzept, Gestaltung und Entwicklung"
 summary: "Werkzeug, das den eigenen Bewerbungsprozess sichtbar macht. Statusverlauf pro Stelle und ein Sankey-Diagramm, das zeigt, wo Bewerbungen tatsächlich enden."
-status: live
+status: beta
 order: 30
 externalUrl: https://bewerbungen-demo.bewerbungs-tracker.workers.dev
 secondaryUrl: https://github.com/zay-ne/bewerbungs-tracker

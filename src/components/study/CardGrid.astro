@@ -6,7 +6,7 @@ export interface Props {
 const { items } = Astro.props;
 ---
 
-<ol class="cards" data-reveal>
+<ol class="cards" data-count={items.length} data-reveal>
   {
     items.map((item, i) => (
       <li class="card" style={`--d:${i * 110}ms`}>
@@ -72,6 +72,19 @@ const { items } = Astro.props;
   @media (min-width: 56rem) {
     .cards {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* Vier Karten in drei Spalten lassen eine allein in der zweiten Zeile
+       stehen. Zwei mal zwei sieht ruhiger aus. */
+    .cards[data-count='2'],
+    .cards[data-count='4'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .cards[data-count='4'] {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 

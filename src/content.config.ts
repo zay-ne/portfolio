@@ -25,7 +25,7 @@ const projects = defineCollection({
     role: z.string(),
     /** Ein bis zwei Sätze für die Übersicht und die Vorschau beim Überfahren. */
     summary: z.string(),
-    status: z.enum(['live', 'wip', 'archived', 'concept']).default('live'),
+    status: z.enum(['live', 'beta', 'wip', 'archived', 'concept']).default('live'),
     /** Kleiner = weiter oben. Gleiche Werte werden nach Jahr sortiert. */
     order: z.number().default(100),
     /** Öffentliche Adresse des Projekts, falls vorhanden. */

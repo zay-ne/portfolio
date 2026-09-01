@@ -3,10 +3,10 @@ key: maps-scout
 lang: de
 title: "Maps Scout"
 discipline: software
-year: "2025 – 2026"
+year: "seit 2025"
 role: "Konzept und Entwicklung"
 summary: "Lokale Web-App zur Marktanalyse. Sucht Unternehmen in einer Region, filtert nach Branche, Bewertung und Website und stellt die Treffer als Kacheln dar."
-status: wip
+status: beta
 order: 40
 secondaryUrl: https://github.com/zay-ne/maps-scout
 secondaryLabel: "Quellcode"

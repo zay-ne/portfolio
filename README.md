@@ -88,8 +88,10 @@ will, bearbeitet `layouts/HomePage.astro`, nicht `pages/index.astro`.
 2. `key` auf dieselbe Kennung setzen. Daraus wird die URL `/arbeit/<kennung>`.
 3. `discipline` bestimmt die Sektion: `venture`, `software`, `research` oder `design`.
    `venture` steht für eigene Unternehmen, `software` für Werkzeuge und Produkte.
-4. `order` steuert die Reihenfolge innerhalb der Sektion, kleiner steht weiter oben.
-5. Dieselbe Datei unter `en/` mit gleichem `key` und `lang: en` anlegen.
+4. `status` ist `live`, `beta`, `wip`, `archived` oder `concept`. Die Beschriftung
+   dazu steht in `src/i18n/ui.ts` unter `projects.statusLabels`.
+5. `order` steuert die Reihenfolge innerhalb der Sektion, kleiner steht weiter oben.
+6. Dieselbe Datei unter `en/` mit gleichem `key` und `lang: en` anlegen.
 
 Fehlt die englische Fassung, erscheint das Projekt dort schlicht nicht und der
 Sprachumschalter führt auf die englische Startseite statt in eine Fehlerseite.
@@ -158,6 +160,7 @@ wird. Verfügbar sind:
 | `timeline` | Zeitverlauf mit Intervallbändern und Schwellenlinie       |
 | `process`  | nummerierter Ablauf, je Schritt mit Nutzen               |
 | `cards`    | gleichrangige Kurztexte nebeneinander                    |
+| `compare`  | zwei Wege Punkt für Punkt gegenübergestellt, zweite Spalte hervorgehoben |
 | `table`    | Vergleichstabelle mit hervorgehobener Zeile              |
 | `modes`    | die fünf Messbereiche der Vectra-Studie als Schema        |
 | `gallery`  | Arbeiten einzeln und groß, Seiten im Wechsel, mit Vollansicht |

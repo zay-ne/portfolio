@@ -181,6 +181,13 @@ const strings = t(locale);
     background: var(--color-accent);
   }
 
+  /* Beta: läuft und ist benutzbar, aber noch nicht fertig. Deshalb der
+     Akzentton wie bei Live, jedoch nur als Ring statt als Fläche. */
+  .row-status[data-status='beta'] .dot {
+    background: var(--color-bg);
+    box-shadow: 0 0 0 1.5px var(--color-accent);
+  }
+
   .row-status[data-status='wip'] .dot {
     background: var(--color-fg-muted);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-fg-muted) 18%, transparent);

@@ -1,0 +1,165 @@
+---
+/**
+ * Gegenüberstellung zweier Wege, Punkt für Punkt.
+ *
+ * Bewusst kein <table>: die Zeilen tragen ganze Sätze, und eine Tabelle mit
+ * drei Textspalten wäre auf einem Telefon nicht mehr lesbar. Stattdessen eine
+ * Liste von Vergleichen, die ab Tablet in ein Raster mit Kopfzeile kippt. Die
+ * Spaltennamen stehen dabei doppelt im Markup: sichtbar in der Kopfzeile für
+ * das Auge, und je Seite als Beschriftung für Vorlesesoftware und für die
+ * gestapelte Ansicht.
+ */
+export interface Props {
+  columns: [string, string];
+  rows: { aspect: string; a: string; b: string }[];
+  caption?: string;
+}
+
+const { columns, rows, caption } = Astro.props;
+---
+
+<div class="compare" data-reveal>
+  <div class="head" aria-hidden="true">
+    <span></span>
+    <span class="label">{columns[0]}</span>
+    <span class="label head-b">{columns[1]}</span>
+  </div>
+
+  <ol class="rows">
+    {
+      rows.map((row, i) => (
+        <li class="row" style={`--d:${i * 80}ms`}>
+          <h3 class="aspect">{row.aspect}</h3>
+          <div class="side">
+            <span class="label side-label">{columns[0]}</span>
+            <p>{row.a}</p>
+          </div>
+          <div class="side side-b">
+            <span class="label side-label">{columns[1]}</span>
+            <p>{row.b}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  {caption && <p class="caption">{caption}</p>}
+</div>
+
+<style>
+  .compare {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Die Kopfzeile trägt nur auf breiten Viewports, sonst steht der Spaltenname
+     bei jeder Seite. */
+  .head {
+    display: none;
+  }
+
+  .rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .row {
+    display: grid;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    border-block-end: 1px solid var(--color-line);
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+
+  html.js [data-reveal].is-visible .row {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 700ms var(--ease-out-quart) var(--d),
+      transform 700ms var(--ease-out-expo) var(--d);
+  }
+
+  html:not(.js) .row {
+    opacity: 1;
+    transform: none;
+  }
+
+  .aspect {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .side p {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-fg-muted);
+  }
+
+  /* Die rechte Seite ist die Antwort auf die linke und darf das zeigen. */
+  .side-b {
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid var(--color-accent);
+  }
+
+  .side-b p {
+    color: var(--color-fg);
+  }
+
+  .caption {
+    padding-block-start: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-fg-subtle);
+    max-width: 56ch;
+  }
+
+  @media (min-width: 56rem) {
+    .head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(1rem, 2.5vw, 2.5rem);
+      padding-block-end: 0.875rem;
+    }
+
+    .head-b {
+      color: var(--color-accent);
+      padding-inline-start: 1rem;
+    }
+
+    .row {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(1rem, 2.5vw, 2.5rem);
+      align-items: start;
+    }
+
+    /* Auf breiten Viewports steht der Spaltenname schon in der Kopfzeile.
+       Für Vorlesesoftware bleibt er hier trotzdem erhalten. */
+    .side-label {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

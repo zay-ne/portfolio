@@ -4,6 +4,7 @@ import Icon from '../components/Icon.astro';
 import SplitLines from '../components/SplitLines.astro';
 import BarStat from '../components/study/BarStat.astro';
 import CardGrid from '../components/study/CardGrid.astro';
+import ComparisonTable from '../components/study/ComparisonTable.astro';
 import FigureGrid from '../components/study/FigureGrid.astro';
 import Lightbox from '../components/study/Lightbox.astro';
 import LinkList from '../components/study/LinkList.astro';
@@ -156,6 +157,10 @@ const { externalUrl, secondaryUrl, secondaryLabel } = project.data;
                   {v.kind === 'figures' && <FigureGrid items={v.items} caption={v.caption} />}
 
                   {v.kind === 'cards' && <CardGrid items={v.items} />}
+
+                  {v.kind === 'compare' && (
+                    <ComparisonTable columns={v.columns} rows={v.rows} caption={v.caption} />
+                  )}
 
                   {v.kind === 'links' && <LinkList items={v.items} caption={v.caption} />}
 

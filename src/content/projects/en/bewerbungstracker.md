@@ -3,10 +3,10 @@ key: bewerbungstracker
 lang: en
 title: "Application Tracker"
 discipline: software
-year: "2025 – 2026"
+year: "since 2025"
 role: "Concept, design and engineering"
 summary: "A tool that makes a job search visible. A status history per application and a Sankey diagram showing where applications actually end."
-status: live
+status: beta
 order: 30
 externalUrl: https://bewerbungen-demo.bewerbungs-tracker.workers.dev
 secondaryUrl: https://github.com/zay-ne/bewerbungs-tracker

@@ -65,6 +65,13 @@ export interface ProcessStep {
   benefit: string;
 }
 
+/** Eine Zeile einer Gegenüberstellung: derselbe Punkt auf beiden Wegen. */
+export interface CompareRow {
+  aspect: string;
+  a: string;
+  b: string;
+}
+
 /** Eine gezeigte Arbeit mit ihren Angaben. */
 export interface GalleryWork {
   image: ImageMetadata;
@@ -87,6 +94,13 @@ export type StudyVisual =
       slides: { image: ImageMetadata; alt: string }[];
     }
   | { kind: 'cards'; items: { title: string; body: string }[] }
+  | {
+      kind: 'compare';
+      /** Erst der bisherige Weg, dann der neue. Die zweite Spalte wird hervorgehoben. */
+      columns: [string, string];
+      rows: CompareRow[];
+      caption?: string;
+    }
   | {
       kind: 'links';
       caption?: string;

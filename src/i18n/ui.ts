@@ -107,6 +107,7 @@ export const ui = {
       nextProject: 'Nächstes Projekt',
       statusLabels: {
         live: 'Live',
+        beta: 'Beta',
         wip: 'In Arbeit',
         archived: 'Abgeschlossen',
         concept: 'Konzept',
@@ -260,6 +261,7 @@ export const ui = {
       nextProject: 'Next project',
       statusLabels: {
         live: 'Live',
+        beta: 'Beta',
         wip: 'In progress',
         archived: 'Completed',
         concept: 'Concept',
