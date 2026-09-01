@@ -33,8 +33,8 @@ export const SOCIALS = [
 ] as const;
 
 /**
- * Die Disziplinen. Reihenfolge hier bestimmt die Reihenfolge und die
- * Nummerierung der Sektionen auf der Startseite. Ein neues Projekt braucht nur
+ * Die Disziplinen. Die Reihenfolge hier bestimmt die Reihenfolge der
+ * aufklappbaren Sektionen auf der Startseite. Ein neues Projekt braucht nur
  * einen dieser Schlüssel im Frontmatter.
  */
 export const DISCIPLINES = ['software', 'research', 'design'] as const;

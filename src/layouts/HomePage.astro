@@ -1,4 +1,5 @@
 ---
+import Accordion from '../components/Accordion.astro';
 import BaseLayout from './BaseLayout.astro';
 import CopyEmail from '../components/CopyEmail.astro';
 import HoverPreview from '../components/HoverPreview.astro';
@@ -19,8 +20,9 @@ const { locale, altHref } = Astro.props;
 const strings = t(locale);
 const groups = await getProjectsByDiscipline(locale);
 
-/* Der Anker aus der Navigation zeigt auf die erste Disziplin-Sektion. */
-const firstDiscipline = groups[0]?.discipline;
+/* "4 Arbeiten" bzw. "1 Arbeit", als Vorschau in der zugeklappten Zeile. */
+const countLabel = (n: number) =>
+  `${n} ${n === 1 ? strings.projects.countOne : strings.projects.countMany}`;
 
 ---
 
@@ -61,46 +63,48 @@ const firstDiscipline = groups[0]?.discipline;
     </div>
   </section>
 
-  <!-- ---------- Arbeiten, nach Disziplin getrennt ---------- -->
-  {
-    groups.map(({ discipline, projects }) => (
-      <section class="shell work-section">
-        <SectionHeading
-          id={discipline === firstDiscipline ? anchors.work : undefined}
-          title={strings.sections[discipline].title}
-          description={strings.sections[discipline].description}
-        />
-        <ProjectList projects={projects} locale={locale} />
-      </section>
-    ))
-  }
+  <!-- ---------- Arbeiten und Person, aufklappbar ---------- -->
+  <section class="shell acc-section">
+    <div class="acc-list" id={anchors.work}>
+      {
+        groups.map(({ discipline, projects }, i) => (
+          <Accordion
+            id={discipline}
+            title={strings.sections[discipline].title}
+            meta={countLabel(projects.length)}
+            index={i}
+          >
+            <p class="prose-measure prose-measure-wide acc-desc" data-reveal>
+              {strings.sections[discipline].description}
+            </p>
+            <ProjectList projects={projects} locale={locale} />
+          </Accordion>
+        ))
+      }
 
-  <HoverPreview />
+      <Accordion id={anchors.about} title={strings.sections.about.title} index={groups.length}>
+        <div class="about-grid">
+          <div class="about-body" data-reveal>
+            {strings.sections.about.body.map((paragraph) => <p class="prose-measure prose-measure-wide">{paragraph}</p>)}
+          </div>
 
-  <!-- ---------- Über mich ---------- -->
-  <section class="shell about-section">
-    <SectionHeading
-      id={anchors.about}
-      title={strings.sections.about.title}
-    />
-    <div class="about-grid">
-      <div class="about-body" data-reveal>
-        {strings.sections.about.body.map((paragraph) => <p class="prose-measure prose-measure-wide">{paragraph}</p>)}
-      </div>
-
-      <div class="about-facts" data-reveal style="--reveal-delay:140ms">
-        <p class="label facts-label">{strings.sections.about.facts.label}</p>
-        <dl class="facts">
-          {strings.sections.about.facts.items.map((item) => (
-            <div class="fact">
-              <dt class="label">{item.term}</dt>
-              <dd>{item.value}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
+          <div class="about-facts" data-reveal style="--reveal-delay:140ms">
+            <p class="label facts-label">{strings.sections.about.facts.label}</p>
+            <dl class="facts">
+              {strings.sections.about.facts.items.map((item) => (
+                <div class="fact">
+                  <dt class="label">{item.term}</dt>
+                  <dd>{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </Accordion>
     </div>
   </section>
+
+  <HoverPreview />
 
   <!-- ---------- Lebenslauf ---------- -->
   <section class="shell cv-section">
@@ -232,17 +236,28 @@ const firstDiscipline = groups[0]?.discipline;
   }
 
   /* ---------- Sektionen ---------- */
-  .work-section,
-  .about-section,
+  .acc-section,
   .cv-section,
   .contact-section {
     padding-block-end: var(--spacing-block);
   }
 
+  /* Die zugeklappten Zeilen bilden zusammen eine durchgehende Liste. Die
+     untere Linie jeder Zeile steckt in der Komponente, die obere hier. */
+  .acc-list {
+    /* Der Auftakt bringt seinen eigenen Abstand nach unten mit, hier braucht
+       es keinen zweiten. */
+    scroll-margin-block-start: 5.5rem;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .acc-desc {
+    padding-block-end: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
   .about-grid {
     display: grid;
     gap: 2.5rem;
-    padding-block-start: var(--spacing-block);
   }
 
   .about-body {

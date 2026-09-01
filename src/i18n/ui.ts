@@ -4,9 +4,8 @@ import type { Locale } from '../consts';
  * Sämtliche Oberflächentexte, zweisprachig an einer Stelle.
  *
  * Regel: kein sichtbarer Text steht fest in einer Komponente, alles läuft hier
- * durch, damit DE und EN nie auseinanderlaufen. Die Nummerierung der Sektionen
- * steht bewusst nicht hier, sie entsteht automatisch aus der Reihenfolge in
- * consts.ts.
+ * durch, damit DE und EN nie auseinanderlaufen. Die Reihenfolge der Sektionen
+ * steht bewusst nicht hier, sie ergibt sich aus consts.ts.
  */
 export const ui = {
   de: {
@@ -98,6 +97,9 @@ export const ui = {
       stack: 'Technik',
       category: 'Kategorie',
       empty: 'In diesem Bereich ist noch nichts veröffentlicht.',
+      /* Vorschau in der zugeklappten Zeile: "1 Arbeit", "4 Arbeiten". */
+      countOne: 'Arbeit',
+      countMany: 'Arbeiten',
       nextProject: 'Nächstes Projekt',
       statusLabels: {
         live: 'Live',
@@ -245,6 +247,8 @@ export const ui = {
       stack: 'Stack',
       category: 'Category',
       empty: 'Nothing published in this area yet.',
+      countOne: 'project',
+      countMany: 'projects',
       nextProject: 'Next project',
       statusLabels: {
         live: 'Live',

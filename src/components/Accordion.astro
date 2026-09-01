@@ -1,0 +1,339 @@
+---
+/**
+ * Aufklappbare Sektion der Startseite.
+ *
+ * Grundlage ist ein natives <details>. Ohne JavaScript öffnet und schließt es
+ * der Browser selbst, mit Tastatur und Vorlesesoftware inbegriffen. Das Skript
+ * am Ende der Datei setzt nur die Höhenanimation obendrauf und markiert die
+ * Sektion dafür mit data-enhanced. Solange diese Markierung fehlt, greifen die
+ * Regeln für [open], sodass der Inhalt in jedem Fall sichtbar wird.
+ */
+export interface Props {
+  title: string;
+  /** Kurzer Zusatz rechts vom Titel, etwa die Zahl der Arbeiten. */
+  meta?: string;
+  /** Anker-Id, falls die Sektion aus der Navigation erreichbar sein soll. */
+  id?: string;
+  /** Position in der Liste, nur für die gestaffelte Einblendung. */
+  index?: number;
+}
+
+const { title, meta, id, index = 0 } = Astro.props;
+---
+
+<details
+  class="acc"
+  id={id}
+  data-acc
+  data-reveal
+  style={`--reveal-delay:${index * 90}ms; --reveal-y:0.75rem`}
+>
+  <summary class="acc-summary">
+    <h2 class="heading-lg acc-title">{title}</h2>
+    {meta && <span class="label acc-meta">{meta}</span>}
+    <span class="acc-icon" aria-hidden="true">
+      <span class="acc-bar"></span>
+      <span class="acc-bar"></span>
+    </span>
+  </summary>
+
+  <div class="acc-panel" data-acc-panel>
+    <div class="acc-clip">
+      <div class="acc-content">
+        <slot />
+      </div>
+    </div>
+  </div>
+</details>
+
+<style>
+  .acc {
+    /* Anker landen unter dem fixierten Kopf, nicht dahinter. */
+    scroll-margin-block-start: 5.5rem;
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  /* ---------- Die geschlossene Zeile ---------- */
+  .acc-summary {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    column-gap: clamp(0.875rem, 2.5vw, 2.5rem);
+    /* Weit über 44px hoch: die ganze Zeile ist die Trefferfläche. */
+    padding-block: clamp(1.5rem, 3.2vw, 2.75rem);
+    cursor: pointer;
+    /* Das Dreieck des Browsers weicht dem eigenen Plus. */
+    list-style: none;
+  }
+
+  .acc-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Akzentlinie, die beim Überfahren von links durchläuft. */
+  .acc-summary::after {
+    content: '';
+    position: absolute;
+    inset-block-end: -1px;
+    inset-inline: 0;
+    block-size: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 520ms var(--ease-out-expo);
+  }
+
+  .acc-summary:hover::after,
+  .acc-summary:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .acc-title {
+    /* Größer als eine Projektzeile, kleiner als der Auftakt. */
+    --heading-lg-size: clamp(1.875rem, 5vw, 3.75rem);
+    text-wrap: balance;
+    transition: transform 520ms var(--ease-out-expo);
+  }
+
+  .acc-summary:hover .acc-title,
+  .acc-summary:focus-visible .acc-title {
+    transform: translate3d(clamp(6px, 1vw, 14px), 0, 0);
+  }
+
+  .acc-meta {
+    white-space: nowrap;
+    color: var(--color-fg-subtle);
+    transition: color var(--duration-base) var(--ease-out-quart);
+  }
+
+  .acc-summary:hover .acc-meta {
+    color: var(--color-fg-muted);
+  }
+
+  /* Auf sehr schmalen Geräten hätten Titel, Anzahl und Zeichen nebeneinander
+     keinen Platz. Die Anzahl ist die entbehrlichste der drei Angaben. */
+  @media (max-width: 30rem) {
+    .acc-meta {
+      display: none;
+    }
+  }
+
+  /* ---------- Plus, das zum Minus wird ---------- */
+  .acc-icon {
+    position: relative;
+    /* Feste Spalte: ohne sie rutschte das Zeichen bei Sektionen ohne Anzahl
+       nach links und die Zeichen stünden nicht mehr untereinander. */
+    grid-column: 3;
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 44px;
+    block-size: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-fg-muted);
+    transition:
+      border-color var(--duration-base) var(--ease-out-quart),
+      color var(--duration-base) var(--ease-out-quart);
+  }
+
+  .acc-summary:hover .acc-icon,
+  .acc-summary:focus-visible .acc-icon {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .acc-bar {
+    position: absolute;
+    inline-size: 14px;
+    block-size: 1px;
+    background: currentColor;
+    transition: transform 520ms var(--ease-out-expo);
+  }
+
+  /* Der zweite Strich steht quer, beide zusammen ergeben ein Plus. Beim Öffnen
+     dreht er sich in die Waagerechte und übrig bleibt ein Minus. */
+  .acc-bar:last-child {
+    transform: rotate(90deg);
+  }
+
+  .acc[open] .acc-bar:last-child {
+    transform: rotate(0deg);
+  }
+
+  /* ---------- Der aufgeklappte Bereich ---------- */
+  .acc-content {
+    padding-block: 0.5rem clamp(2rem, 4vw, 3.5rem);
+  }
+
+  /* Ohne die Höhenanimation steht der Bereich einfach offen da. Erst wenn das
+     Skript übernommen hat, wird die Höhe animiert. */
+  .acc[data-enhanced] .acc-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 560ms var(--ease-out-expo);
+  }
+
+  .acc[data-enhanced] .acc-clip {
+    min-block-size: 0;
+    overflow: hidden;
+  }
+
+  .acc[data-enhanced][data-expanded] .acc-panel {
+    grid-template-rows: 1fr;
+  }
+
+  /* Nach dem Aufklappen fällt die Beschneidung weg, sonst schnitte sie
+     Fokusringe an den Rändern des Bereichs ab. */
+  .acc[data-enhanced][data-done] .acc-clip {
+    overflow: visible;
+  }
+
+  /* Beim Skriptbetrieb entscheidet data-expanded über das Zeichen, nicht
+     [open]: beim Zuklappen bleibt [open] gesetzt, bis die Animation ausläuft. */
+  .acc[data-enhanced] .acc-bar:last-child {
+    transform: rotate(90deg);
+  }
+
+  .acc[data-enhanced][data-expanded] .acc-bar:last-child {
+    transform: rotate(0deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .acc-title,
+    .acc-bar,
+    .acc-summary::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Höhenanimation für die aufklappbaren Sektionen.
+  //
+  // Der Browser blendet den Inhalt eines geschlossenen <details> hart ein und
+  // aus, ein Übergang ist daran nicht zu binden. Deshalb fängt das Skript den
+  // Klick ab, hält das Element während des Zuklappens offen und animiert die
+  // Höhe über grid-template-rows von 0fr auf 1fr.
+  //
+  // Bei reduzierter Bewegung bleibt es beim nativen Verhalten. Dann wird
+  // data-enhanced gar nicht erst gesetzt und die Sektion öffnet unmittelbar.
+  let controller: AbortController | null = null;
+
+  function initAccordions() {
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+
+    const items = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-acc]'));
+    if (items.length === 0) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timers = new WeakMap<HTMLElement, number>();
+
+    // Der Inhalt einer geschlossenen Sektion wird nicht dargestellt, der
+    // Beobachter für die Scroll-Reveals kann dort also nie auslösen. Beim
+    // Aufklappen übernimmt diese Funktion das Einblenden. Die Staffelung
+    // steckt weiterhin in den --reveal-delay der einzelnen Elemente.
+    const revealInside = (el: HTMLElement) => {
+      el.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-visible)').forEach((target) => {
+        target.classList.add('is-visible');
+      });
+    };
+
+    // Bringt eine Sektion nach Ende der Höhenanimation in ihren Ruhezustand:
+    // offen ohne Beschneidung oder wirklich geschlossen.
+    const settle = (el: HTMLDetailsElement) => {
+      window.clearTimeout(timers.get(el));
+      if (el.hasAttribute('data-expanded')) el.setAttribute('data-done', '');
+      else el.open = false;
+    };
+
+    // Sicherheitsnetz, falls kein transitionend eintrifft, etwa weil der
+    // Übergang unterbrochen wurde oder der Bereich leer ist.
+    const scheduleSettle = (el: HTMLDetailsElement) => {
+      window.clearTimeout(timers.get(el));
+      timers.set(el, window.setTimeout(() => settle(el), 700));
+    };
+
+    const expand = (el: HTMLDetailsElement) => {
+      el.open = true;
+      // Layout erzwingen, damit 0fr tatsächlich der Startwert des Übergangs ist.
+      void el.offsetHeight;
+      el.setAttribute('data-expanded', '');
+      revealInside(el);
+      scheduleSettle(el);
+    };
+
+    const collapse = (el: HTMLDetailsElement) => {
+      el.removeAttribute('data-done');
+      el.removeAttribute('data-expanded');
+      scheduleSettle(el);
+    };
+
+    const openInstantly = (el: HTMLDetailsElement) => {
+      el.open = true;
+      if (!reduced) {
+        el.setAttribute('data-expanded', '');
+        el.setAttribute('data-done', '');
+      }
+      revealInside(el);
+    };
+
+    for (const el of items) {
+      const summary = el.querySelector('summary');
+      const panel = el.querySelector<HTMLElement>('[data-acc-panel]');
+      if (!summary || !panel || reduced) continue;
+
+      el.setAttribute('data-enhanced', '');
+      // Wer schneller klickt als das Skript lädt, hat die Sektion nativ
+      // geöffnet. Dieser Stand wird übernommen, sonst klappte sie im Moment
+      // der Übernahme wieder zu.
+      if (el.open) {
+        el.setAttribute('data-expanded', '');
+        el.setAttribute('data-done', '');
+      }
+
+      summary.addEventListener(
+        'click',
+        (event) => {
+          event.preventDefault();
+          if (el.hasAttribute('data-expanded')) collapse(el);
+          else expand(el);
+        },
+        { signal },
+      );
+
+      // Nur der Höhenübergang des Bereichs selbst zählt. Ohne diese Prüfung
+      // würde jedes eingeblendete Kindelement seinen transitionend hier
+      // hochreichen und die Animation vorzeitig beenden.
+      panel.addEventListener(
+        'transitionend',
+        (event) => {
+          if (event.target !== panel || event.propertyName !== 'grid-template-rows') return;
+          settle(el);
+        },
+        { signal },
+      );
+    }
+
+    // Ein Link wie /#about soll die Sektion nicht nur anspringen, sondern auch
+    // öffnen. Das gilt beim Laden ebenso wie beim Sprung innerhalb der Seite.
+    const openFromHash = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (!(el instanceof HTMLDetailsElement) || !el.hasAttribute('data-acc') || el.open) return;
+      openInstantly(el);
+      // Die Seite ist durch das Öffnen länger geworden, also erneut anspringen.
+      el.scrollIntoView({ block: 'start', behavior: 'auto' });
+    };
+
+    openFromHash();
+    window.addEventListener('hashchange', openFromHash, { signal });
+  }
+
+  initAccordions();
+  document.addEventListener('astro:page-load', initAccordions);
+</script>

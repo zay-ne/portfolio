@@ -70,7 +70,7 @@ src/
     ui.ts                Sämtliche Oberflächentexte, DE und EN
     utils.ts             Sprache aus der URL, Routentabelle, Datumsformat
   lib/projects.ts        Projekte laden, sortieren, gruppieren
-  components/            Kopf, Fuß, Projektliste, Hover-Vorschau, Icons …
+  components/            Kopf, Fuß, Projektliste, Aufklapp-Sektionen, Icons …
   components/study/      Diagramme der ausführlichen Seiten, ohne Bibliothek
   layouts/               Ganze Seitentypen: Start, Projekt, Lebenslauf, Recht
   pages/                 Routen, dünne Hüllen um die Layouts
@@ -224,10 +224,22 @@ Eigenschaft an eine Komponente gehen. `<Reveal class="hero-top">` hätte die
 Layoutregeln zu `.hero-top` stillschweigend verworfen. Ein natives Element mit
 `data-reveal` und optionalem `style="--reveal-delay:200ms"` umgeht das.
 
-**Die Nummerierung der Sektionen entsteht automatisch** aus der Reihenfolge in
-`DISCIPLINES` (`src/consts.ts`). Kommt eine Disziplin dazu oder fällt eine weg,
-verschieben sich alle Nummern korrekt mit, ohne dass irgendwo eine Zahl von
-Hand geändert werden muss.
+**Die Startseite klappt ihre Sektionen auf.** Software, Forschung, Design und
+Kurz zu mir liegen zugeklappt untereinander, der Inhalt erscheint erst nach
+einem Klick. Jede Sektion ist ein natives `<details>` in
+`components/Accordion.astro`. Ohne JavaScript öffnet und schließt der Browser
+sie selbst, das Skript legt nur die Höhenanimation darüber und markiert die
+Sektion dafür mit `data-enhanced`. Die Reihenfolge und die Anzahl der Sektionen
+ergeben sich weiterhin aus `DISCIPLINES` (`src/consts.ts`).
+
+**Der Inhalt einer zugeklappten Sektion wird nicht dargestellt,** der Beobachter
+für die Scroll-Einblendungen kann dort also nie auslösen. Deshalb blendet das
+Skript beim Aufklappen selbst ein. Wer in einer aufklappbaren Sektion neuen
+Inhalt ergänzt, gibt ihm wie gewohnt `data-reveal` und muss sonst nichts tun.
+
+**Jede Disziplin hat eine eigene Anker-Id** (`#software`, `#research`,
+`#design`, `#about`). Ein Link darauf springt die Sektion nicht nur an, sondern
+klappt sie auch auf. `#work` zeigt weiterhin auf die Liste als Ganzes.
 
 **Schriftgrößen großer Überschriften laufen über Custom Properties.** Eine Seite
 verstellt sie über ein Elternelement (`--display-size`, `--heading-lg-size`),
