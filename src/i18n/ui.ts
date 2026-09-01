@@ -33,11 +33,15 @@ export const ui = {
       lines: ['Ich entwickle Software,', 'gestalte Marken', 'und forsche in der Medizintechnik.'],
       intro:
         'Ingenieur der Medizintechnik mit wissenschaftlichem Hintergrund. Co-Founder von meedup, Gründer von zayne und Head of Design beim Entrepreneurs Club Mainz. Ich verbinde technisches Verständnis mit Gestaltung und unternehmerischer Praxis.',
-      status: 'Offen für neue Aufgaben',
       scroll: 'Scrollen',
     },
 
     sections: {
+      venture: {
+        title: 'Gründung',
+        description:
+          'Eigene Unternehmen, in denen ich Geschäftsmodell, Vertrieb und Kundenbeziehung verantworte. Von der Marktvalidierung bis zum abgeschlossenen Auftrag.',
+      },
       software: {
         title: 'Software',
         description:
@@ -74,7 +78,7 @@ export const ui = {
         label: 'Werdegang',
         title: 'Lebenslauf',
         description:
-          'Stationen, Ausbildung, Zertifizierungen und Fähigkeiten. Als Seite zum Lesen und als PDF zum Mitnehmen.',
+          'Stationen, Ausbildung, Zertifizierungen und Fähigkeiten, vollständig als Seite zum Lesen.',
         cta: 'Lebenslauf ansehen',
       },
       contact: {
@@ -108,6 +112,7 @@ export const ui = {
         concept: 'Konzept',
       },
       disciplineLabels: {
+        venture: 'Gründung',
         software: 'Software',
         research: 'Forschung',
         design: 'Design',
@@ -132,7 +137,6 @@ export const ui = {
     cv: {
       title: 'Lebenslauf',
       lead: 'Ingenieur mit medizintechnischem Studium, vier Jahren unternehmerischer Praxis und wissenschaftlicher Projektleitung.',
-      download: 'Als PDF laden',
       updated: 'Stand',
       experience: 'Berufliche Stationen',
       education: 'Ausbildung',
@@ -183,11 +187,15 @@ export const ui = {
       lines: ['I develop software,', 'shape brands', 'and research medical technology.'],
       intro:
         'Medical engineer with a research background. Co-founder of meedup, founder of zayne and Head of Design at Entrepreneurs Club Mainz. I combine technical understanding with design and entrepreneurial practice.',
-      status: 'Open to new roles',
       scroll: 'Scroll',
     },
 
     sections: {
+      venture: {
+        title: 'Ventures',
+        description:
+          'Companies of my own, where I own the business model, sales and the client relationship. From market validation to the closed deal.',
+      },
       software: {
         title: 'Software',
         description:
@@ -224,7 +232,7 @@ export const ui = {
         label: 'Career',
         title: 'Curriculum vitae',
         description:
-          'Positions, education, certifications and skills. As a page to read and a PDF to take away.',
+          'Positions, education, certifications and skills, in full as a page to read.',
         cta: 'View CV',
       },
       contact: {
@@ -257,6 +265,7 @@ export const ui = {
         concept: 'Concept',
       },
       disciplineLabels: {
+        venture: 'Ventures',
         software: 'Software',
         research: 'Research',
         design: 'Design',
@@ -281,7 +290,6 @@ export const ui = {
     cv: {
       title: 'Curriculum vitae',
       lead: 'Engineer with a medical technology degree, four years of entrepreneurial practice and scientific project leadership.',
-      download: 'Download PDF',
       updated: 'Updated',
       experience: 'Experience',
       education: 'Education',

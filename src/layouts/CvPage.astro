@@ -1,10 +1,9 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Icon from '../components/Icon.astro';
 import SplitLines from '../components/SplitLines.astro';
 import { SITE, type Locale } from '../consts';
 import { formatMonthYear, t } from '../i18n/utils';
-import { CV_PDF, CV_UPDATED, cv, type CvEntry } from '../data/cv';
+import { CV_UPDATED, cv, type CvEntry } from '../data/cv';
 
 interface Props {
   locale: Locale;
@@ -14,7 +13,6 @@ interface Props {
 const { locale, altHref } = Astro.props;
 const strings = t(locale);
 const content = cv[locale];
-const pdf = CV_PDF[locale];
 
 /* Beide Rubriken teilen sich dieselbe Zeilenstruktur, deshalb eine Schleife
    statt zweier fast gleicher Blöcke. */
@@ -47,14 +45,6 @@ const blocks: Array<{ title: string; entries: CvEntry[] }> = [
 
       <div class="cv-lead" data-reveal style="--reveal-delay:220ms">
         <p class="prose-measure prose-measure-wide">{strings.cv.lead}</p>
-        {
-          pdf && (
-            <a class="download" href={pdf} download>
-              <span>{strings.cv.download}</span>
-              <Icon name="download" size={16} />
-            </a>
-          )
-        }
       </div>
     </header>
 
@@ -170,26 +160,6 @@ const blocks: Array<{ title: string; entries: CvEntry[] }> = [
     align-items: flex-start;
     gap: 2rem;
     padding-block-start: clamp(2rem, 5vh, 3rem);
-  }
-
-  .download {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-block-size: 44px;
-    padding-inline: 1.35rem;
-    border-radius: 999px;
-    background: var(--color-fg);
-    color: var(--color-bg);
-    font-size: 0.9375rem;
-    transition:
-      background-color var(--duration-fast) var(--ease-out-quart),
-      transform var(--duration-base) var(--ease-out-quart);
-  }
-
-  .download:hover {
-    background: var(--color-accent);
-    color: var(--color-accent-contrast);
   }
 
   .cv-block {

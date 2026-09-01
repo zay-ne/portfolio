@@ -2,7 +2,7 @@
 key: meedup
 lang: en
 title: "meedup"
-discipline: software
+discipline: venture
 year: "2025 – present"
 role: "Co-founder, product and business model"
 summary: "A community connecting engaged students with companies. Built on a database of more than 1,000 student initiatives and a network of over 10,000 students."

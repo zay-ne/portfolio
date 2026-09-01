@@ -86,7 +86,8 @@ will, bearbeitet `layouts/HomePage.astro`, nicht `pages/index.astro`.
 1. `src/content/projects/de/<kennung>.md` anlegen, eine bestehende Datei als
    Vorlage nehmen.
 2. `key` auf dieselbe Kennung setzen. Daraus wird die URL `/arbeit/<kennung>`.
-3. `discipline` bestimmt die Sektion: `software`, `research` oder `design`.
+3. `discipline` bestimmt die Sektion: `venture`, `software`, `research` oder `design`.
+   `venture` steht für eigene Unternehmen, `software` für Werkzeuge und Produkte.
 4. `order` steuert die Reihenfolge innerhalb der Sektion, kleiner steht weiter oben.
 5. Dieselbe Datei unter `en/` mit gleichem `key` und `lang: en` anlegen.
 
@@ -117,11 +118,9 @@ Danach, nach Wichtigkeit:
   Seite, siehe unten unter Konventionen.
 - `src/content/projects/*/ecm-kampagnen.md` ist inhaltlich noch sehr dünn.
   Entweder füllen oder vorübergehend auf `draft: true` setzen.
-- Bei Maps Scout steht ein `TODO` zur Abwägung: das Werkzeug liest öffentlich
-  sichtbare Google-Maps-Daten, was den dortigen Nutzungsbedingungen
-  widerspricht. Entscheide, ob das Projekt öffentlich gezeigt werden soll.
-- Lebenslauf-PDF unter `public/` ablegen und in `src/data/cv.ts` bei `CV_PDF`
-  eintragen. Solange dort `null` steht, erscheint der Download-Knopf nicht.
+- Der Lebenslauf steht bewusst nur als Seite zur Verfügung. Soll er doch als
+  Datei zum Herunterladen angeboten werden, braucht es wieder einen Knopf in
+  `src/layouts/CvPage.astro` und die Datei unter `public/`.
 - `public/og.png` (1200 x 630) für Vorschaubilder beim Teilen anlegen.
 - Titelbilder unter `public/work/` ablegen und im Frontmatter als `cover`
   eintragen.
@@ -135,14 +134,17 @@ gesetzt, rendert `layouts/StudyPage.astro` die Seite, und der Fließtext der
 Markdown-Datei wird nicht verwendet. Die Datei bleibt trotzdem nötig, damit das
 Projekt in der Übersicht erscheint.
 
-Bislang nutzen das vier Arbeiten:
+Bislang nutzen das sieben Arbeiten:
 
-| `feature`           | Inhalte in                    |
-| ------------------- | ----------------------------- |
-| `meedup`            | `src/data/meedup.ts`          |
-| `ecm-kampagnen`     | `src/data/ecm-kampagnen.ts`   |
-| `vectra-h2`         | `src/data/vectra-study.ts`    |
-| `periorbital-week`  | `src/data/week-study.ts`      |
+| `feature`           | Inhalte in                        |
+| ------------------- | --------------------------------- |
+| `meedup`            | `src/data/meedup.ts`              |
+| `zayne`             | `src/data/zayne.ts`               |
+| `bewerbungstracker` | `src/data/bewerbungstracker.ts`   |
+| `maps-scout`        | `src/data/maps-scout.ts`          |
+| `ecm-kampagnen`     | `src/data/ecm-kampagnen.ts`       |
+| `vectra-h2`         | `src/data/vectra-study.ts`        |
+| `periorbital-week`  | `src/data/week-study.ts`          |
 
 Alle teilen sich ein Layout. Eine Arbeit beschreibt ihre Abschnitte als Liste,
 und jeder Abschnitt kann eine Grafik tragen, die über das Feld `kind` gewählt
@@ -224,8 +226,8 @@ Eigenschaft an eine Komponente gehen. `<Reveal class="hero-top">` hätte die
 Layoutregeln zu `.hero-top` stillschweigend verworfen. Ein natives Element mit
 `data-reveal` und optionalem `style="--reveal-delay:200ms"` umgeht das.
 
-**Die Startseite klappt ihre Sektionen auf.** Software, Forschung, Design und
-Kurz zu mir liegen zugeklappt untereinander, der Inhalt erscheint erst nach
+**Die Startseite klappt ihre Sektionen auf.** Gründung, Software, Forschung,
+Design und Kurz zu mir liegen zugeklappt untereinander, der Inhalt erscheint erst nach
 einem Klick. Jede Sektion ist ein natives `<details>` in
 `components/Accordion.astro`. Ohne JavaScript öffnet und schließt der Browser
 sie selbst, das Skript legt nur die Höhenanimation darüber und markiert die

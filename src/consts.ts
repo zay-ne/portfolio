@@ -37,5 +37,5 @@ export const SOCIALS = [
  * aufklappbaren Sektionen auf der Startseite. Ein neues Projekt braucht nur
  * einen dieser Schlüssel im Frontmatter.
  */
-export const DISCIPLINES = ['software', 'research', 'design'] as const;
+export const DISCIPLINES = ['venture', 'software', 'research', 'design'] as const;
 export type Discipline = (typeof DISCIPLINES)[number];

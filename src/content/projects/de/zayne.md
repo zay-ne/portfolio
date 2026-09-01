@@ -2,7 +2,7 @@
 key: zayne
 lang: de
 title: "zayne"
-discipline: software
+discipline: venture
 year: "2022 – heute"
 role: "Founder, Akquisition bis Abrechnung"
 summary: "Eigenes Studio für digitale Kundenprojekte, seit 2022. Über 150 abgewickelte Verkäufe für mehr als 50 Kunden, von Marke und Website über Text bis Film und Ton."

@@ -12,6 +12,7 @@ secondaryUrl: https://github.com/zay-ne/maps-scout
 secondaryLabel: "Quellcode"
 # cover: "/work/maps-scout.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
 stack: ["Python", "FastAPI", "SQLite", "HTML/CSS/JS"]
+feature: maps-scout
 draft: false
 ---
 
@@ -34,4 +35,4 @@ Ein Werkzeug, das diese Recherche bündelt: Suche nach Region und Branche, Filte
 
 Läuft lokal und wird weiterentwickelt.
 
-TODO abwägen: Das Werkzeug greift auf öffentlich sichtbare Google-Maps-Daten zu, was den dortigen Nutzungsbedingungen widerspricht. Das steht so auch in der Projekt-Liesmich. Überleg dir, ob du das Projekt öffentlich zeigen willst, und wenn ja, ob dieser Hinweis mit auf die Seite gehört.
+Hinweis: Der Fließtext dieser Datei wird nicht gerendert, die Seite kommt aus `src/data/maps-scout.ts`. Die Abwägung zu den Google-Nutzungsbedingungen steht dort im Abschnitt „Grenzen, die dazugehören“.

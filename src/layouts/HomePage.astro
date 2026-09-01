@@ -50,10 +50,6 @@ const countLabel = (n: number) =>
         </div>
 
         <div class="hero-aside" data-reveal style="--reveal-delay:440ms">
-          <p class="status">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span class="label">{strings.hero.status}</span>
-          </p>
           <a class="scroll-cue" href={`#${anchors.work}`}>
             <span class="label">{strings.hero.scroll}</span>
             <span class="scroll-icon"><Icon name="arrow-down" size={14} /></span>
@@ -183,20 +179,6 @@ const countLabel = (n: number) =>
     /* Etwas länger als der Standard: der Einleitungstext soll nicht zu einer
        schmalen, siebenzeiligen Säule werden. */
     --measure: 52ch;
-  }
-
-  .status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-  }
-
-  .status-dot {
-    inline-size: 6px;
-    block-size: 6px;
-    border-radius: 999px;
-    background: var(--color-accent);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 16%, transparent);
   }
 
   .hero-aside {

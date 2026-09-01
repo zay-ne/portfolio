@@ -12,6 +12,7 @@ secondaryUrl: https://github.com/zay-ne/maps-scout
 secondaryLabel: "Source code"
 # cover: "/work/maps-scout.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
 stack: ["Python", "FastAPI", "SQLite", "HTML/CSS/JS"]
+feature: maps-scout
 draft: false
 ---
 
@@ -34,4 +35,4 @@ A tool that bundles that research: search by region and sector, filter by rating
 
 Runs locally and is still being developed.
 
-TODO, worth weighing: the tool reads publicly visible Google Maps data, which conflicts with their terms of use. The project readme says so too. Decide whether you want this project shown publicly, and if so, whether that note belongs on the page.
+Note: the body of this file is not rendered, the page comes from `src/data/maps-scout.ts`. The weighing of the Google terms of use sits there under “Limits that come with it”.

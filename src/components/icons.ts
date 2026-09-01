@@ -12,7 +12,6 @@ export const iconPaths = {
   moon: '<path d="M12 3a6.36 6.36 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
   copy: '<rect width="13" height="13" x="9" y="9" rx="2"/><path d="M5 15a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2"/>',
   check: '<path d="M20 6 9 17l-5-5"/>',
-  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
   close: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
   menu: '<path d="M3 8h18"/><path d="M3 16h18"/>',
 } as const;

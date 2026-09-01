@@ -1,5 +1,7 @@
 import type { StudyContent } from './study-types';
+import { bewerbungstracker } from './bewerbungstracker';
 import { ecmKampagnen } from './ecm-kampagnen';
+import { mapsScout } from './maps-scout';
 import { meedup } from './meedup';
 import { vectraStudy } from './vectra-study';
 import { zayne } from './zayne';
@@ -11,7 +13,9 @@ import type { Locale } from '../consts';
  * `feature` im Frontmatter der Projektdatei.
  */
 export const studies = {
+  bewerbungstracker,
   'ecm-kampagnen': ecmKampagnen,
+  'maps-scout': mapsScout,
   meedup,
   'vectra-h2': vectraStudy,
   zayne,

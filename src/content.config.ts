@@ -18,7 +18,7 @@ const projects = defineCollection({
     lang: z.enum(['de', 'en']),
     title: z.string(),
     /** Bestimmt, in welcher Sektion das Projekt erscheint. */
-    discipline: z.enum(['software', 'research', 'design']),
+    discipline: z.enum(['venture', 'software', 'research', 'design']),
     /** Als Text, damit auch "2023–2025" möglich ist. */
     year: z.string(),
     /** Deine Rolle in einem knappen Ausdruck, z. B. "Konzept, Design & Entwicklung". */
@@ -42,7 +42,9 @@ const projects = defineCollection({
      * Nur für Arbeiten, die mehr als Fließtext brauchen, etwa eine Studie mit
      * eigenen Diagrammen. Der Fließtext der Datei wird dann nicht gerendert.
      */
-    feature: z.enum(['meedup', 'zayne', 'ecm-kampagnen', 'vectra-h2', 'periorbital-week']).optional(),
+    feature: z
+      .enum(['meedup', 'zayne', 'bewerbungstracker', 'maps-scout', 'ecm-kampagnen', 'vectra-h2', 'periorbital-week'])
+      .optional(),
     /** Auf true setzen, um ein Projekt zu verstecken, ohne es zu löschen. */
     draft: z.boolean().default(false),
   }),

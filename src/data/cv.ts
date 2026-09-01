@@ -1,6 +1,9 @@
 /**
  * Lebenslaufdaten, zweisprachig.
  *
+ * Der Lebenslauf steht bewusst nur als Seite zur Verfügung, nicht als Datei
+ * zum Herunterladen.
+ *
  * Übernommen aus den fünf Bewerbungsfassungen (Sales, QM, Projektmanagement,
  * Engineering, IT) und auf eine gemeinsame, für ein öffentliches Portfolio
  * passende Fassung zusammengeführt.
@@ -40,20 +43,6 @@ export interface CvContent {
 
 /** TODO: bei inhaltlichen Änderungen mitziehen. */
 export const CV_UPDATED = '2026-08-01';
-
-/**
- * Steht auf null, solange keine Datei existiert. Dann erscheint der
- * Download-Knopf gar nicht erst, statt ins Leere zu führen.
- *
- * TODO zum Aktivieren: PDF unter public/lebenslauf.pdf bzw. public/cv.pdf
- * ablegen und die Pfade hier eintragen:
- *   de: '/lebenslauf.pdf',
- *   en: '/cv.pdf',
- */
-export const CV_PDF: Record<'de' | 'en', string | null> = {
-  de: null,
-  en: null,
-};
 
 export const cv: Record<'de' | 'en', CvContent> = {
   de: {

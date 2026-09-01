@@ -12,7 +12,7 @@ import type { StudyContent } from './study-types';
  */
 export const meedup: Record<'de' | 'en', StudyContent> = {
   de: {
-    eyebrow: 'Software · meedup GbR',
+    eyebrow: 'Gründung · meedup GbR',
     headline: ['Unternehmen stellen', 'eine echte Aufgabe.', 'Studierende lösen sie.'],
     lead: 'meedup verbindet engagierte Studierende mit Unternehmen. Grundlage sind eine Datenbank von über 1.000 Studenteninitiativen und ein Netzwerk von mehr als 10.000 Studierenden in ganz Deutschland.',
     meta: [
@@ -173,7 +173,7 @@ export const meedup: Record<'de' | 'en', StudyContent> = {
   },
 
   en: {
-    eyebrow: 'Software · meedup GbR',
+    eyebrow: 'Ventures · meedup GbR',
     headline: ['Companies set', 'a real task.', 'Students solve it.'],
     lead: 'meedup connects engaged students with companies. It rests on a database of more than 1,000 student initiatives and a network of over 10,000 students across Germany.',
     meta: [

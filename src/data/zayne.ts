@@ -10,7 +10,7 @@ import type { StudyContent } from './study-types';
  */
 export const zayne: Record<'de' | 'en', StudyContent> = {
   de: {
-    eyebrow: 'Software · zayne',
+    eyebrow: 'Gründung · zayne',
     headline: ['Marke, Website,', 'Text, Film und Ton.', 'Aus einer Hand.'],
     lead: 'Seit 2022 setze ich mit zayne digitale Kundenprojekte um: Markenauftritt, Website, Text, Film und Ton. Akquisition, Konzeption, Umsetzung, Abnahme und Abrechnung liegen in meiner Verantwortung.',
     meta: [
@@ -99,7 +99,7 @@ export const zayne: Record<'de' | 'en', StudyContent> = {
   },
 
   en: {
-    eyebrow: 'Software · zayne',
+    eyebrow: 'Ventures · zayne',
     headline: ['Brand, website,', 'copy, film and sound.', 'From a single source.'],
     lead: 'Since 2022 I have delivered digital client work through zayne: brand identity, website, copy, film and sound. Acquisition, concept, delivery, sign off and invoicing all sit with me.',
     meta: [

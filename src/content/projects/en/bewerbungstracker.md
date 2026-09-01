@@ -13,6 +13,7 @@ secondaryUrl: https://github.com/zay-ne/bewerbungs-tracker
 secondaryLabel: "Source code"
 # cover: "/work/bewerbungstracker.jpg"  # optional, ohne Bild erscheint eine typografische Vorschau
 stack: ["Cloudflare Workers", "JavaScript", "Web und macOS"]
+feature: bewerbungstracker
 draft: false
 ---
 
