@@ -1,4 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0a0a0a"/>
-  <path d="M9 22V10h3.2l3.8 7.4L19.8 10H23v12h-2.7v-7.4L17.1 22h-2.2l-3.2-7.4V22H9Z" fill="#fafafa"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Schedi Samet">
+  <title>Schedi Samet</title>
+  <!--
+    Ein S als Linie gleichmäßiger Stärke, ohne Fläche darunter.
+
+    Die Mittellinie läuft waagerecht von x=5,25 bis x=58,75. Bei einer
+    Strichstärke von 10,5 liegt die Außenkante damit genau auf 0 und 64: der
+    obere Bogen berührt die linke Kante, der untere die rechte. An beiden
+    Extremstellen steht die Tangente senkrecht, sonst schösse die Kurve darüber
+    hinaus. Oben und unten bleibt ein schmaler Rand.
+
+    Die Enden sind stumpf abgeschnitten, nicht rund. Weil die Tangente dort
+    schräg liegt, ergibt das den schrägen Schnitt eines Schriftzeichens. Mit
+    runden Enden liest sich das Zeichen als Welle, nicht als Buchstabe.
+
+    Die Farbe steht doppelt: als Attribut für Werkzeuge, die den Stilblock
+    ignorieren, und im Stilblock für dunkle Oberflächen. Beide Blautöne sind
+    dieselben wie --color-accent auf der Seite, hell und dunkel.
+  -->
+  <style>
+    .mark { stroke: #2563eb; }
+
+    @media (prefers-color-scheme: dark) {
+      .mark { stroke: #6c96ff; }
+    }
+  </style>
+
+  <path
+    class="mark"
+    d="M49 15C38.21 12.84 37.25 8.5 29 8.5C14 8.5 5.25 15 5.25 22C5.25 29 23.26 22.38 32 32C40.74 41.62 58.75 35 58.75 42C58.75 49 50 55.5 35 55.5C26.75 55.5 25.79 51.16 15 49"
+    fill="none"
+    stroke="#2563eb"
+    stroke-width="10.5"
+    stroke-linecap="butt"
+    stroke-linejoin="round"
+  />
 </svg>

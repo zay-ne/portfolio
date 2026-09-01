@@ -56,6 +56,9 @@ const enHref = locale === 'en' ? canonical.href : alternate.href;
     <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Für den Homescreen legt iOS seine eigene Maske über das Bild, deshalb
+         liegt hier eine randlose Fläche statt des freien Zeichens. -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Vorgeladen wird nur der lateinische Grundschnitt: er trägt alles, was
          Deutsch und Englisch brauchen. latin-ext bleibt verfügbar, wird aber

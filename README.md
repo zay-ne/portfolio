@@ -269,6 +269,24 @@ statt die globale Klasse zu überschreiben.
 Bewegung und falls das Modul-Skript ausbleibt, steht der gesamte Inhalt sofort
 und vollständig da. Ein Wächter im Seitenkopf sorgt dafür.
 
+**Das Zeichen ist ein S, das die Seitenkanten berührt.** `public/favicon.svg`
+zeichnet es als Linie gleichmäßiger Stärke. Die Mittellinie läuft von x=5,25
+bis x=58,75; bei einer Strichstärke von 10,5 liegt die Außenkante damit genau
+auf 0 und 64. An beiden Extremstellen steht die Tangente senkrecht, sonst
+schösse die Kurve darüber hinaus. Wer die Strichstärke ändert, muss die beiden
+x-Werte mitziehen, sonst stimmt die Berührung nicht mehr.
+
+Die Enden sind stumpf abgeschnitten. Weil die Tangente dort schräg liegt, ergibt
+das den schrägen Schnitt eines Schriftzeichens; mit runden Enden liest sich das
+Zeichen als Welle. Die Farbe steht doppelt im Bild, als Attribut und im
+Stilblock, damit sie auch dann sitzt, wenn ein Werkzeug den Stilblock ignoriert.
+Unter `prefers-color-scheme: dark` wechselt sie auf den hellen Akzentton.
+
+`public/apple-touch-icon.png` ist die Fassung für den Homescreen: randlose
+dunkle Fläche mit weißem Zeichen, ohne abgerundete Ecken, weil iOS seine eigene
+Maske darüberlegt. Neu erzeugt wird sie aus demselben Pfad, siehe die
+Kommentare in `public/favicon.svg`.
+
 **Schriften kommen vom eigenen Server.** Astros Fonts-API lädt Archivo und
 JetBrains Mono zur Buildzeit herunter. Im Browser geht keine Anfrage an Google,
 und es gibt keine Cookies und keine externen Einbettungen, was der
