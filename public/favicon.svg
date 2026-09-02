@@ -1,37 +1,61 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Schedi Samet">
   <title>Schedi Samet</title>
   <!--
-    Ein S als Linie gleichmäßiger Stärke, ohne Fläche darunter.
+    Ein S aus drei waagerechten Balken und zwei Bögen, mit flachen Endbalken
+    und schräg geschnittenen Enden.
 
-    Die Mittellinie läuft waagerecht von x=5,25 bis x=58,75. Bei einer
-    Strichstärke von 10,5 liegt die Außenkante damit genau auf 0 und 64: der
-    obere Bogen berührt die linke Kante, der untere die rechte. An beiden
-    Extremstellen steht die Tangente senkrecht, sonst schösse die Kurve darüber
-    hinaus. Oben und unten bleibt ein schmaler Rand.
+    Die Aufteilung ist an der Vorlage ausgemessen: oberer Balken 5,75 bis 17,25,
+    Freiraum bis 26,25, Mittelbalken bis 37,75, Freiraum bis 46,75, unterer
+    Balken bis 58,25. Der Mittelteil liegt waagerecht, nicht diagonal. Eine
+    flache Diagonale quetscht die beiden Freiräume zu Schlitzen zusammen, weil
+    sich dann die Ränder des Strichs überlagern.
 
-    Die Enden sind stumpf abgeschnitten, nicht rund. Weil die Tangente dort
-    schräg liegt, ergibt das den schrägen Schnitt eines Schriftzeichens. Mit
-    runden Enden liest sich das Zeichen als Welle, nicht als Buchstabe.
+    Gezeichnet als Strich gleichmäßiger Stärke über einer Mittellinie. Sie ist
+    punktsymmetrisch zur Mitte (32, 32): die untere Hälfte ist die gedrehte
+    obere, jeder Kontrollpunkt hat sein Gegenstück. An den Bogenaußenseiten
+    steht die Tangente senkrecht, an den Balken waagerecht, deshalb sitzen die
+    Übergänge ohne Knick.
+
+    Die beiden Endbalken laufen absichtlich über den Bildrand hinaus, bis x=70
+    und x=-6. Abgeschnitten werden sie vom Beschnittpfad, einem Quadrat mit zwei
+    herausgenommenen Dreiecken. Nur so entsteht der schräge Schnitt: ein
+    stumpfer Abschluss stünde senkrecht zur Laufrichtung und damit senkrecht.
+
+    Die Berührung der Seitenkanten steckt in den Ecken dieser Dreiecke. Oben
+    rechts liegt die obere Schnittecke auf x=64, unten links die untere auf x=0.
+    Die Dreiecke reichen 1,25 über den Balken hinaus, sonst bliebe an der
+    Schnittkante ein Haarstrich stehen. Wer die Strichstärke ändert, muss die
+    Dreiecke mitziehen, sonst berührt das Zeichen die Kanten nicht mehr oder
+    läuft darüber hinaus.
 
     Die Farbe steht doppelt: als Attribut für Werkzeuge, die den Stilblock
-    ignorieren, und im Stilblock für dunkle Oberflächen. Beide Blautöne sind
-    dieselben wie --color-accent auf der Seite, hell und dunkel.
+    ignorieren, und im Stilblock für dunkle Oberflächen. Beide Werte sind
+    dieselben wie --color-fg auf der Seite, hell und dunkel.
   -->
   <style>
-    .mark { stroke: #2563eb; }
+    .mark { stroke: #0a0a0a; }
 
     @media (prefers-color-scheme: dark) {
-      .mark { stroke: #6c96ff; }
+      .mark { stroke: #f4f4f5; }
     }
   </style>
 
+  <defs>
+    <clipPath id="ends">
+      <polygon
+        points="0,0 64,0 64,5.75 58,17.25 64,18.5 64,64 0,64 0,58.25 6,46.75 0,45.5"
+      />
+    </clipPath>
+  </defs>
+
   <path
     class="mark"
-    d="M49 15C38.21 12.84 37.25 8.5 29 8.5C14 8.5 5.25 15 5.25 22C5.25 29 23.26 22.38 32 32C40.74 41.62 58.75 35 58.75 42C58.75 49 50 55.5 35 55.5C26.75 55.5 25.79 51.16 15 49"
+    d="M70 11.5L26 11.5C19.55 11.5 15.65 15.3 15.65 21.75C15.65 28.2 19.55 32 26 32L38 32C44.45 32 48.35 35.8 48.35 42.25C48.35 48.7 44.45 52.5 38 52.5L-6 52.5"
     fill="none"
-    stroke="#2563eb"
-    stroke-width="10.5"
+    stroke="#0a0a0a"
+    stroke-width="11.5"
     stroke-linecap="butt"
     stroke-linejoin="round"
+    clip-path="url(#ends)"
   />
 </svg>

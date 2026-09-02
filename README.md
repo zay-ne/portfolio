@@ -270,22 +270,31 @@ Bewegung und falls das Modul-Skript ausbleibt, steht der gesamte Inhalt sofort
 und vollständig da. Ein Wächter im Seitenkopf sorgt dafür.
 
 **Das Zeichen ist ein S, das die Seitenkanten berührt.** `public/favicon.svg`
-zeichnet es als Linie gleichmäßiger Stärke. Die Mittellinie läuft von x=5,25
-bis x=58,75; bei einer Strichstärke von 10,5 liegt die Außenkante damit genau
-auf 0 und 64. An beiden Extremstellen steht die Tangente senkrecht, sonst
-schösse die Kurve darüber hinaus. Wer die Strichstärke ändert, muss die beiden
-x-Werte mitziehen, sonst stimmt die Berührung nicht mehr.
+baut es aus drei waagerechten Balken und zwei Bögen, mit flachen Endbalken und
+schräg geschnittenen Enden. Die Aufteilung der Höhe ist ausgemessen: Balken
+11,5 Einheiten stark, Freiräume 9 Einheiten hoch.
 
-Die Enden sind stumpf abgeschnitten. Weil die Tangente dort schräg liegt, ergibt
-das den schrägen Schnitt eines Schriftzeichens; mit runden Enden liest sich das
-Zeichen als Welle. Die Farbe steht doppelt im Bild, als Attribut und im
-Stilblock, damit sie auch dann sitzt, wenn ein Werkzeug den Stilblock ignoriert.
-Unter `prefers-color-scheme: dark` wechselt sie auf den hellen Akzentton.
+**Der Mittelteil liegt waagerecht, nicht diagonal.** Das ist der Punkt, an dem
+ein erster Entwurf scheiterte: eine flache Diagonale quetscht die beiden
+Freiräume zu Schlitzen zusammen, weil sich die Ränder des Strichs dort
+überlagern. Wer die Form ändert, prüft zuerst, ob die Freiräume offen bleiben.
+
+**Die schrägen Enden entstehen durch Beschnitt, nicht durch den Strichabschluss.**
+Ein stumpfer Abschluss steht senkrecht zur Laufrichtung, bei waagerechten Balken
+also senkrecht. Deshalb laufen die Balken absichtlich über den Bildrand hinaus
+und ein Beschnittpfad nimmt oben rechts und unten links je ein Dreieck heraus.
+In den Ecken dieser Dreiecke steckt auch die Berührung: oben rechts liegt die
+obere Schnittecke auf x=64, unten links die untere auf x=0. Wer die Strichstärke
+ändert, muss die Dreiecke mitziehen.
+
+Nachgemessen wird das an den gezeichneten Pixeln, nicht an der Bounding-Box des
+Pfades, denn der Beschnitt entfernt einen Teil des Strichs. Das Prüfskript dazu
+liegt nicht im Projekt, die Kommentare in `public/favicon.svg` nennen aber alle
+Sollwerte.
 
 `public/apple-touch-icon.png` ist die Fassung für den Homescreen: randlose
 dunkle Fläche mit weißem Zeichen, ohne abgerundete Ecken, weil iOS seine eigene
-Maske darüberlegt. Neu erzeugt wird sie aus demselben Pfad, siehe die
-Kommentare in `public/favicon.svg`.
+Maske darüberlegt.
 
 **Schriften kommen vom eigenen Server.** Astros Fonts-API lädt Archivo und
 JetBrains Mono zur Buildzeit herunter. Im Browser geht keine Anfrage an Google,
